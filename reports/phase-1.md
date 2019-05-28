@@ -1,4 +1,4 @@
-# CS 1653 -- Term Project 1
+# CS 1653 -- Team Project 1
 
 ##Mustafa Alazzawi, James Tomko, Tanner Stauffer
 ##Pitt username: mua31, jat190, tas202
