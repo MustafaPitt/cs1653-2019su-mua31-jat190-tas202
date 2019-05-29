@@ -4,7 +4,7 @@
 3. The ideas are neat but need organization. I think you may have wanted to have multiple iterations over the report.
 
 # Areas of improvement
-1. (**-1**) Some conflicting assumptions and definitions.
+1. (**-0.5**) Some conflicting assumptions and definitions.
 2. You should commit early and often. All team members have to commit their respective contributions.
 3. Better usage of the Markup language.
 4. (**-1**) Mixing of assumptions and security properties. For example, in Property 2, you say "We are assuming the account only used by one person and that the account is not hacked." This statement is mixing a property and an assumption. The property is that each account is used by one person. The assumption is that accounts are not hacked. If the assumption is vilated, then the property may not hold any more.
