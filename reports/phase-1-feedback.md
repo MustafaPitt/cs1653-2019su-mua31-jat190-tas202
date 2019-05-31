@@ -1,3 +1,4 @@
+# **(8/10)**
 # Strong aspects
 1. I espcially liked Property 4 because it reflects on the psychological acceptability and user-friendliness.
 2. I liked the Group Quota property because it nicely reflecs the availability property.
