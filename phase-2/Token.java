@@ -3,6 +3,8 @@
  * file servers.
  */
 
+import java.util.List;
+
 public class Token implements UserToken {
 	String       username;
 	String       issuingServer;

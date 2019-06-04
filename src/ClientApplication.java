@@ -12,11 +12,27 @@ import java.util.regex.Pattern;
 /* client application  to connect  with group server  */
 public class ClientApplication {
 
+	static final int GROUP_PORT = 8000;
+	static final int FILE_PORT = 8001;
+
+	static GroupClient groupClient;
+	static FileClient fileClient;
+	static UserToken token;
 
     public static void main (String []args){
+		groupClient = new GroupClient();
+		fileClient = new FileClient();
 
         while (true){
             Scanner scanner = new Scanner(System.in);
+
+			System.out.println("Username: ");
+			String username = scanner.nextLine();
+
+			// Get token
+			groupClient.connect("localhost", GROUP_PORT);
+			token = groupClient.getToken(username);
+
             System.out.println("1)Login to group server 2) Connect to File Server 3) exit");
             String input = scanner.next();
             if (!input.matches("[0-9]")){
@@ -33,15 +49,46 @@ public class ClientApplication {
     private static void connectToFileServer() {
         {
             // make sure the client is authorized /*.... TO DO .....*/
-            FileClient fileClient = new FileClient();
-            fileClient.connect("localhost", 7777);
+            fileClient = new FileClient();
+            fileClient.connect("localhost", FILE_PORT);
             if (fileClient.isConnected()) System.out.println("application is connected to client server");
             Scanner scanner = new Scanner(System.in);
             while(true){ // while you are in file server
-                System.out.println("1) log out");
+				System.out.println("1. List files\n" +
+				                   "2. Upload\n" +
+				                   "3. Download\n" +
+				                   "4. Delete\n" +
+				                   "5. Log out\n");
                 String input = scanner.next();
-                if (!input.matches("[0-9]")) System.out.println("invalid input");
-                if(input.equals("1")) {
+
+				if (input.equals("1")) { // list files
+					System.out.println("Here!");
+					System.out.println(fileClient.listFiles(token));
+					System.out.println("Here!");
+				}
+
+				if (input.equals("2")) { // upload
+					String source;
+					String dest;
+					String group;
+
+					System.out.print("Source?: ");
+					scanner.nextLine();
+					source = scanner.nextLine();
+					System.out.print("Dest?: ");
+					dest = scanner.nextLine();
+					System.out.print("Groups?: ");
+					group = scanner.nextLine();
+						
+					System.out.println(fileClient.upload(source, dest,
+						group, token));
+				}
+
+                if (!input.matches("[1-5]")) System.out.println("invalid input");
+
+				
+
+                if(input.equals("5")) {
                     System.out.println("Logging out");
                     fileClient.disconnect();
                     return;
@@ -67,7 +114,7 @@ public class ClientApplication {
              System.out.println("application is connected to group server");
              System.out.println("Enter your admin account");
              String adminUser = scanner.next();
-             Token token = (Token) groupClient.getToken(adminUser);
+             token = (Token) groupClient.getToken(adminUser);
              System.out.println("token is " + token.getGroups() + "issuer  " + token.getIssuer() + "subject"+  token.getSubject());
              if (groupClient.isConnected()){ // check if the user is a member of group admin
                  System.out.println("You are logged in as " + adminUser);
