@@ -46,7 +46,10 @@ public class GroupServer extends Server {
 			FileInputStream fis = new FileInputStream(userFile);
 			userStream = new ObjectInputStream(fis);
 			userList = (UserList)userStream.readObject();
+			System.out.println("DBG  show all users in the group servers");
+			userList.showAllUsers();
 		}
+
 		catch(FileNotFoundException e)
 		{
 			System.out.println("UserList File Does Not Exist. Creating UserList...");
@@ -87,7 +90,9 @@ public class GroupServer extends Server {
 			
 			while(true)
 			{
+				System.err.println("waiting for connection");
 				sock = serverSock.accept();
+				System.err.println("got connection");
 				thread = new GroupThread(sock, this);
 				thread.start();
 			}

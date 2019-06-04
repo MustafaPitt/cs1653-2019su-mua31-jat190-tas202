@@ -8,13 +8,17 @@ public abstract class Client {
 	 * Socket and input/output streams
 	 */
 	protected Socket sock;
-	protected ObjectOutputStream output;
-	protected ObjectInputStream input;
+	protected ObjectOutputStream output = null;
+	protected ObjectInputStream input = null;
 
 	public boolean connect(final String server, final int port) {
 		try {
 			sock = new Socket(server,port);
-//			sock.connect(socket.getLocalSocketAddress(),3000);
+			output = new ObjectOutputStream(sock.getOutputStream());
+			input = new ObjectInputStream(sock.getInputStream());
+//			Envelope msg = new Envelope("GET");
+//			output.writeObject(msg);
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -50,14 +50,16 @@ public class GroupClient extends Client implements GroupClientInterface {
 	 {
 		 try
 			{
-				Envelope message = null, response = null;
+				Envelope message, response;
 				//Tell the server to create a user
 				message = new Envelope("CUSER");
 				message.addObject(username); //Add user name string
 				message.addObject(token); //Add the requester's token
 				output.writeObject(message);
 				response = (Envelope)input.readObject();
-				
+				System.err.println(response.getMessage());
+				response = (Envelope)input.readObject();
+				System.err.println(response.getMessage());
 				//If server indicates success, return true
 				if(response.getMessage().equals("OK"))
 				{

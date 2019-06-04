@@ -26,7 +26,6 @@ public class GroupThread extends Thread
 			System.out.println("*** New connection from " + socket.getInetAddress() + ":" + socket.getPort() + "***");
 			final ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
 			final ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
-			
 			do
 			{
 				Envelope message = (Envelope)input.readObject();
@@ -54,6 +53,7 @@ public class GroupThread extends Thread
 				}
 				else if(message.getMessage().equals("CUSER")) //Client wants to create a user
 				{
+					System.err.println("got here");
 					if(message.getObjContents().size() < 2)
 					{
 						response = new Envelope("FAIL");
@@ -71,12 +71,13 @@ public class GroupThread extends Thread
 								
 								if(createUser(username, yourToken))
 								{
+									System.err.println("got here 4");
 									response = new Envelope("OK"); //Success
 								}
 							}
 						}
 					}
-					
+					System.err.println(response.getMessage());
 					output.writeObject(response);
 				}
 				else if(message.getMessage().equals("DUSER")) //Client wants to delete a user
@@ -153,7 +154,8 @@ public class GroupThread extends Thread
 		if(my_gs.userList.checkUser(username))
 		{
 			//Issue a new token with server's name, user's name, and user's groups
-			UserToken yourToken = new Token(my_gs.name, username, my_gs.userList.getUserGroups(username));
+			UserToken yourToken = new Token(my_gs.name, username, my_gs.userList.getUserGroups(username),
+					my_gs.userList.getUserOwnership(username));
 			return yourToken;
 		}
 		else
@@ -167,15 +169,23 @@ public class GroupThread extends Thread
 	private boolean createUser(String username, UserToken yourToken)
 	{
 		String requester = yourToken.getSubject();
+		System.err.println("requester: " + requester);
+		System.err.println("All users: ");
+		my_gs.userList.showAllUsers();
 		
 		//Check if requester exists
 		if(my_gs.userList.checkUser(requester))
 		{
 			//Get the user's groups
 			ArrayList<String> temp = my_gs.userList.getUserGroups(requester);
+			System.err.println("Printing requester groups: ");
+			for (String g : temp) {
+				System.err.println(g);
+			}
 			//requester needs to be an administrator
 			if(temp.contains("ADMIN"))
 			{
+				System.err.println("got here 2");
 				//Does user already exist?
 				if(my_gs.userList.checkUser(username))
 				{
@@ -184,6 +194,7 @@ public class GroupThread extends Thread
 				else
 				{
 					my_gs.userList.addUser(username);
+					System.err.println("got here 3");
 					return true;
 				}
 			}
@@ -235,7 +246,8 @@ public class GroupThread extends Thread
 					for(int index = 0; index < deleteOwnedGroup.size(); index++)
 					{
 						//Use the delete group method. Token must be created for this action
-						deleteGroup(deleteOwnedGroup.get(index), new Token(my_gs.name, username, deleteOwnedGroup));
+						deleteGroup(deleteOwnedGroup.get(index), new Token(my_gs.name, username, deleteOwnedGroup,
+								my_gs.userList.getUserOwnership(username)));
 					}
 					
 					//Delete the user from the user list
