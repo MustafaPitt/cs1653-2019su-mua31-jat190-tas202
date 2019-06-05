@@ -22,16 +22,20 @@ public class ClientApplication {
     public static void main (String []args){
 		groupClient = new GroupClient();
 		fileClient = new FileClient();
-
+		boolean signedIn = false;
         while (true){
             Scanner scanner = new Scanner(System.in);
+						String username = null;
 
-			System.out.println("Username: ");
-			String username = scanner.nextLine();
+						if(signedIn == false){
+							System.out.println("Username: ");
+							username = scanner.nextLine();
+							signedIn = true;
+						}
 
-			// Get token
-			groupClient.connect("localhost", GROUP_PORT);
-			token = groupClient.getToken(username);
+						// Get token
+						groupClient.connect("localhost", GROUP_PORT);
+						token = groupClient.getToken(username);
 
             System.out.println("1)Login to group server 2) Connect to File Server 3) exit");
             String input = scanner.next();
@@ -54,17 +58,15 @@ public class ClientApplication {
             if (fileClient.isConnected()) System.out.println("application is connected to client server");
             Scanner scanner = new Scanner(System.in);
             while(true){ // while you are in file server
-				System.out.println("1. List files\n" +
+							System.out.println("1. List files\n" +
 				                   "2. Upload\n" +
 				                   "3. Download\n" +
 				                   "4. Delete\n" +
 				                   "5. Log out\n");
-                String input = scanner.next();
+              String input = scanner.next();
 
 				if (input.equals("1")) { // list files
-					System.out.println("Here!");
 					System.out.println(fileClient.listFiles(token));
-					System.out.println("Here!");
 				}
 
 				if (input.equals("2")) { // upload
@@ -79,21 +81,44 @@ public class ClientApplication {
 					dest = scanner.nextLine();
 					System.out.print("Groups?: ");
 					group = scanner.nextLine();
-						
+
 					System.out.println(fileClient.upload(source, dest,
 						group, token));
 				}
 
-                if (!input.matches("[1-5]")) System.out.println("invalid input");
+				if (input.equals("3")) { // Download a file
+					String source;
+					String dest;
 
-				
+					System.out.print("Source?: ");
+					scanner.nextLine();
+					source = scanner.nextLine();
+					System.out.print("Dest?: ");
+					dest = scanner.nextLine();
 
-                if(input.equals("5")) {
-                    System.out.println("Logging out");
-                    fileClient.disconnect();
-                    return;
-                }
-            }
+					System.out.println(fileClient.download(source, dest, token));
+
+				}
+
+				if (input.equals("4")) { // Delete a file
+					String filename;
+
+					System.out.print("Filename to delete?: ");
+					scanner.nextLine();
+					filename = scanner.nextLine();
+
+					System.out.println(fileClient.delete(filename, token));
+
+				}
+
+        if(input.equals("5")) {
+          System.out.println("Logging out");
+          fileClient.disconnect();
+          return;
+        }
+
+				if (!input.matches("[1-5]")) System.out.println("invalid input");
+      }
     }
 }
 
