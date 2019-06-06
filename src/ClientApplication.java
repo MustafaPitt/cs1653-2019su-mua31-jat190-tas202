@@ -167,7 +167,7 @@ public class ClientApplication {
         System.out.println("********** ADMIN USER MENU **********");
         while (true) {
             System.out.println("1) create a user \n2) del a user\n3) list all users\n4) create a group " +
-                    "\n5) delete a group \n6) list group members \n7) logout");
+                    "\n5) delete a group \n6) list group members \n7)Add User to Group \n8)Remove user from Group \n9) logout");
             String input = scanner.next();
             if (!Pattern.matches("[0-9]", input)) System.out.println("invalid input");
 
@@ -177,7 +177,9 @@ public class ClientApplication {
             else if (input.equals("4")) createGroupInGS(groupClient,adminUser);
             else if (input.equals("5")) delGroupInGS(groupClient,adminUser);
             else if (input.equals("6")) listMembersGroup(groupClient,adminUser);
-            else if (input.equals("7")) {
+						else if (input.equals("7")) addUserToGroup(groupClient,adminUser);
+						else if (input.equals("8")) removeUserFromGroup(groupClient,adminUser);
+            else if (input.equals("9")) {
                 System.out.println("logging out");
                 groupClient.disconnect();
                 return;
@@ -191,7 +193,7 @@ public class ClientApplication {
         Scanner scanner = new Scanner(System.in);
         String groupName =  scanner.next();
         Token token = (Token) groupClient.getToken(user);
-        groupClient.listMembers(groupName,token);
+        System.out.println(groupClient.listMembers(groupName,token));
     }
 
     private static void delGroupInGS(GroupClient groupClient, String adminUser) {
@@ -246,4 +248,37 @@ public class ClientApplication {
          }
          else System.out.println("Error creating a user");
      }
+
+		 private static void addUserToGroup(GroupClient groupClient, String adminUsername) {
+          Scanner scanner = new Scanner(System.in);
+          System.out.println("...........Adding A User to a Group ..........");
+          System.out.println("Enter a username that is being added:");
+          Token token = (Token) groupClient.getToken(adminUsername);
+          String username = scanner.next();
+
+					System.out.println("Enter the group name:");
+					String groupname = scanner.next();
+
+					//does the new username exist
+					if(!groupClient.userList.checkUser(username)){
+						System.out.println("This user doesn't exist.");
+					}
+
+					//is the user the owner of the group
+					else if(!token.getOwnership().contains(groupName)){
+						System.out.println("You must be the owner of a group to add new members.");
+					}
+
+					else{
+						if(!groupClient.addUserToGroup(username, groupname, token)){
+							System.out.println("Error adding user to group.")
+						}
+							System.out.println("User succesfully added to group.")
+					}
+
+
+      }
+
+
+
  }
