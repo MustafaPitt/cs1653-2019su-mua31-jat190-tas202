@@ -37,6 +37,10 @@ public class Token implements UserToken, Serializable {
 		return groups;
 	}
 
+	public List<String> getOwnership() {
+		return ownership;
+	}
+
 
 
 	public void  printGroup(){

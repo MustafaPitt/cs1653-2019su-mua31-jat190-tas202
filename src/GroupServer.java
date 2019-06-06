@@ -9,6 +9,7 @@
  *
  */
 
+
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.io.*;
@@ -19,7 +20,9 @@ public class GroupServer extends Server {
 
 	public static final int SERVER_PORT = 8765;
 	public UserList userList;
-    
+	// to manage group members => each group map to a list contains members belong to key group
+	public HashMap<String,List<String>> groupMembers = new HashMap<>();
+
 	public GroupServer() {
 		super(SERVER_PORT, "ALPHA");
 	}

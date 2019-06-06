@@ -80,8 +80,8 @@ import java.util.*;
 		
 		public User()
 		{
-			groups = new ArrayList<String>();
-			ownership = new ArrayList<String>();
+			groups = new ArrayList<>();
+			ownership = new ArrayList<>();
 		}
 		
 		public ArrayList<String> getGroups()

@@ -47,4 +47,5 @@ public interface UserToken
      */
     public List<java.lang.String> getGroups();
 
+    List<String> getOwnership();
 }   //-- end interface UserToken
