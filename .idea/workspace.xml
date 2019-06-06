@@ -3,19 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="6c5b1895-81e5-4827-bfc2-0716c0042f0f" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/phase-2-1653/ClientApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/phase-2-1653/ClientApplication.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/phase-2-1653/GroupClient.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/phase-2-1653/GroupClient.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/phase-2-1653/GroupThread.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/phase-2-1653/GroupThread.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/phase-2-1653/Token.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/phase-2-1653/Token.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/phase-2-1653/UserList.bin" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/phase-2-1653/UserList.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/phase-2-1653/UserToken.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/phase-2-1653/UserToken.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ClientApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ClientApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GroupClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GroupClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GroupServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GroupServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GroupThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GroupThread.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Token.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Token.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/UserList.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/UserList.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/UserToken.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/UserToken.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -50,7 +38,7 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Token.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="455">
+            <state relative-caret-position="535">
               <caret line="43" selection-start-line="43" selection-end-line="43" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -274,7 +262,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1559854293646" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1559854590622" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="project.structure.last.edited" value="Modules" />
@@ -347,12 +335,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1559324138884</updated>
-      <workItem from="1559324142367" duration="106689000" />
+      <workItem from="1559324142367" duration="106985000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="106689000" />
+    <option name="totallyTimeSpent" value="106985000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -365,23 +353,22 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="Designer" order="0" />
       <window_info id="UI Designer" order="1" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Favorites" order="3" side_tool="true" />
       <window_info id="Image Layers" order="4" />
-      <window_info active="true" content_ui="combo" id="Project" order="5" sideWeight="0.8560311" visible="true" weight="0.2489339" />
-      <window_info id="Structure" order="6" sideWeight="0.14396887" side_tool="true" visible="true" weight="0.2489339" />
+      <window_info content_ui="combo" id="Project" order="5" sideWeight="0.8548387" visible="true" weight="0.2489339" />
+      <window_info id="Structure" order="6" sideWeight="0.14516129" side_tool="true" visible="true" weight="0.2489339" />
       <window_info anchor="bottom" id="Docker" order="0" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="1" weight="0.32932165" />
-      <window_info anchor="bottom" id="Terminal" order="2" weight="0.32932165" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="2" visible="true" weight="0.32827735" />
       <window_info anchor="bottom" id="Database Changes" order="3" />
       <window_info anchor="bottom" id="Event Log" order="4" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="5" />
       <window_info anchor="bottom" id="Find" order="6" weight="0.32827735" />
-      <window_info anchor="bottom" id="Run" order="7" visible="true" weight="0.44312027" />
+      <window_info anchor="bottom" id="Run" order="7" weight="0.44312027" />
       <window_info anchor="bottom" id="Debug" order="8" weight="0.33586133" />
       <window_info anchor="bottom" id="Cvs" order="9" weight="0.25" />
       <window_info anchor="bottom" id="Messages" order="10" weight="0.32827735" />
@@ -757,7 +744,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Token.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="455">
+        <state relative-caret-position="535">
           <caret line="43" selection-start-line="43" selection-end-line="43" />
           <folding>
             <element signature="imports" expanded="true" />
