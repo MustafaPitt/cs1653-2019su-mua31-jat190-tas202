@@ -56,6 +56,11 @@ public class LoginGUI extends javax.swing.JDialog {
 
         btnGroup.setText("Group Server");
         btnGroup.setEnabled(false);
+        btnGroup.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGroupActionPerformed(evt);
+            }
+        });
 
         btnFile.setText("File Server");
         btnFile.setEnabled(false);
@@ -137,6 +142,11 @@ public class LoginGUI extends javax.swing.JDialog {
         dispose();
         FileGUI.go(token);
     }//GEN-LAST:event_btnFileActionPerformed
+
+    private void btnGroupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGroupActionPerformed
+        dispose();
+        GroupGUI.go(token);
+    }//GEN-LAST:event_btnGroupActionPerformed
 
   
     public static void go() {

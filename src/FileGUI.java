@@ -118,7 +118,6 @@ public class FileGUI extends javax.swing.JFrame {
 
         dlgUploadPrompt.setTitle("Upload file...");
         dlgUploadPrompt.setAlwaysOnTop(true);
-        dlgUploadPrompt.setModalityType(java.awt.Dialog.ModalityType.MODELESS);
         dlgUploadPrompt.setResizable(false);
         dlgUploadPrompt.setSize(getPreferredSize());
 
@@ -337,14 +336,14 @@ public class FileGUI extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("GUI Client");
+        setTitle("Files");
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
             }
         });
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Local"));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null));
 
         localPathField.setEditable(false);
 
@@ -384,7 +383,7 @@ public class FileGUI extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Remote"));
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null));
 
         remotePathField.setEditable(false);
 
@@ -399,7 +398,7 @@ public class FileGUI extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane2)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 335, Short.MAX_VALUE)
                     .addComponent(remotePathField, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
@@ -486,7 +485,7 @@ public class FileGUI extends javax.swing.JFrame {
                         .addComponent(btnDisconnect)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 342, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 347, Short.MAX_VALUE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
