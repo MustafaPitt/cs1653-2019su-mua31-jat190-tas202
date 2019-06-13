@@ -1,6 +1,7 @@
 import java.awt.event.WindowEvent;
 import java.io.File;
 import javax.swing.DefaultListModel;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /*
@@ -18,6 +19,8 @@ public class FileGUI extends javax.swing.JFrame {
     FileClient fc;
     UserToken token;
 
+    //JFrame parent;
+    
     /**
      * Creates new form FileGUI
      */
@@ -25,12 +28,15 @@ public class FileGUI extends javax.swing.JFrame {
         initComponents();
     }
     
-    public FileGUI(UserToken t) {
+    public FileGUI(UserToken t, String hostname, int port) {
         this();
+        
+        //parent = p;
+        
         token = t;
         localdir = new File(".");
         fc = new FileClient();
-        fc.connect("localhost", 8001);
+        fc.connect(hostname, port);
         
         updateLocalList();
         updateRemoteList();
@@ -338,12 +344,12 @@ public class FileGUI extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Files");
         addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosing(java.awt.event.WindowEvent evt) {
-                formWindowClosing(evt);
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
             }
         });
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Local"));
 
         localPathField.setEditable(false);
 
@@ -383,7 +389,7 @@ public class FileGUI extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null));
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Remote"));
 
         remotePathField.setEditable(false);
 
@@ -516,7 +522,6 @@ public class FileGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_cmdRemoteDeleteActionPerformed
 
     private void btnDisconnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDisconnectActionPerformed
-        // Disconnect and close window
         fc.disconnect();
         this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
     }//GEN-LAST:event_btnDisconnectActionPerformed
@@ -589,10 +594,10 @@ public class FileGUI extends javax.swing.JFrame {
         openDeleteDlg();
     }//GEN-LAST:event_btnRemoteDeleteActionPerformed
 
-    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        // Close connection before quitting.
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
         if (fc.isConnected()) fc.disconnect();
-    }//GEN-LAST:event_formWindowClosing
+      //  parent.setVisible(true);
+    }//GEN-LAST:event_formWindowClosed
 
     public void openUploadDlg() {
         // Set default entries
@@ -648,11 +653,11 @@ public class FileGUI extends javax.swing.JFrame {
             dlm.addElement(s.replace("/","")); // Remove prefixed '/'
     }
     
-    public static void go(UserToken t) {
+    public static void go(UserToken t, String hostname, int port) {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new FileGUI(t).setVisible(true);
+                new FileGUI(t, hostname, port).setVisible(true);
             }
         });
     }
@@ -683,7 +688,7 @@ public class FileGUI extends javax.swing.JFrame {
         }
         //</editor-fold>
 
-        go(null);
+        go(null, "localhost", 8001);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

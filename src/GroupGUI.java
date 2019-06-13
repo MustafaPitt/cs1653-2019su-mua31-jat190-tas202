@@ -1,5 +1,8 @@
 
+import java.awt.event.WindowEvent;
 import javax.swing.DefaultListModel;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -14,6 +17,8 @@ import javax.swing.DefaultListModel;
 public class GroupGUI extends javax.swing.JFrame {
     GroupClient gc;
     UserToken token;
+    
+    //JFrame parent;
     /**
      * Creates new form GroupGUI
      */
@@ -21,11 +26,14 @@ public class GroupGUI extends javax.swing.JFrame {
         initComponents();
     }
     
-    public GroupGUI(UserToken t) {
+    public GroupGUI(UserToken t, String hostname, int port) {
         this();
+        
+      //  parent = p;
+        
         token = t;
         gc = new GroupClient();
-        gc.connect("localhost", 8000);
+        gc.connect(hostname, port);
         
         updateTokenLabel();
         updateGroupList();
@@ -80,20 +88,33 @@ public class GroupGUI extends javax.swing.JFrame {
         txtDeleteGroupGroup = new javax.swing.JTextField();
         btnDeleteGroupCancel = new javax.swing.JButton();
         btnDeleteGroupOK = new javax.swing.JButton();
-        btnCreateUser = new javax.swing.JButton();
-        btnDeleteUser = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
-        btnCreateGroup = new javax.swing.JButton();
-        btnDeleteGroup = new javax.swing.JButton();
-        bntAddToGroup = new javax.swing.JButton();
-        btnRemoveFromGroup = new javax.swing.JButton();
-        lblTokenInfo = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         groupList = new javax.swing.JList<>();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         userList = new javax.swing.JList<>();
+        jPanel1 = new javax.swing.JPanel();
+        lblTokenInfo = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
+        jLabel16 = new javax.swing.JLabel();
+        jLabel17 = new javax.swing.JLabel();
+        lblUserName = new javax.swing.JLabel();
+        lblIssuer = new javax.swing.JLabel();
+        lblGroups = new javax.swing.JLabel();
+        lblOwnership = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
+        btnCreateGroup = new javax.swing.JButton();
+        btnDeleteGroup = new javax.swing.JButton();
+        btnRemoveFromGroup = new javax.swing.JButton();
+        bntAddToGroup = new javax.swing.JButton();
+        jSeparator2 = new javax.swing.JSeparator();
+        jPanel5 = new javax.swing.JPanel();
+        btnCreateUser = new javax.swing.JButton();
+        btnDeleteUser = new javax.swing.JButton();
+        jSeparator3 = new javax.swing.JSeparator();
+        btnDisconnect = new javax.swing.JButton();
 
         dlgCreateGroup.setTitle("Create Group...");
         dlgCreateGroup.setModal(true);
@@ -103,8 +124,18 @@ public class GroupGUI extends javax.swing.JFrame {
         jLabel2.setText("Group name:");
 
         btnCreateGroupCancel.setText("Cancel");
+        btnCreateGroupCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCreateGroupCancelActionPerformed(evt);
+            }
+        });
 
         btnCreateGroupOK.setText("OK");
+        btnCreateGroupOK.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCreateGroupOKActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout dlgCreateGroupLayout = new javax.swing.GroupLayout(dlgCreateGroup.getContentPane());
         dlgCreateGroup.getContentPane().setLayout(dlgCreateGroupLayout);
@@ -153,11 +184,19 @@ public class GroupGUI extends javax.swing.JFrame {
 
         jLabel4.setText("Username:");
 
-        txtCreateUserName.setText("jTextField1");
-
         btnCreateUserCancel.setText("Cancel");
+        btnCreateUserCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCreateUserCancelActionPerformed(evt);
+            }
+        });
 
         bntCreateUserOK.setText("OK");
+        bntCreateUserOK.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bntCreateUserOKActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout dlgCreateUserLayout = new javax.swing.GroupLayout(dlgCreateUser.getContentPane());
         dlgCreateUser.getContentPane().setLayout(dlgCreateUserLayout);
@@ -206,13 +245,19 @@ public class GroupGUI extends javax.swing.JFrame {
 
         jLabel7.setText("Group name:");
 
-        txtAddUserToGroupUser.setText("jTextField1");
-
-        txtAddUserToGroupGroup.setText("jTextField2");
-
         btnAddUserToGroupCancel.setText("Cancel");
+        btnAddUserToGroupCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddUserToGroupCancelActionPerformed(evt);
+            }
+        });
 
         btnAddUserToGroupOK.setText("OK");
+        btnAddUserToGroupOK.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddUserToGroupOKActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout dlgAddUserToGroupLayout = new javax.swing.GroupLayout(dlgAddUserToGroup.getContentPane());
         dlgAddUserToGroup.getContentPane().setLayout(dlgAddUserToGroupLayout);
@@ -272,13 +317,19 @@ public class GroupGUI extends javax.swing.JFrame {
 
         jLabel10.setText("Group name:");
 
-        txtRemoveUserFromGroupUser.setText("jTextField1");
-
-        txtRemoveUserFromGroupGroup.setText("jTextField2");
-
         btnRemoveUserFromGroupCancel.setText("Cancel");
+        btnRemoveUserFromGroupCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveUserFromGroupCancelActionPerformed(evt);
+            }
+        });
 
         btnRemoveUserFromGroupOK.setText("OK");
+        btnRemoveUserFromGroupOK.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveUserFromGroupOKActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout dlgRemoveUserFromGroupLayout = new javax.swing.GroupLayout(dlgRemoveUserFromGroup.getContentPane());
         dlgRemoveUserFromGroup.getContentPane().setLayout(dlgRemoveUserFromGroupLayout);
@@ -336,11 +387,19 @@ public class GroupGUI extends javax.swing.JFrame {
 
         jLabel12.setText("Username:");
 
-        txtDeleteUserUser.setText("jTextField1");
-
         btnDeleteUserCancel.setText("Cancel");
+        btnDeleteUserCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteUserCancelActionPerformed(evt);
+            }
+        });
 
         btnDeleteUserOK.setText("OK");
+        btnDeleteUserOK.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteUserOKActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout dlgDeleteUserLayout = new javax.swing.GroupLayout(dlgDeleteUser.getContentPane());
         dlgDeleteUser.getContentPane().setLayout(dlgDeleteUserLayout);
@@ -387,16 +446,19 @@ public class GroupGUI extends javax.swing.JFrame {
 
         jLabel14.setText("Group name:");
 
-        txtDeleteGroupGroup.setText("jTextField1");
-        txtDeleteGroupGroup.addActionListener(new java.awt.event.ActionListener() {
+        btnDeleteGroupCancel.setText("Cancel");
+        btnDeleteGroupCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtDeleteGroupGroupActionPerformed(evt);
+                btnDeleteGroupCancelActionPerformed(evt);
             }
         });
 
-        btnDeleteGroupCancel.setText("jButton1");
-
-        btnDeleteGroupOK.setText("jButton2");
+        btnDeleteGroupOK.setText("OK");
+        btnDeleteGroupOK.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteGroupOKActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout dlgDeleteGroupLayout = new javax.swing.GroupLayout(dlgDeleteGroup.getContentPane());
         dlgDeleteGroup.getContentPane().setLayout(dlgDeleteGroupLayout);
@@ -438,28 +500,13 @@ public class GroupGUI extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Groups");
-
-        btnCreateUser.setText("Create User...");
-
-        btnDeleteUser.setText("Delete User...");
-
-        jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);
-
-        btnCreateGroup.setText("Create Group...");
-        btnCreateGroup.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCreateGroupActionPerformed(evt);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
             }
         });
 
-        btnDeleteGroup.setText("Delete Group");
-
-        bntAddToGroup.setText("Add User to Group...");
-
-        btnRemoveFromGroup.setText("Remove User from Group...");
-
-        lblTokenInfo.setFont(new java.awt.Font("Consolas", 0, 11)); // NOI18N
-        lblTokenInfo.setText("HELP!");
+        jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Groups"));
 
@@ -477,14 +524,14 @@ public class GroupGUI extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 251, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 295, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -499,7 +546,7 @@ public class GroupGUI extends javax.swing.JFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 295, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -510,64 +557,207 @@ public class GroupGUI extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Token Information"));
+
+        lblTokenInfo.setText("User:");
+
+        jLabel15.setText("Issuer:");
+
+        jLabel16.setText("Groups:");
+
+        jLabel17.setText("Ownership:");
+
+        lblUserName.setText("jLabel18");
+
+        lblIssuer.setText("jLabel19");
+
+        lblGroups.setText("jLabel21");
+
+        lblOwnership.setText("jLabel22");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblTokenInfo, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel16, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel17, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblUserName, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
+                    .addComponent(lblIssuer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblGroups, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblOwnership, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblTokenInfo)
+                    .addComponent(lblUserName))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel15)
+                    .addComponent(lblIssuer))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel16)
+                    .addComponent(lblGroups))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel17)
+                    .addComponent(lblOwnership))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        btnCreateGroup.setText("Create Group...");
+        btnCreateGroup.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCreateGroupActionPerformed(evt);
+            }
+        });
+
+        btnDeleteGroup.setText("Delete Group");
+        btnDeleteGroup.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteGroupActionPerformed(evt);
+            }
+        });
+
+        btnRemoveFromGroup.setText("Remove User from Group...");
+        btnRemoveFromGroup.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveFromGroupActionPerformed(evt);
+            }
+        });
+
+        bntAddToGroup.setText("Add User to Group...");
+        bntAddToGroup.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bntAddToGroupActionPerformed(evt);
+            }
+        });
+
+        jSeparator2.setOrientation(javax.swing.SwingConstants.VERTICAL);
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnCreateGroup)
+                    .addComponent(btnDeleteGroup)
+                    .addComponent(bntAddToGroup)
+                    .addComponent(btnRemoveFromGroup))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanel4Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {bntAddToGroup, btnCreateGroup, btnDeleteGroup, btnRemoveFromGroup});
+
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addComponent(btnCreateGroup)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnDeleteGroup)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(bntAddToGroup)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnRemoveFromGroup))
+            .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+
+        btnCreateUser.setText("Create User...");
+        btnCreateUser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCreateUserActionPerformed(evt);
+            }
+        });
+
+        btnDeleteUser.setText("Delete User...");
+        btnDeleteUser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteUserActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(btnCreateUser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btnDeleteUser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addComponent(btnCreateUser)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnDeleteUser))
+        );
+
+        btnDisconnect.setText("Disconnect");
+        btnDisconnect.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDisconnectActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnCreateUser)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnDeleteUser))
-                            .addComponent(lblTokenInfo, javax.swing.GroupLayout.DEFAULT_SIZE, 210, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(19, 19, 19)
                         .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnCreateGroup)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnDeleteGroup))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(bntAddToGroup)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnRemoveFromGroup))))
+                            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jSeparator3)
+                            .addComponent(btnDisconnect, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {bntAddToGroup, btnCreateGroup, btnDeleteGroup, btnRemoveFromGroup});
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jPanel2, jPanel3});
 
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnCreateUser)
-                            .addComponent(btnDeleteUser))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblTokenInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnCreateGroup)
-                            .addComponent(btnDeleteGroup))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(bntAddToGroup)
-                            .addComponent(btnRemoveFromGroup))))
-                .addGap(18, 18, 18)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.LEADING))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 3, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(44, 44, 44)))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(btnDisconnect)
+                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -578,23 +768,216 @@ public class GroupGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCreateGroupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateGroupActionPerformed
-
+        openCreateGroupDialog();
     }//GEN-LAST:event_btnCreateGroupActionPerformed
 
     private void groupListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_groupListMouseClicked
         updateUserList();
     }//GEN-LAST:event_groupListMouseClicked
 
-    private void txtDeleteGroupGroupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDeleteGroupGroupActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtDeleteGroupGroupActionPerformed
+    private void btnDisconnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDisconnectActionPerformed
+        gc.disconnect();
+        this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+    }//GEN-LAST:event_btnDisconnectActionPerformed
 
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        if (gc.isConnected()) gc.disconnect();
+ //       parent.setVisible(true);
+    }//GEN-LAST:event_formWindowClosed
+
+    private void btnCreateGroupCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateGroupCancelActionPerformed
+        dlgCreateGroup.setVisible(false);
+    }//GEN-LAST:event_btnCreateGroupCancelActionPerformed
+
+    private void btnCreateUserCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateUserCancelActionPerformed
+        dlgCreateUser.setVisible(false);
+    }//GEN-LAST:event_btnCreateUserCancelActionPerformed
+
+    private void btnAddUserToGroupCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddUserToGroupCancelActionPerformed
+        dlgAddUserToGroup.setVisible(false);
+    }//GEN-LAST:event_btnAddUserToGroupCancelActionPerformed
+
+    private void btnRemoveUserFromGroupCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveUserFromGroupCancelActionPerformed
+        dlgRemoveUserFromGroup.setVisible(false);
+    }//GEN-LAST:event_btnRemoveUserFromGroupCancelActionPerformed
+
+    private void btnDeleteUserCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteUserCancelActionPerformed
+        dlgDeleteUser.setVisible(false);
+    }//GEN-LAST:event_btnDeleteUserCancelActionPerformed
+
+    private void btnDeleteGroupCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteGroupCancelActionPerformed
+        dlgDeleteGroup.setVisible(false);
+    }//GEN-LAST:event_btnDeleteGroupCancelActionPerformed
+
+    private void bntAddToGroupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntAddToGroupActionPerformed
+        openAddUserToGroupDialog();
+    }//GEN-LAST:event_bntAddToGroupActionPerformed
+
+    private void btnRemoveFromGroupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveFromGroupActionPerformed
+        openRemoveUserFromGroupDialog();
+    }//GEN-LAST:event_btnRemoveFromGroupActionPerformed
+
+    private void btnCreateUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateUserActionPerformed
+        openCreateUserDialog();
+    }//GEN-LAST:event_btnCreateUserActionPerformed
+
+    private void btnDeleteUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteUserActionPerformed
+        openDeleteUserDialog();
+    }//GEN-LAST:event_btnDeleteUserActionPerformed
+
+    private void btnDeleteGroupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteGroupActionPerformed
+        openDeleteGroupDialog();
+    }//GEN-LAST:event_btnDeleteGroupActionPerformed
+
+    private void btnCreateGroupOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateGroupOKActionPerformed
+        String g = txtCreateGroupName.getText();
+        
+        if (!gc.createGroup(g, token)) {
+            JOptionPane.showMessageDialog(this, "Unable to create group!");
+        }
+        
+        updateGroupList();
+        updateUserList();
+        
+        dlgCreateGroup.setVisible(false);
+    }//GEN-LAST:event_btnCreateGroupOKActionPerformed
+
+    private void bntCreateUserOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntCreateUserOKActionPerformed
+        if (!token.getGroups().contains("ADMIN")) {
+            JOptionPane.showMessageDialog(this, "Only ADMIN can do that.");
+            return;
+        }
+        
+        if (!gc.createUser(txtCreateUserName.getText(), token)) {
+            JOptionPane.showMessageDialog(this, "Unable to create user!");
+            return;
+        }
+        
+        dlgCreateUser.setVisible(false);
+    }//GEN-LAST:event_bntCreateUserOKActionPerformed
+
+    private void btnAddUserToGroupOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddUserToGroupOKActionPerformed
+        if (!token.getOwnership().contains(txtAddUserToGroupGroup.getText())) {
+            JOptionPane.showMessageDialog(this, "Only the owner can add users.");
+            return;
+        }
+        
+        if (!gc.addUserToGroup(txtAddUserToGroupUser.getText(), txtAddUserToGroupGroup.getText(), token)) {
+            JOptionPane.showMessageDialog(this, "Unable to add user.");
+            return;
+        }
+        
+        updateUserList();
+        
+        dlgAddUserToGroup.setVisible(false);
+    }//GEN-LAST:event_btnAddUserToGroupOKActionPerformed
+
+    private void btnRemoveUserFromGroupOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveUserFromGroupOKActionPerformed
+        String u = txtRemoveUserFromGroupUser.getText();
+        String g = txtRemoveUserFromGroupGroup.getText();
+        
+        if (!gc.deleteUserFromGroup(u, g, token)) {
+            JOptionPane.showMessageDialog(this, "Unable to remove user from group.");
+            return;
+        }
+        
+        updateUserList();
+        
+        dlgRemoveUserFromGroup.setVisible(false);
+    }//GEN-LAST:event_btnRemoveUserFromGroupOKActionPerformed
+
+    private void btnDeleteUserOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteUserOKActionPerformed
+        String u = txtDeleteUserUser.getText();
+        
+        if (!gc.deleteUser(u, token)) {
+            JOptionPane.showMessageDialog(this, "Unable to delete user.");
+            return;
+        }
+        
+        updateUserList();
+        
+        dlgDeleteUser.setVisible(false);
+    }//GEN-LAST:event_btnDeleteUserOKActionPerformed
+
+    private void btnDeleteGroupOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteGroupOKActionPerformed
+        String g = txtDeleteGroupGroup.getText();
+        
+        if (token.getOwnership().contains(g)) {
+            JOptionPane.showMessageDialog(this, "Only the owner can delete the group");
+            return;
+        }
+        
+        if (!gc.deleteGroup(g, token)) {
+            JOptionPane.showMessageDialog(this, "Unable to delete group.");
+            return;
+        }
+        
+        updateGroupList();
+        updateUserList();
+        
+        dlgDeleteGroup.setVisible(false);
+    }//GEN-LAST:event_btnDeleteGroupOKActionPerformed
+
+    
+    public void openCreateGroupDialog() {
+        txtCreateGroupName.setText("");
+        dlgCreateGroup.pack();
+        dlgCreateGroup.setVisible(true);
+    }
+    
+    public void openCreateUserDialog() {
+        txtCreateUserName.setText("");
+        dlgCreateUser.pack();
+        dlgCreateUser.setVisible(true);
+    }
+    
+    public void openDeleteGroupDialog() {
+        String g = groupList.getSelectedValue();
+        
+        if (g != null) txtDeleteGroupGroup.setText(g);
+        else txtDeleteGroupGroup.setText("");
+        dlgDeleteGroup.pack();
+        dlgDeleteGroup.setVisible(true);
+    }
+    
+    public void openAddUserToGroupDialog() {
+        String g = groupList.getSelectedValue();
+        
+        if (g != null) txtAddUserToGroupGroup.setText(g);
+        else txtAddUserToGroupGroup.setText("");
+        
+        txtAddUserToGroupUser.setText("");
+        dlgAddUserToGroup.pack();
+        dlgAddUserToGroup.setVisible(true);
+    }
+    
+    public void openRemoveUserFromGroupDialog() {
+        String g = groupList.getSelectedValue();
+        String u = userList.getSelectedValue();
+        
+        if (g != null) txtRemoveUserFromGroupGroup.setText(g);
+        else txtRemoveUserFromGroupGroup.setText("");
+        
+        if (u != null) txtRemoveUserFromGroupUser.setText(u);
+        else txtRemoveUserFromGroupUser.setText("");
+        
+        dlgRemoveUserFromGroup.pack();
+        dlgRemoveUserFromGroup.setVisible(true);
+    }
+    
+    public void openDeleteUserDialog() {
+        txtDeleteUserUser.setText("");
+        dlgDeleteUser.pack();
+        dlgDeleteUser.setVisible(true);
+    }
+    
+
+    
     public void updateTokenLabel() {
-        lblTokenInfo.setText(
-            "User:   " + token.getSubject() + "\n" +
-            "Issuer: " + token.getIssuer() + "\n" +
-            "Groups: " + token.getGroups() + "\n" +
-            "Owner:  " + token.getOwnership() + "\n");
+        lblUserName.setText(token.getSubject());
+        lblIssuer.setText(token.getIssuer());
+        lblGroups.setText(token.getGroups().toString());
+        lblOwnership.setText(token.getOwnership().toString());
     }
     
     public void updateGroupList() {
@@ -616,10 +999,10 @@ public class GroupGUI extends javax.swing.JFrame {
         }
     }
     
-    public static void go(UserToken t) {
+    public static void go(UserToken t, String hostname, int port) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new GroupGUI(t).setVisible(true);
+                new GroupGUI(t, hostname, port).setVisible(true);
             }
         });
     }
@@ -651,7 +1034,7 @@ public class GroupGUI extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        go(null);
+        go(null, "localhost", 8000);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -670,6 +1053,7 @@ public class GroupGUI extends javax.swing.JFrame {
     private javax.swing.JButton btnDeleteUser;
     private javax.swing.JButton btnDeleteUserCancel;
     private javax.swing.JButton btnDeleteUserOK;
+    private javax.swing.JButton btnDisconnect;
     private javax.swing.JButton btnRemoveFromGroup;
     private javax.swing.JButton btnRemoveUserFromGroupCancel;
     private javax.swing.JButton btnRemoveUserFromGroupOK;
@@ -686,6 +1070,9 @@ public class GroupGUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -694,12 +1081,21 @@ public class GroupGUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JLabel lblGroups;
+    private javax.swing.JLabel lblIssuer;
+    private javax.swing.JLabel lblOwnership;
     private javax.swing.JLabel lblTokenInfo;
+    private javax.swing.JLabel lblUserName;
     private javax.swing.JTextField txtAddUserToGroupGroup;
     private javax.swing.JTextField txtAddUserToGroupUser;
     private javax.swing.JTextField txtCreateGroupName;
