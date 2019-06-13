@@ -173,12 +173,12 @@ public class ClientApplication {
 
             else if (input.equals("1")) createUserInGS(groupClient, adminUser);
             else if (input.equals("2")) delUserFromGS(groupClient,adminUser);
-            else if (input.equals("3")) listAllUsers(groupClient,adminUser);
+            // else if (input.equals("3")) listAllUsers(groupClient,adminUser);
             else if (input.equals("4")) createGroupInGS(groupClient,adminUser);
             else if (input.equals("5")) delGroupInGS(groupClient,adminUser);
             else if (input.equals("6")) listMembersGroup(groupClient,adminUser);
 						else if (input.equals("7")) addUserToGroup(groupClient,adminUser);
-						else if (input.equals("8")) removeUserFromGroup(groupClient,adminUser);
+						//else if (input.equals("8")) removeUserFromGroup(groupClient,adminUser);
             else if (input.equals("9")) {
                 System.out.println("logging out");
                 groupClient.disconnect();
@@ -220,10 +220,10 @@ public class ClientApplication {
         else System.out.println("Error creating a group");
     }
 
-    private static void listAllUsers(GroupClient groupClient, String adminUser) {
-        System.out.println("coming soon. This method should return all the users in " +
-                "the group server");
-    }
+    // private static void listAllUsers(GroupClient groupClient, String adminUser) {
+    //     System.out.println("coming soon. This method should return all the users in " +
+    //             "the group server");
+    // }
 
     private static void delUserFromGS(GroupClient groupClient,String adminUsername) {
         Scanner scanner = new Scanner(System.in);
@@ -271,9 +271,9 @@ public class ClientApplication {
 
 					else{
 						if(!groupClient.addUserToGroup(username, groupname, token)){
-							System.out.println("Error adding user to group.")
+							System.out.println("Error adding user to group.");
 						}
-							System.out.println("User succesfully added to group.")
+							System.out.println("User succesfully added to group.");
 					}
 
 
