@@ -226,7 +226,6 @@ public class FileThread extends Thread
 						try
 						{
 
-
 							File f = new File("shared_files/"+"_"+remotePath.replace('/', '_'));
 
 							if (!f.exists()) {

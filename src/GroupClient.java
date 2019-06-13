@@ -24,7 +24,7 @@ public class GroupClient extends Client implements GroupClientInterface {
 			//Successful response
 			if(response.getMessage().equals("OK"))
 			{
-				//If there is a token in the Envelope, return it 
+				//If there is a token in the Envelope, return it
 				ArrayList<Object> temp = null;
 				temp = response.getObjContents();
 
@@ -175,11 +175,9 @@ public class GroupClient extends Client implements GroupClientInterface {
 			output.writeObject(message);
 
 			response = (Envelope)input.readObject();
-
-			//If server indicates success, return the member list
+					//If server indicates success, return the member list
 			if(response.getMessage().equals("OK"))
 			{
-				System.err.println("there is list of group members");
 				return (List<String>)response.getObjContents().get(0); //This cast creates compiler warnings. Sorry.
 			}
 
@@ -194,16 +192,16 @@ public class GroupClient extends Client implements GroupClientInterface {
 		}
 	}
 
-	public boolean addUserToGroup(String username, String groupname, UserToken token)
+	public boolean addUserToGroup(String userToAdd, String groupname, UserToken token)
 	{
 		try
 		{
 			Envelope message = null, response = null;
 			//Tell the server to add a user to the group
 			message = new Envelope("AUSERTOGROUP");
-			message.addObject(username); //Add user name string
 			message.addObject(groupname); //Add group name string
 			message.addObject(token); //Add requester's token
+			message.addObject(userToAdd); //Add user name string
 			output.writeObject(message);
 
 			response = (Envelope)input.readObject();
@@ -223,16 +221,18 @@ public class GroupClient extends Client implements GroupClientInterface {
 		}
 	}
 
-	public boolean deleteUserFromGroup(String username, String groupname, UserToken token)
+	public boolean deleteUserFromGroup(String username, String groupName, UserToken token)
 	{
 		try
 		{
 			Envelope message = null, response = null;
 			//Tell the server to remove a user from the group
 			message = new Envelope("RUSERFROMGROUP");
-			message.addObject(username); //Add user name string
-			message.addObject(groupname); //Add group name string
+			message.addObject(groupName); //Add group name string
 			message.addObject(token); //Add requester's token
+
+			message.addObject(username); //Add user name string
+
 			output.writeObject(message);
 
 			response = (Envelope)input.readObject();
