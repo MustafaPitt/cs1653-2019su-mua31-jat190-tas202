@@ -18,14 +18,14 @@ public interface GroupClientInterface
      * @return true if the connection succeeds, false otherwise
      *
      */
-    public boolean connect(final String server, final int port);
+     boolean connect(final String server, final int port);
 
 
     /**
      * Close down the connection to the group server.
      *
      */
-    public void disconnect();
+     void disconnect();
 
 
     /**
@@ -51,7 +51,7 @@ public interface GroupClientInterface
      * @return true if the new user was created, false otherwise
      *
      */
-    public boolean createUser(final String username, final UserToken token);
+    boolean createUser(final String username, final UserToken token);
 
 
     /**
@@ -65,7 +65,7 @@ public interface GroupClientInterface
      * @return true if the user was deleted, false otherwise
      *
      */
-    public boolean deleteUser(final String username, final UserToken token);
+     boolean deleteUser(final String username, final UserToken token);
 
 
     /**
@@ -91,7 +91,7 @@ public interface GroupClientInterface
      * @return true if the group was deleted, false otherwise
      *
      */
-    public boolean deleteGroup(final String groupname, final UserToken token);
+     boolean deleteGroup(final String groupname, final UserToken token);
 
 
     /**
@@ -105,7 +105,7 @@ public interface GroupClientInterface
      * @return true if the user was added, false otherwise
      *
      */
-    public boolean addUserToGroup(final String user, final String group, final UserToken token);
+     boolean addUserToGroup(final String user, final String group, final UserToken token);
 
 
     /**
@@ -119,7 +119,7 @@ public interface GroupClientInterface
      * @return true if the user was removed, false otherwise
      *
      */
-    public boolean deleteUserFromGroup(final String user, final String group, final UserToken token);
+     boolean deleteUserFromGroup(final String user, final String group, final UserToken token);
 
 
 
@@ -135,6 +135,6 @@ public interface GroupClientInterface
      *         a group has no members, while a null return indicates
      *         an error.
      */
-    public List<String> listMembers(final String group, final UserToken token);
+     List<String> listMembers(final String group, final UserToken token);
 
 }   //-- end interface GroupClientInterface

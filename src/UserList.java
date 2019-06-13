@@ -64,6 +64,10 @@ import java.util.*;
 		}
 		public synchronized  void showAllUsers(){
 			System.err.println("Printing userList list: ");
+			if (list == null){
+				System.out.println("No users found ");
+				return;
+			}
 			for (String key : list.keySet()){
 				System.err.println(key + "," + list.get(key));
 			}

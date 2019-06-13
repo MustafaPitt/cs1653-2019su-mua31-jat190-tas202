@@ -10,6 +10,8 @@
  */
 
 
+import com.sun.istack.internal.Nullable;
+
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.io.*;
@@ -21,7 +23,7 @@ public class GroupServer extends Server {
 	public static final int SERVER_PORT = 8765;
 	public UserList userList;
 	// to manage group members => each group map to a list contains members belong to key group
-	public HashMap<String,List<String>> groupMembers = new HashMap<>();
+	public HashMap<String,List<String>> groupMembers ;
 
 	public GroupServer() {
 		super(SERVER_PORT, "ALPHA");
@@ -42,13 +44,19 @@ public class GroupServer extends Server {
 		//This runs a thread that saves the lists on program exit
 		Runtime runtime = Runtime.getRuntime();
 		runtime.addShutdownHook(new ShutDownListener(this));
-		
+
+
 		//Open user file to get user list
 		try
 		{
 			FileInputStream fis = new FileInputStream(userFile);
 			userStream = new ObjectInputStream(fis);
 			userList = (UserList)userStream.readObject();
+
+			fis = new FileInputStream("GroupMembers.bin");
+			groupStream = new ObjectInputStream(fis);
+			groupMembers = (HashMap) groupStream.readObject();
+
 			System.out.println("DBG  show all users in the group servers");
 			userList.showAllUsers();
 		}
@@ -62,9 +70,13 @@ public class GroupServer extends Server {
 			
 			//Create a new list, add current user to the ADMIN group. They now own the ADMIN group.
 			userList = new UserList();
+			groupMembers = new HashMap<>();  // init a group members
 			userList.addUser(username);
 			userList.addGroup(username, "ADMIN");
 			userList.addOwnership(username, "ADMIN");
+			List<String> members = new ArrayList<>();
+			members.add(username);
+			groupMembers.put("ADMIN",members);
 		}
 		catch(IOException e)
 		{
@@ -76,7 +88,7 @@ public class GroupServer extends Server {
 			System.out.println("Error reading from UserList file");
 			System.exit(-1);
 		}
-		
+
 		//Autosave Daemon. Saves lists every 5 minutes
 		AutoSave aSave = new AutoSave(this);
 		aSave.setDaemon(true);
@@ -123,10 +135,18 @@ class ShutDownListener extends Thread
 	{
 		System.out.println("Shutting down server");
 		ObjectOutputStream outStream;
+		ObjectOutputStream outStreamGroup;
+
 		try
 		{
 			outStream = new ObjectOutputStream(new FileOutputStream("UserList.bin"));
 			outStream.writeObject(my_gs.userList);
+			outStream.close();
+
+			outStreamGroup = new ObjectOutputStream(new FileOutputStream("GroupMembers.bin"));
+			outStreamGroup.writeObject(my_gs.groupMembers);
+			outStreamGroup.close();
+
 		}
 		catch(Exception e)
 		{
@@ -157,6 +177,9 @@ class AutoSave extends Thread
 				{
 					outStream = new ObjectOutputStream(new FileOutputStream("UserList.bin"));
 					outStream.writeObject(my_gs.userList);
+					outStream.close();
+					outStream = new ObjectOutputStream(new FileOutputStream("GroupMembers.bin"));
+					outStream.writeObject(my_gs.groupMembers);
 				}
 				catch(Exception e)
 				{

@@ -3,7 +3,24 @@
   <component name="ChangeListManager">
     <list default="true" id="6c5b1895-81e5-4827-bfc2-0716c0042f0f" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phase-2-1653/AutoSave.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/phase-2-1653/AutoSave.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phase-2-1653/ClientApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/phase-2-1653/ClientApplication.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phase-2-1653/FileList.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phase-2-1653/GroupClient.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/phase-2-1653/GroupClient.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phase-2-1653/GroupServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/phase-2-1653/GroupServer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phase-2-1653/GroupThread.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/phase-2-1653/GroupThread.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phase-2-1653/RunGroupServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/phase-2-1653/RunGroupServer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phase-2-1653/ShutDownListener.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/phase-2-1653/ShutDownListener.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phase-2-1653/UserList$User.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/phase-2-1653/UserList$User.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/phase-2-1653/UserList.bin" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/phase-2-1653/UserList.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phase-2-1653/UserList.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/phase-2-1653/UserList.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ClientApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ClientApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GroupClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GroupClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GroupClientInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GroupClientInterface.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GroupServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GroupServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GroupThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GroupThread.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RunGroupServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/RunGroupServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UserList.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/UserList.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -15,10 +32,22 @@
   <component name="FileEditorManager">
     <leaf>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/ClientApplication.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="302">
+              <caret line="234" column="59" selection-start-line="234" selection-start-column="59" selection-end-line="234" selection-end-column="59" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/GroupClient.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="332">
-              <caret line="173" column="24" lean-forward="true" selection-start-line="173" selection-start-column="24" selection-end-line="173" selection-end-column="24" />
+            <state relative-caret-position="156">
+              <caret line="181" column="13" selection-start-line="181" selection-start-column="13" selection-end-line="181" selection-end-column="13" />
               <folding>
                 <element signature="e#3657#3687#0" expanded="true" />
               </folding>
@@ -27,43 +56,44 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/GroupThread.java">
+        <entry file="file://$PROJECT_DIR$/out/production/phase-2-1653/Envelope.class">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="244" column="16" selection-start-line="244" selection-start-column="16" selection-end-line="244" selection-end-column="16" />
+            <state>
+              <folding>
+                <element signature="e#0#679#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/Token.java">
+        <entry file="file://$PROJECT_DIR$/src/GroupThread.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="399">
-              <caret line="29" column="5" lean-forward="true" selection-start-line="29" selection-start-column="5" selection-end-line="29" selection-end-column="5" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state relative-caret-position="418">
+              <caret line="328" column="41" selection-start-line="328" selection-start-column="41" selection-end-line="328" selection-end-column="41" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/ClientApplication.java">
+        <entry file="file://$PROJECT_DIR$/src/GroupClientInterface.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="281">
-              <caret line="111" selection-start-line="111" selection-end-line="111" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state relative-caret-position="172">
+              <caret line="80" column="19" selection-start-line="80" selection-start-column="19" selection-end-line="80" selection-end-column="19" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/RunGroupServer.java">
+        <entry file="file://$PROJECT_DIR$/src/GroupServer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="170">
-              <caret line="10" column="45" selection-start-line="10" selection-start-column="45" selection-end-line="10" selection-end-column="45" />
+            <state relative-caret-position="187">
+              <caret line="28" column="36" selection-start-line="28" selection-start-column="36" selection-end-line="28" selection-end-column="36" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#764#765#0" expanded="true" />
+                <element signature="e#798#799#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -72,7 +102,35 @@
         <entry file="file://$PROJECT_DIR$/src/RunFileServer.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="51">
-              <caret line="3" column="4" lean-forward="true" selection-start-line="3" selection-start-column="4" selection-end-line="3" selection-end-column="4" />
+              <caret line="3" column="4" selection-start-line="3" selection-start-column="4" selection-end-line="3" selection-end-column="4" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/RunGroupServer.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="85">
+              <caret line="5" column="4" selection-start-line="5" selection-start-column="4" selection-end-line="5" selection-end-column="4" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Envelope.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="435">
+              <caret line="30" selection-start-line="30" selection-end-line="30" />
+              <folding>
+                <element signature="e#247#255#0" expanded="true" />
+                <element signature="e#292#293#0" expanded="true" />
+                <element signature="e#309#310#0" expanded="true" />
+                <element signature="e#342#343#0" expanded="true" />
+                <element signature="e#359#360#0" expanded="true" />
+                <element signature="e#407#408#0" expanded="true" />
+                <element signature="e#432#433#0" expanded="true" />
+                <element signature="e#475#476#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -80,8 +138,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/UserList.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="190">
-              <caret line="77" column="34" selection-start-line="77" selection-start-column="34" selection-end-line="77" selection-end-column="34" />
+            <state relative-caret-position="332">
+              <caret line="85" column="9" selection-start-line="85" selection-start-column="9" selection-end-line="85" selection-end-column="9" />
               <folding>
                 <element signature="e#273#287#0" expanded="true" />
                 <element signature="e#749#750#0" expanded="true" />
@@ -96,47 +154,6 @@
                 <element signature="e#1290#1291#0" expanded="true" />
                 <element signature="e#1371#1372#0" expanded="true" />
                 <element signature="e#1421#1422#0" expanded="true" />
-                <element signature="e#1975#1976#0" expanded="true" />
-                <element signature="e#1997#1998#0" expanded="true" />
-                <element signature="e#2115#2116#0" expanded="true" />
-                <element signature="e#2141#2142#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/GroupClientInterface.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="196">
-              <caret line="93" column="19" selection-start-line="93" selection-start-column="19" selection-end-line="93" selection-end-column="19" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Client.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="276">
-              <caret line="40" selection-start-line="40" selection-end-line="40" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Envelope.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="248">
-              <caret line="19" selection-start-line="19" selection-end-line="19" />
-              <folding>
-                <element signature="e#247#255#0" expanded="true" />
-                <element signature="e#292#293#0" expanded="true" />
-                <element signature="e#309#310#0" expanded="true" />
-                <element signature="e#359#360#0" expanded="true" />
-                <element signature="e#407#408#0" expanded="true" />
-                <element signature="e#432#433#0" expanded="true" />
-                <element signature="e#475#476#0" expanded="true" />
-                <element signature="e#505#506#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -153,36 +170,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>mua31</find>
-      <find>fis</find>
-      <find>read</find>
-      <find>connect</find>
-      <find>Request received:</find>
-      <find>co</find>
-      <find>toke</find>
-      <find>ALPHA</find>
-      <find>gettoken</find>
-      <find>token</find>
-      <find>create a user</find>
-      <find>create</find>
-      <find>show</find>
-      <find>FAIL</find>
-      <find>group</find>
-      <find>create a</find>
-      <find>cgro</find>
-      <find>listm</find>
-      <find>deleteGroup</find>
-      <find>group already exists</find>
-      <find>DBG</find>
-      <find>no su</find>
-      <find>adduse</find>
-      <find>memeber</find>
-      <find>listMembers</find>
+      <find>addUserToGroup</find>
+      <find>DBG in GroupThread print requester</find>
+      <find>deleted</find>
+      <find>removeUserFromGroup</find>
+      <find>BG in GroupThread print requester</find>
+      <find>dbg 185 group thread</find>
+      <find>there is list of group member</find>
+      <find>removeuserfrom</find>
       <find>list</find>
-      <find>listall</find>
-      <find>listmem</find>
-      <find>OK</find>
+      <find>listallme</find>
+      <find>output</find>
+      <find>memeber</find>
+      <find>successfully</find>
       <find>listAllMembersInGroup</find>
+      <find>connect</find>
+      <find>group</find>
+      <find>isUserInAdminGroup</find>
+      <find>listMembers</find>
+      <find>DBG in GroupThread print</find>
+      <find>ADMIN USER MENU</find>
+      <find>li</find>
+      <find>system.err</find>
+      <find>dbg group thread</find>
+      <find>got here 2</find>
+      <find>deleteuser</find>
+      <find>there is list of group membe</find>
+      <find>check</find>
+      <find>there is list of group members</find>
+      <find>group name</find>
+      <find>refres</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -191,12 +208,13 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/GroupClientInterface.java" />
         <option value="$PROJECT_DIR$/src/Client.java" />
         <option value="$PROJECT_DIR$/src/UserToken.java" />
         <option value="$PROJECT_DIR$/src/Token.java" />
         <option value="$PROJECT_DIR$/src/UserList.java" />
+        <option value="$PROJECT_DIR$/src/GroupClientInterface.java" />
         <option value="$PROJECT_DIR$/src/GroupServer.java" />
+        <option value="$PROJECT_DIR$/src/RunGroupServer.java" />
         <option value="$PROJECT_DIR$/src/GroupClient.java" />
         <option value="$PROJECT_DIR$/src/ClientApplication.java" />
         <option value="$PROJECT_DIR$/src/GroupThread.java" />
@@ -247,12 +265,6 @@
               <item name="phase-2-1653" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="phase-2-1653" type="b2602c69:ProjectViewProjectNode" />
-              <item name="phase-2-1653" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="GroupServer.java" type="529ef68f:ClassesTreeStructureProvider$PsiClassOwnerTreeNode" />
-            </path>
           </expand>
           <select />
         </subPane>
@@ -262,9 +274,11 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1559854934678" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1560391123705" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/out/production/phase-2-1653" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
@@ -287,7 +301,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.ClientApplication">
+  <component name="RunManager" selected="Application.RunGroupServer">
     <configuration name="ClientApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="ClientApplication" />
       <module name="phase-2-1653" />
@@ -307,7 +321,8 @@
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="RunGroupServer" />
       <module name="phase-2-1653" />
-      <option name="PROGRAM_PARAMETERS" value="8085" />
+      <option name="PROGRAM_PARAMETERS" value="9988" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/out/production/phase-2-1653" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -319,8 +334,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.ClientApplication" />
         <item itemvalue="Application.RunGroupServer" />
+        <item itemvalue="Application.ClientApplication" />
         <item itemvalue="Application.RunFileServer" />
       </list>
     </recent_temporary>
@@ -335,12 +350,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1559324138884</updated>
-      <workItem from="1559324142367" duration="107229000" />
+      <workItem from="1559324142367" duration="163030000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="107229000" />
+    <option name="totallyTimeSpent" value="163030000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -359,16 +374,16 @@
       <window_info id="Capture Tool" order="2" />
       <window_info id="Favorites" order="3" side_tool="true" />
       <window_info id="Image Layers" order="4" />
-      <window_info content_ui="combo" id="Project" order="5" sideWeight="0.8548387" visible="true" weight="0.2489339" />
-      <window_info id="Structure" order="6" sideWeight="0.14516129" side_tool="true" visible="true" weight="0.2489339" />
+      <window_info content_ui="combo" id="Project" order="5" sideWeight="0.5263158" visible="true" weight="0.2489339" />
+      <window_info id="Structure" order="6" sideWeight="0.47368422" side_tool="true" visible="true" weight="0.2489339" />
       <window_info anchor="bottom" id="Docker" order="0" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="1" weight="0.32932165" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="2" visible="true" weight="0.32827735" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="2" visible="true" weight="0.3618635" />
       <window_info anchor="bottom" id="Database Changes" order="3" />
       <window_info anchor="bottom" id="Event Log" order="4" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="5" />
-      <window_info anchor="bottom" id="Find" order="6" weight="0.32827735" />
-      <window_info anchor="bottom" id="Run" order="7" weight="0.44312027" />
+      <window_info anchor="bottom" id="Find" order="6" weight="0.42795232" />
+      <window_info anchor="bottom" id="Run" order="7" weight="0.27410617" />
       <window_info anchor="bottom" id="Debug" order="8" weight="0.33586133" />
       <window_info anchor="bottom" id="Cvs" order="9" weight="0.25" />
       <window_info anchor="bottom" id="Messages" order="10" weight="0.32827735" />
@@ -384,6 +399,37 @@
       <window_info anchor="right" id="Ant Build" order="7" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="8" weight="0.25" />
     </layout>
+    <layout-to-restore>
+      <window_info id="Designer" order="0" />
+      <window_info id="UI Designer" order="1" />
+      <window_info id="Capture Tool" order="2" />
+      <window_info id="Favorites" order="3" side_tool="true" />
+      <window_info id="Image Layers" order="4" />
+      <window_info content_ui="combo" id="Project" order="5" sideWeight="0.5277311" visible="true" weight="0.2489339" />
+      <window_info id="Structure" order="6" sideWeight="0.4722689" side_tool="true" visible="true" weight="0.2489339" />
+      <window_info anchor="bottom" id="Docker" order="0" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="1" weight="0.32932165" />
+      <window_info anchor="bottom" id="Terminal" order="2" weight="0.3618635" />
+      <window_info anchor="bottom" id="Database Changes" order="3" />
+      <window_info anchor="bottom" id="Event Log" order="4" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="5" />
+      <window_info anchor="bottom" id="Find" order="6" weight="0.032502707" />
+      <window_info active="true" anchor="bottom" id="Run" order="7" visible="true" weight="0.35536295" />
+      <window_info anchor="bottom" id="Debug" order="8" weight="0.33586133" />
+      <window_info anchor="bottom" id="Cvs" order="9" weight="0.25" />
+      <window_info anchor="bottom" id="Messages" order="10" weight="0.32827735" />
+      <window_info anchor="bottom" id="Inspection" order="11" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="12" weight="0.32932165" />
+      <window_info anchor="right" id="Theme Preview" order="0" />
+      <window_info anchor="right" id="Database" order="1" />
+      <window_info anchor="right" id="Capture Analysis" order="2" />
+      <window_info anchor="right" id="Palette&#9;" order="3" />
+      <window_info anchor="right" id="Maven" order="4" />
+      <window_info anchor="right" id="Palette" order="5" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="6" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="7" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="8" weight="0.25" />
+    </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
@@ -393,20 +439,42 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/src/GroupThread.java</url>
-          <line>281</line>
+          <line>375</line>
           <properties class="GroupThread" method="createUser">
             <option name="EMULATED" value="true" />
           </properties>
           <option name="timeStamp" value="5" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/ClientApplication.java</url>
-          <line>107</line>
+          <url>file://$PROJECT_DIR$/src/GroupClient.java</url>
+          <line>176</line>
           <properties />
-          <option name="timeStamp" value="20" />
+          <option name="timeStamp" value="24" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/GroupThread.java</url>
+          <line>31</line>
+          <properties />
+          <option name="timeStamp" value="26" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/GroupServer.java</url>
+          <line>28</line>
+          <properties />
+          <option name="timeStamp" value="27" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/GroupThread.java</url>
+          <line>279</line>
+          <properties />
+          <option name="timeStamp" value="28" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
+  </component>
+  <component name="antWorkspaceConfiguration">
+    <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
+    <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_171/src.zip!/java/lang/Thread.java">
@@ -597,13 +665,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/out/production/phase-2-1653/GroupThread.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="453">
-          <caret line="178" column="20" lean-forward="true" selection-start-line="178" selection-start-column="20" selection-end-line="178" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/out/production/phase-2-1653/Token.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="374">
@@ -632,17 +693,89 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/out/production/phase-2-1653/GroupThread.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="449">
+          <caret line="170" column="25" lean-forward="true" selection-start-line="170" selection-start-column="25" selection-end-line="170" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/out/production/phase-2-1653/GroupMembers.bin">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Client.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="242">
+          <caret line="17" column="43" selection-start-line="17" selection-start-column="43" selection-end-line="17" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Token.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="484">
+          <caret line="38" selection-start-line="38" selection-end-line="38" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Envelope.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="435">
+          <caret line="30" selection-start-line="30" selection-end-line="30" />
+          <folding>
+            <element signature="e#247#255#0" expanded="true" />
+            <element signature="e#292#293#0" expanded="true" />
+            <element signature="e#309#310#0" expanded="true" />
+            <element signature="e#342#343#0" expanded="true" />
+            <element signature="e#359#360#0" expanded="true" />
+            <element signature="e#407#408#0" expanded="true" />
+            <element signature="e#432#433#0" expanded="true" />
+            <element signature="e#475#476#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/RunFileServer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="3" column="4" selection-start-line="3" selection-start-column="4" selection-end-line="3" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/GroupServer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="28" column="36" selection-start-line="28" selection-start-column="36" selection-end-line="28" selection-end-column="36" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#764#765#0" expanded="true" />
+            <element signature="e#798#799#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/out/production/phase-2-1653/Envelope.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#679#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/RunGroupServer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" column="45" selection-start-line="10" selection-start-column="45" selection-end-line="10" selection-end-column="45" />
+        <state relative-caret-position="85">
+          <caret line="5" column="4" selection-start-line="5" selection-start-column="4" selection-end-line="5" selection-end-column="4" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/UserList.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="190">
-          <caret line="77" column="34" selection-start-line="77" selection-start-column="34" selection-end-line="77" selection-end-column="34" />
+        <state relative-caret-position="332">
+          <caret line="85" column="9" selection-start-line="85" selection-start-column="9" selection-end-line="85" selection-end-column="9" />
           <folding>
             <element signature="e#273#287#0" expanded="true" />
             <element signature="e#749#750#0" expanded="true" />
@@ -657,98 +790,41 @@
             <element signature="e#1290#1291#0" expanded="true" />
             <element signature="e#1371#1372#0" expanded="true" />
             <element signature="e#1421#1422#0" expanded="true" />
-            <element signature="e#1975#1976#0" expanded="true" />
-            <element signature="e#1997#1998#0" expanded="true" />
-            <element signature="e#2115#2116#0" expanded="true" />
-            <element signature="e#2141#2142#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/RunFileServer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="4" lean-forward="true" selection-start-line="3" selection-start-column="4" selection-end-line="3" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Client.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="276">
-          <caret line="40" selection-start-line="40" selection-end-line="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Envelope.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="248">
-          <caret line="19" selection-start-line="19" selection-end-line="19" />
-          <folding>
-            <element signature="e#247#255#0" expanded="true" />
-            <element signature="e#292#293#0" expanded="true" />
-            <element signature="e#309#310#0" expanded="true" />
-            <element signature="e#359#360#0" expanded="true" />
-            <element signature="e#407#408#0" expanded="true" />
-            <element signature="e#432#433#0" expanded="true" />
-            <element signature="e#475#476#0" expanded="true" />
-            <element signature="e#505#506#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/GroupServer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="219">
-          <caret line="22" column="95" selection-start-line="22" selection-start-column="95" selection-end-line="22" selection-end-column="95" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#649#650#0" expanded="true" />
-            <element signature="e#677#678#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/GroupClientInterface.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="196">
-          <caret line="93" column="19" selection-start-line="93" selection-start-column="19" selection-end-line="93" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/ClientApplication.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="281">
-          <caret line="111" selection-start-line="111" selection-end-line="111" />
-          <folding>
-            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/GroupClient.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="332">
-          <caret line="173" column="24" lean-forward="true" selection-start-line="173" selection-start-column="24" selection-end-line="173" selection-end-column="24" />
+        <state relative-caret-position="156">
+          <caret line="181" column="13" selection-start-line="181" selection-start-column="13" selection-end-line="181" selection-end-column="13" />
           <folding>
             <element signature="e#3657#3687#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/GroupThread.java">
+    <entry file="file://$PROJECT_DIR$/src/GroupClientInterface.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="244" column="16" selection-start-line="244" selection-start-column="16" selection-end-line="244" selection-end-column="16" />
+        <state relative-caret-position="172">
+          <caret line="80" column="19" selection-start-line="80" selection-start-column="19" selection-end-line="80" selection-end-column="19" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Token.java">
+    <entry file="file://$PROJECT_DIR$/src/ClientApplication.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="399">
-          <caret line="29" column="5" lean-forward="true" selection-start-line="29" selection-start-column="5" selection-end-line="29" selection-end-column="5" />
+        <state relative-caret-position="302">
+          <caret line="234" column="59" selection-start-line="234" selection-start-column="59" selection-end-line="234" selection-end-column="59" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/GroupThread.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="418">
+          <caret line="328" column="41" selection-start-line="328" selection-start-column="41" selection-end-line="328" selection-end-column="41" />
         </state>
       </provider>
     </entry>
