@@ -62,7 +62,16 @@ import java.util.*;
 		{
 			list.get(user).removeOwnership(groupname);
 		}
-		
+                
+                public synchronized List<String> getAllUsers() {
+                    return new ArrayList<String>(list.keySet());
+                }
+		public synchronized  void showAllUsers(){
+			System.err.println("Printing userList list: ");
+			for (String key : list.keySet()){
+				System.err.println(key + "," + list.get(key));
+			}
+		}
 	
 	class User implements java.io.Serializable {
 
@@ -75,8 +84,8 @@ import java.util.*;
 		
 		public User()
 		{
-			groups = new ArrayList<String>();
-			ownership = new ArrayList<String>();
+			groups = new ArrayList<>();
+			ownership = new ArrayList<>();
 		}
 		
 		public ArrayList<String> getGroups()

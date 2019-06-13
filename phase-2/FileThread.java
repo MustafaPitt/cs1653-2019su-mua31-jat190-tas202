@@ -2,6 +2,7 @@
 
 import java.lang.Thread;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
 import java.io.File;
 import java.io.FileInputStream;
@@ -37,6 +38,21 @@ public class FileThread extends Thread
 				if(e.getMessage().equals("LFILES"))
 				{
 				    /* TODO: Write this handler */
+					Token t = (Token)e.getObjContents().get(0);
+					if (t == null) {
+						response = new Envelope("FAIL-BADTOKEN");
+					}
+
+					List<String> files = new ArrayList<String>();
+
+					for (ShareFile sf : FileServer.fileList.getFiles()) {
+						if (t.getGroups().contains(sf.getGroup()))
+							files.add(sf.getPath());
+					}
+
+					response = new Envelope("OK");
+					response.addObject(files);
+					output.writeObject(response);
 				}
 				if(e.getMessage().equals("UPLOADF"))
 				{
@@ -209,7 +225,6 @@ public class FileThread extends Thread
 
 						try
 						{
-
 
 							File f = new File("shared_files/"+"_"+remotePath.replace('/', '_'));
 

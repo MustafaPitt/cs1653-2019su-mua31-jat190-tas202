@@ -1,6 +1,6 @@
+import java.io.*;
 import java.net.Socket;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.net.UnknownHostException;
 
 public abstract class Client {
 
@@ -8,14 +8,21 @@ public abstract class Client {
 	 * Socket and input/output streams
 	 */
 	protected Socket sock;
-	protected ObjectOutputStream output;
-	protected ObjectInputStream input;
+	protected ObjectOutputStream output = null;
+	protected ObjectInputStream input = null;
 
 	public boolean connect(final String server, final int port) {
-		System.out.println("attempting to connect");
+		try {
+			sock = new Socket(server,port);
+			output = new ObjectOutputStream(sock.getOutputStream());
+			input = new ObjectInputStream(sock.getInputStream());
+//			Envelope msg = new Envelope("GET");
+//			output.writeObject(msg);
 
-		/* TODO: Write this method */
-
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return isConnected();
 	}
 
 	public boolean isConnected() {

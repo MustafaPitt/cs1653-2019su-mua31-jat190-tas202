@@ -1,4 +1,3 @@
-
 import java.util.List;
 
 /**
@@ -34,7 +33,7 @@ public interface UserToken
      * @return The subject of this token
      *
      */
-    public String getSubject();
+    public java.lang.String getSubject();
 
 
     /**
@@ -46,6 +45,7 @@ public interface UserToken
      * @return The list of group memberships encoded in this token
      *
      */
-    public List<String> getGroups();
+    public List<java.lang.String> getGroups();
 
+    List<String> getOwnership();
 }   //-- end interface UserToken
