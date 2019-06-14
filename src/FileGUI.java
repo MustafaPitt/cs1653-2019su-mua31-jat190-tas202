@@ -541,7 +541,9 @@ public class FileGUI extends javax.swing.JFrame {
 
         if (src.length() != 0 && dest.length() != 0 && group.length() != 0) {
             if (token.getGroups().contains(group)) {
-                fc.upload(src, dest, group, token);
+                if (!fc.upload(src, dest, group, token)) {
+                    JOptionPane.showMessageDialog(this, "Error uploading file.");
+                }
                 dlgUploadPrompt.setVisible(false);
                 updateRemoteList();
             }
@@ -561,7 +563,9 @@ public class FileGUI extends javax.swing.JFrame {
         String dest  = localdir.getPath() + '\\' +txtDownloadLocal.getText();
 
         if (src.length() != 0 && dest.length() != 0) {
-            fc.download(src, dest, token);
+            if (!fc.download(src, dest, token)) {
+                JOptionPane.showMessageDialog(this, "Error downloading file.");
+            }
             dlgDownloadPrompt.setVisible(false);
             updateLocalList();
         }
@@ -582,7 +586,8 @@ public class FileGUI extends javax.swing.JFrame {
         String src   = txtDeleteRemote.getText();
 
         if (src.length() != 0) {
-            fc.delete(src, token);
+            if (!fc.delete(src, token))
+                JOptionPane.showMessageDialog(this, "Error deleting file!");
             dlgDeletePrompt.setVisible(false);
             updateRemoteList();
         }
