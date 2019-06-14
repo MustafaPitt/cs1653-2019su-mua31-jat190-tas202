@@ -30,3 +30,10 @@
 4. Entering 3 will prompt you to enter a source filename and a destination filename to download a file from the system.
 5. Entering 4 will prompt you to enter a filename to delete.
 6. Entering 5 will log you out of the file server.
+
+
+# Known Error:
+1. Reproduction steps: Upload a file to FS, Download same file, Delete same file
+2. --> Error deleting file <filename>
+3. This, however, doesn't not occur when doing the same steps minus the download.
+4. We did not implement upload, download, or delete so I don't think this is our error.
