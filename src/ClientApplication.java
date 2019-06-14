@@ -26,7 +26,7 @@ public class ClientApplication {
 						String username = null;
 
 						if(signedIn == false){
-							System.out.println("Username: ");
+							System.out.print("Username: ");
 							username = scanner.nextLine();
 							signedIn = true;
 						}else{
@@ -34,7 +34,7 @@ public class ClientApplication {
 						}
 
 
-            System.out.println("1)Login to group server 2) Connect to File Server 3) exit");
+            System.out.println("\n1)Login to group server 2) Connect to File Server 3) Exit");
             String input = scanner.next();
             if (!input.matches("[0-9]")){
                 System.out.println("Invalid input");
@@ -68,17 +68,17 @@ public class ClientApplication {
             fileClient = new FileClient();
             fileClient.connect(fs_server_name, fs_port);
 
-            if (fileClient.isConnected()) System.out.println("application is connected to client server");
+            if (fileClient.isConnected()) System.out.println("-Connection established.");
             while(true){ // while you are in file server
-							System.out.println("1. List files\n" +
-				                   "2. Upload\n" +
-				                   "3. Download\n" +
-				                   "4. Delete\n" +
-				                   "5. Log out\n");
+							System.out.println("1) List files\n" +
+				                   "2) Upload\n" +
+				                   "3) Download\n" +
+				                   "4) Delete\n" +
+				                   "5) Log out\n");
               String input = scanner.next();
 
 				if (input.equals("1")) { // list files
-					System.out.println(fileClient.listFiles(token));
+					System.out.println("\n" + fileClient.listFiles(token));
 				}
 
 				if (input.equals("2")) { // upload
@@ -91,11 +91,10 @@ public class ClientApplication {
 					source = scanner.nextLine();
 					System.out.print("Dest?: ");
 					dest = scanner.nextLine();
-					System.out.print("Groups?: ");
+					System.out.print("Group?: ");
 					group = scanner.nextLine();
 
-					System.out.println(fileClient.upload(source, dest,
-						group, token));
+					fileClient.upload(source, dest, group, token);
 				}
 
 				if (input.equals("3")) { // Download a file
@@ -108,8 +107,7 @@ public class ClientApplication {
 					System.out.print("Dest?: ");
 					dest = scanner.nextLine();
 
-					System.out.println(fileClient.download(source, dest, token));
-
+					fileClient.download(source, dest, token);
 				}
 
 				if (input.equals("4")) { // Delete a file
@@ -119,17 +117,16 @@ public class ClientApplication {
 					scanner.nextLine();
 					filename = scanner.nextLine();
 
-					System.out.println(fileClient.delete(filename, token));
-
+					fileClient.delete(filename, token);
 				}
 
         if(input.equals("5")) {
-          System.out.println("Logging out");
+          System.out.println("Logging out.");
           fileClient.disconnect();
           return;
         }
 
-				if (!input.matches("[1-5]")) System.out.println("invalid input");
+				if (!input.matches("[1-5]")) System.out.println("Invalid input.");
 
     }
 }
@@ -138,9 +135,9 @@ public class ClientApplication {
     // handle all group server operations
      private static void connectToGroupServer(String username) {
 			 Scanner scanner = new Scanner(System.in);
-			 System.out.print("Enter group server address: ");
+			 System.out.print("Enter GROUP server address: ");
 			 gs_server_name = scanner.nextLine();
-			 System.out.print("Enter group server port number:");
+			 System.out.print("Enter GROUP server port number:");
 			 gs_port = scanner.nextInt();
 
 			 groupClient.connect(gs_server_name, gs_port);
@@ -149,7 +146,7 @@ public class ClientApplication {
          System.out.println("Connecting to Group Server Menu");
 
 				 if (groupClient.isConnected()) {
-             System.out.println("application is connected to group server");
+             System.out.println("-Connection established.");
 
              if(token != null) groupServerMenu();
              else System.out.println("Couldn't verify your user name");
@@ -172,15 +169,16 @@ public class ClientApplication {
 
     private static void groupServerMenu() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("********** Client USER MENU **********");
+        System.out.println("********** CLIENT USER MENU **********");
         while (true) {
 
 						token = (Token) groupClient.getToken(token.getSubject()); //update token
 
-            System.out.println("1) create a user \n2) del a user\n3) create a group " +
-                    "\n4) delete a group \n5) list group members \n6) Add User to Group \n7) Remove user from Group \n8) logout");
+						System.out.println("\n********** CLIENT USER MENU **********");
+            System.out.println("1) Create a user \n2) Delete a user\n3) Create a group " +
+                    "\n4) Delete a group \n5) List group members \n6) Add User to group \n7) Remove user from group \n8) Logout");
             String input = scanner.next();
-            if (!Pattern.matches("[0-9]", input)) System.out.println("invalid input");
+            if (!Pattern.matches("[0-9]", input)) System.out.println("Invalid input");
             else if (input.equals("1")) createUserInGS();
             else if (input.equals("2")) delUserFromGS();
             else if (input.equals("3")) createGroupInGS();
@@ -189,7 +187,7 @@ public class ClientApplication {
 						else if (input.equals("6")) addUserToGroup();
 						else if (input.equals("7")) delUserFromGroup();
             else if (input.equals("8")) {
-                System.out.println("logging out");
+                System.out.println("Logging out.");
                 groupClient.disconnect();
                 return;
             }
@@ -198,8 +196,8 @@ public class ClientApplication {
 
     private static void listMembersGroup() {
 			try {
-					System.out.println("........... list members group menu ..........");
-					System.out.println("Enter a group name");
+					System.out.println("........... List members group menu ..........");
+					System.out.println("Enter a group name:");
 					Scanner scanner = new Scanner(System.in);
 					String groupName = scanner.next();
 					List<String> members = groupClient.listMembers(groupName, token);
@@ -217,107 +215,107 @@ public class ClientApplication {
 
     private static void delGroupInGS() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("...........delete a group menu ..........");
-        System.out.println("Enter a group name to delete");
+        System.out.println("...........Delete a group menu ..........");
+        System.out.println("Enter a group name to delete:");
         String groupName = scanner.next();
 
         if (groupClient.deleteGroup(groupName,token)){
-            System.out.println("group " + groupName + " deleted successfully");
+            System.out.println("Group " + groupName + " deleted successfully.");
 						// refresh the server
 						groupClient.disconnect();
             groupClient.connect(gs_server_name, gs_port);
 				}
-        else System.out.println("Error deleting a group");
+        else System.out.println("Error deleting a group.");
 
     }
 
     private static void createGroupInGS() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("...........create a group menu ..........");
-        System.out.println("Enter a group name to create");
+        System.out.println("...........Create a group menu ..........");
+        System.out.println("Enter a group name to create:");
 
         String groupName = scanner.next();
         if (groupClient.createGroup(groupName,token)){
-            System.out.println("group " + groupName + " created successfully");
+            System.out.println("Group " + groupName + " created successfully.");
 						// refresh the server
             groupClient.disconnect();
             groupClient.connect(gs_server_name, gs_port);
         }
-        else System.out.println("Error creating a group");
+        else System.out.println("Error creating a group.");
 
 		}
 
     private static void delUserFromGS() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("...........delete user menu ..........");
-        System.out.println("Enter a username to delete");
+        System.out.println("...........Delete user menu ..........");
+        System.out.println("Enter a username to delete:");
         String username = scanner.next();
         if (groupClient.deleteUser(username,token)){
-            System.out.println("user " + username + " deleted successfully");
+            System.out.println("User " + username + " deleted successfully.");
 						// refresh the server
             groupClient.disconnect();
             groupClient.connect(gs_server_name, gs_port);
 				}
-        else System.out.println("Error deleting  a user");
+        else System.out.println("Error deleting a user.");
 
     }
 
     private static void createUserInGS() {
          Scanner scanner = new Scanner(System.in);
          System.out.println("...........Create new user menu ..........");
-         System.out.println("Enter a new username");
+         System.out.println("Enter a new username:");
          String username = scanner.next();
          if (groupClient.createUser(username,token)){
-             System.out.println("user " + username + " created successfully");
+             System.out.println("User " + username + " created successfully.");
 						 // refresh the server
              groupClient.disconnect();
              groupClient.connect(gs_server_name, gs_port);
 				 }
-         else System.out.println("Error creating a user");
+         else System.out.println("Error creating a user.");
 
      }
 
 		 private static void addUserToGroup() {
 			 try {
-					 System.out.println("........... add user to a group menu ..........");
-					 System.out.println("Enter a group name");
+					 System.out.println("........... Add user to a group menu ..........");
+					 System.out.println("Enter a group name: ");
 					 Scanner scanner = new Scanner(System.in);
 					 String groupName = scanner.next();
-					 System.out.println("Enter a user name to be added to a group " + groupName);
+					 System.out.println("Enter a user name to be added to a group " + groupName + ": ");
 					 String userToBeAdd = scanner.next();
 					 if(groupClient.addUserToGroup(userToBeAdd,groupName,token)){
-							 System.out.println("User " + userToBeAdd + " added to group " + groupName + " successfully ");
+							 System.out.println("User " + userToBeAdd + " added to group " + groupName + " successfully.");
 							 // refresh the server
 							 groupClient.disconnect();
 							 groupClient.connect(gs_server_name, gs_port);
 					 }
 					 else
-							 System.out.println("Error adding user to a group");
+							 System.out.println("Error adding user to a group.");
 
 			 }catch (Exception Ignore){
-					 System.out.println("Error adding user to a group");
+					 System.out.println("Error adding user to a group.");
 			 }
       }
 
 			private static void delUserFromGroup() {
 	        try {
-	            System.out.println("........... dell user from a group menu ..........");
-	            System.out.println("Enter a group name");
+	            System.out.println("........... Delete user from a group menu ..........");
+	            System.out.println("Enter a group name: ");
 	            Scanner scanner = new Scanner(System.in);
 	            String groupName = scanner.next();
-	            System.out.println("Enter a user name to be deleted from a group " + groupName);
+	            System.out.println("Enter a user name to be deleted from group " + groupName + ": ");
 	            String userToBeDel = scanner.next();
 	            if(groupClient.deleteUserFromGroup(userToBeDel,groupName,token)){
-	                System.out.println("User " + userToBeDel + " deleted from group " + groupName + " successfully ");
+	                System.out.println("User " + userToBeDel + " deleted from group " + groupName + " successfully.");
 	                // refresh the server
 	                groupClient.disconnect();
 	                groupClient.connect(gs_server_name, gs_port);
 	            }
 	            else
-	                System.out.println("Error deleting  user from group" + groupName);
+	                System.out.println("Error deleting  user from group" + groupName + ".");
 
 	        }catch (Exception Ignore){
-	            System.out.println("Error adding user to a group");
+	            System.out.println("Error adding user to a group.");
 	        }
 	    }
 
