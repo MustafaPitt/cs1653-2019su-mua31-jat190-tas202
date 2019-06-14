@@ -1,7 +1,6 @@
 
 import java.awt.event.WindowEvent;
 import javax.swing.DefaultListModel;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /*
@@ -18,6 +17,9 @@ public class GroupGUI extends javax.swing.JFrame {
     GroupClient gc;
     UserToken token;
     
+    String server_host;
+    int server_port;
+    
     //JFrame parent;
     /**
      * Creates new form GroupGUI
@@ -30,6 +32,8 @@ public class GroupGUI extends javax.swing.JFrame {
         this();
         
       //  parent = p;
+      server_host = hostname;
+      server_port = port;
         
         token = t;
         gc = new GroupClient();
@@ -836,6 +840,9 @@ public class GroupGUI extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Unable to create group!");
         }
         
+        // Update token.
+        reconnect();
+        
         updateGroupList();
         updateUserList();
         
@@ -853,19 +860,28 @@ public class GroupGUI extends javax.swing.JFrame {
             return;
         }
         
+        // ???
+        reconnect();
+        
         dlgCreateUser.setVisible(false);
     }//GEN-LAST:event_bntCreateUserOKActionPerformed
 
     private void btnAddUserToGroupOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddUserToGroupOKActionPerformed
-        if (!token.getOwnership().contains(txtAddUserToGroupGroup.getText())) {
+        String u = txtAddUserToGroupUser.getText();
+        String g = txtAddUserToGroupGroup.getText();
+        
+        if (!token.getOwnership().contains(g)) {
             JOptionPane.showMessageDialog(this, "Only the owner can add users.");
             return;
         }
-        
-        if (!gc.addUserToGroup(txtAddUserToGroupUser.getText(), txtAddUserToGroupGroup.getText(), token)) {
+       
+        if (!gc.addUserToGroup(u, g, token)) {
             JOptionPane.showMessageDialog(this, "Unable to add user.");
             return;
         }
+        
+        // Update token (?)
+        reconnect();
         
         updateUserList();
         
@@ -881,6 +897,9 @@ public class GroupGUI extends javax.swing.JFrame {
             return;
         }
         
+        // ???
+        reconnect();
+        
         updateUserList();
         
         dlgRemoveUserFromGroup.setVisible(false);
@@ -889,10 +908,19 @@ public class GroupGUI extends javax.swing.JFrame {
     private void btnDeleteUserOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteUserOKActionPerformed
         String u = txtDeleteUserUser.getText();
         
+        if (!token.getGroups().contains("ADMIN")) {
+            JOptionPane.showMessageDialog(this, "Only ADMIN can do that.");
+            return;
+        }
+        
         if (!gc.deleteUser(u, token)) {
             JOptionPane.showMessageDialog(this, "Unable to delete user.");
             return;
         }
+        
+        // Update token.
+        //gc.getToken(token.getSubject());
+        reconnect();
         
         updateUserList();
         
@@ -902,7 +930,7 @@ public class GroupGUI extends javax.swing.JFrame {
     private void btnDeleteGroupOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteGroupOKActionPerformed
         String g = txtDeleteGroupGroup.getText();
         
-        if (token.getOwnership().contains(g)) {
+        if (!token.getOwnership().contains(g)) {
             JOptionPane.showMessageDialog(this, "Only the owner can delete the group");
             return;
         }
@@ -911,6 +939,8 @@ public class GroupGUI extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Unable to delete group.");
             return;
         }
+        
+        reconnect();
         
         updateGroupList();
         updateUserList();
@@ -997,6 +1027,16 @@ public class GroupGUI extends javax.swing.JFrame {
             for (String u : gc.listMembers(group, token))
                 dlm.addElement(u);
         }
+    }
+    
+    // Sometimes the client doesn't tell us about changes
+    // we make until the next time we connect. I'm sure
+    // there's a better way to fix this...
+    public void reconnect() {
+        gc.disconnect();
+        gc.connect(server_host, server_port);
+        token = gc.getToken(token.getSubject());
+        updateTokenLabel();
     }
     
     public static void go(UserToken t, String hostname, int port) {
