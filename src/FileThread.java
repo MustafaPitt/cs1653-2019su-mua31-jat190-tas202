@@ -175,6 +175,8 @@ public class FileThread extends Thread
 							}
 							while (fis.available()>0);
 
+							fis.close();
+
 							//If server indicates success, return the member list
 							if(e.getMessage().compareTo("DOWNLOADF")==0)
 							{
