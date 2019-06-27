@@ -44,6 +44,21 @@ To prevent eavesdroppers from obtaining a user’s token, we will use public key
 
 By exchanging a symmetric key in this manner, we can establish secure communication. Since the initially exchanged key is encrypted with the server’s public key, only the server and the client will be able to know the shared key. Then, they can communicate securely using the agreed symmetric key and eavesdroppers will no longer be able to gather information from these communications.
 
+### Client <--> Group Server Overview
+* [T1] When a new user is created, the group server will generate that user a password. This password will be manually distributed to the user.
+* [T1]
+* [T2]
+* [T4]
+
+![Client - GS](report_img/client_gs.jpg)
+
+### Client <--> File Server Overview
+* [T2]
+* [T3]
+* [T4]
+
+![Client - GS](report_img/client_gs.jpg)
+
 ### Conclusion
 //closing para:  discussing the interplay between your proposed mechanisms, and commenting on the design process that your group followed  …more on pdf
 
