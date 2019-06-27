@@ -52,23 +52,21 @@ corresponding private keys from which it is derived.
 By exchanging keys in this manner, we can prevent eavesdropping, since
 the shared secret cannot be calculated from the two public keys. This is
 also resistant to man-in-the-middle attacks, since the exchanged public
-keys are signed. Since all further commincations are encrypted with this
+keys are signed. Since all further communicationsincations are encrypted with this
 secret, it should be sufficient to have secure communication between the
 hosts.
 
 ### Client <--> Group Server Overview
-* [T1] When a new user is created, the group server will generate that user a password. This password will be manually distributed to the user.
-* [T1]
-* [T2]
-* [T4]
+* [T1] When a new user is created, the group server will generate that user a password. This password will be manually distributed to the user. When a user attempts to log in, they will need to provide their username and password.
+* [T2] When the group server returns the token, it will also return the signed hash of the token for future verification.
+* [T4] A Diffie-Hellman shared key is established between the client and group server to begin. Then with each consecutive message relayed the client and group server will encrypt their message with the shared Diffie-Hellman Key.
 
 ![Client - GS](report_img/client_gs.jpg)
 
 ### Client <--> File Server Overview
-* [T2]
-* [T3]
-* [T4]
-
+* [T2] When the client presents the file server their token, they will also send the signed hash of it signed by the group servers private key. With this the file server can verify that the token has not been modified.
+* [T3] The second phase on the picture below shows the challenge / response protocol. The user sends the file server a timestamp encrypted with the fileservers public key. A trustworthy fileserver will be able to decrypt it with its private key and then return the timestamp + 1;  
+* [T4] A Diffie-Hellman shared key is established between the client and file server to begin. Then with each consecutive message relayed the client and file server will encrypt their message with the shared Diffie-Hellman Key.
 ![Client - GS](report_img/client_fs.jpg)
 
 ### Conclusion
