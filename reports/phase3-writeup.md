@@ -57,7 +57,7 @@ By exchanging a symmetric key in this manner, we can establish secure communicat
 * [T3]
 * [T4]
 
-![Client - GS](report_img/client_gs.jpg)
+![Client - GS](report_img/client_fs.jpg)
 
 ### Conclusion
 //closing para:  discussing the interplay between your proposed mechanisms, and commenting on the design process that your group followed  …more on pdf
