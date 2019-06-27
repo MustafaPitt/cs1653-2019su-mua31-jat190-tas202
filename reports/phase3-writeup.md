@@ -52,7 +52,7 @@ corresponding private keys from which it is derived.
 By exchanging keys in this manner, we can prevent eavesdropping, since
 the shared secret cannot be calculated from the two public keys. This is
 also resistant to man-in-the-middle attacks, since the exchanged public
-keys are signed. Since all further communicationsincations are encrypted with this
+keys are signed. Since all further communications are encrypted with this
 secret, it should be sufficient to have secure communication between the
 hosts.
 
