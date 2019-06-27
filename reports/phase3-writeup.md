@@ -38,11 +38,27 @@ Each installed file server S will generate a key pair. The public key will be av
 It’s effective because the public key will be delivered to the client out of band by trusted individuals. Any message encrypted by the client using the public key will only be decrypted by the corresponding private key. Returning the decrypted message to client will assure the client that the public key is valid. Because only the corresponding private key would match with the given public key, we know the server is trustworthy.
 
 ### Preventing Eavesdropping (T4)
-We are assuming our communication lines are being listened to by ‘passive attackers.’ This is a threat because we are sending important information like tokens, passwords, and keys on these lines. Any eavesdropper could listen and gather this valuable information. For instance, if Eve could obtain the token of Alex through the network then Eve would have access as Alex’s user account.
+We are assuming our communication lines are being listened to by
+‘passive attackers.’ This is a threat because we are sending important
+information like tokens, passwords, and keys on these lines. Any
+eavesdropper could listen and gather this valuable information. For
+instance, if Eve could obtain the token of Alex through the network then
+Eve would have access as Alex’s user account.
 
-To prevent eavesdroppers from obtaining a user’s token, we will use public keys of both the servers to establish secure communication between the client and the servers. After establishing a secure connection, a symmetric key will be exchanged and used to encipher further communication. All communications containing sensitive information between clients and servers will be encrypted.
+To prevent eavesdroppers from viewing the transmitted information, we
+will use a signed Diffie-Hellman key exchange when communicating between
+the client and the servers, as shown in the diagrams below. The
+exchanged secret will be used as the key to a symmetric cipher, allowing
+for efficient encryption and decryption. Only the client and the server
+will be able to create this key, since only they will have the
+corresponding private keys from which it is derived.
 
-By exchanging a symmetric key in this manner, we can establish secure communication. Since the initially exchanged key is encrypted with the server’s public key, only the server and the client will be able to know the shared key. Then, they can communicate securely using the agreed symmetric key and eavesdroppers will no longer be able to gather information from these communications.
+By exchanging keys in this manner, we can prevent eavesdropping, since
+the shared secret cannot be calculated from the two public keys. This is
+also resistant to man-in-the-middle attacks, since the exchanged public
+keys are signed. Since all further commincations are encrypted with this
+secret, it should be sufficient to have secure communication between the
+hosts.
 
 ### Client <--> Group Server Overview
 * [T1] When a new user is created, the group server will generate that user a password. This password will be manually distributed to the user.
