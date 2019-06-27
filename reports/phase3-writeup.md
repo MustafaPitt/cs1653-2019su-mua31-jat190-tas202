@@ -13,7 +13,7 @@ The unauthorized token issuance threat is the concern that an untrusted user wil
 
 In order to prevent users from obtaining another user’s token, we implement a password-based authentication system. Users need to provide both their public username and a private password when initially requesting a token from the group server. The group server stores the hash of the password with the user information. When a user requests a token, they provide their username and password. The group server hashes the received password and looks up the user in it’s database. If the stored has matches the calculated hash, the user is deemed to be authenticated and the token is provided. If the hashes are different, then the server rejects the authentication request.
 
-![T1 Example](report_img/T1)
+![T1 Example](report_img/T1.jpg)
 
 This is an effective approach to stopping the unauthorized token issuance threat because a given user can no longer easily access another user’s token. Provided that each user keeps their password private and when logging in the user enters the correct password, then the server can confirm the user is who they say they are. This is secure as long as it is not possible for users to learn another user’s password. This is correct because a valid (username, password) pair will match the group server’s database, giving the user his token, and an invalid combination will not.
 
@@ -33,7 +33,7 @@ Example: If Bob created and bugged the client application to send users to file 
 
 Each installed file server S will generate a key pair. The public key will be available to clients out of band. On each connection, the server will present the user with it’s public key. For the first connection, the user must verify that the keys match manually, but if they do match, it can be saved and compared automatically on subsequent connections. Each time the client connects, they will encrypt a random number and send it to the server. The server will have one chance to respond with the correctly decrypted number. If the server does this, we can be reasonably sure that it has the corresponding private key, since only the corresponding private key can decrypt a message encrypted with its public key.
 
-![T3 Example](report_img/T3)
+![T3 Example](report_img/T3.jpg)
 
 It’s effective because the public key will be delivered to the client out of band by trusted individuals. Any message encrypted by the client using the public key will only be decrypted by the corresponding private key. Returning the decrypted message to client will assure the client that the public key is valid. Because only the corresponding private key would match with the given public key, we know the server is trustworthy.
 
