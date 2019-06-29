@@ -29,7 +29,7 @@ The threat of unauthorized file servers means that since their are N files serve
 
 Example: If Bob created and bugged the client application to send users to file server S’ (a non-trusted file server), and Alex logs into S’, then all Alex files are not secure and confidential anymore. They can be accessed by Bob.
 
-Each installed file server S will generate a key pair. The public key will be available to clients out of band. On each connection, the server will present the user with it’s public key. For the first connection, the user must verify that the keys match manually, but if they do match, it can be saved and compared automatically on subsequent connections. Each time the client connects, they will encrypt a timestamp and send it to the server. The server will have one chance to respond with the correctly decrypted timestamp + 1. If the server does this, we can be reasonably sure that it has the corresponding private key, since only the corresponding private key can decrypt a message encrypted with its public key.
+Each installed file server S will generate a key pair. The public key will be available to clients out of band. On each connection, the server will present the user with it’s public key. For the first connection, the user must verify that the keys match manually, but if they do match, it can be saved and compared automatically on subsequent connections. Each time the client connects, they will encrypt a large random number and send it to the server. The server will have one chance to respond with the correctly decrypted number. If the server does this, we can be reasonably sure that it has the corresponding private key, since only the corresponding private key can decrypt a message encrypted with its public key.
 
 It’s effective because the public key will be delivered to the client out of band by trusted individuals. Any message encrypted by the client using the public key will only be decrypted by the corresponding private key. Returning the decrypted message to client will assure the client that the public key is valid. Because only the corresponding private key would match with the given public key, we know the server is trustworthy.
 
@@ -65,7 +65,7 @@ hosts.
 
 ### Client <--> File Server Overview
 * [T2] When the client presents the file server their token, they will also send the signed hash of it signed by the group servers private key. With this the file server can verify that the token has not been modified.
-* [T3] The second phase on the picture below shows the challenge / response protocol. The user sends the file server a timestamp encrypted with the fileservers public key. A trustworthy fileserver will be able to decrypt it with its private key and then return the timestamp + 1;  
+* [T3] The second phase on the picture below shows the challenge / response protocol. The user sends the file server a large random number encrypted with the fileservers public key. A trustworthy fileserver will be able to decrypt it with its private key and then return the number. (Replace timestamp and timstamp+1 in the picture below with random number N).
 * [T4] A Diffie-Hellman shared key is established between the client and file server to begin. Then with each consecutive message relayed the client and file server will encrypt their message with the shared Diffie-Hellman Key.
 ![Client - GS](report_img/client_fs.jpg)
 
