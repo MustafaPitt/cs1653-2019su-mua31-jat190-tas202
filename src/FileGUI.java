@@ -1,8 +1,6 @@
+import javax.swing.*;
 import java.awt.event.WindowEvent;
 import java.io.File;
-import javax.swing.DefaultListModel;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -14,30 +12,30 @@ import javax.swing.JOptionPane;
  *
  * @author Jim
  */
-public class FileGUI extends javax.swing.JFrame {
+public class FileGUI extends JFrame {
     File localdir;
     FileClient fc;
     UserToken token;
 
     //JFrame parent;
-    
+
     /**
      * Creates new form FileGUI
      */
     public FileGUI() {
         initComponents();
     }
-    
+
     public FileGUI(UserToken t, String hostname, int port) {
         this();
-        
+
         //parent = p;
-        
+
         token = t;
         localdir = new File(".");
         fc = new FileClient();
         fc.connect(hostname, port);
-        
+
         updateLocalList();
         updateRemoteList();
     }
@@ -344,7 +342,7 @@ public class FileGUI extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Files");
         addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosed(java.awt.event.WindowEvent evt) {
+            public void windowClosed(WindowEvent evt) {
                 formWindowClosed(evt);
             }
         });
@@ -505,7 +503,7 @@ public class FileGUI extends javax.swing.JFrame {
         // Change local directory
         jFileChooser1.showOpenDialog(this);
         localdir = jFileChooser1.getSelectedFile();
-        
+
         updateLocalList();
     }//GEN-LAST:event_localBrowseActionPerformed
 
@@ -578,7 +576,7 @@ public class FileGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnDownloadActionPerformed
 
     private void btnDeleteCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteCancelActionPerformed
-        
+
         dlgDeletePrompt.setVisible(false);
     }//GEN-LAST:event_btnDeleteCancelActionPerformed
 
@@ -599,7 +597,7 @@ public class FileGUI extends javax.swing.JFrame {
         openDeleteDlg();
     }//GEN-LAST:event_btnRemoteDeleteActionPerformed
 
-    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+    private void formWindowClosed(WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
         if (fc.isConnected()) fc.disconnect();
       //  parent.setVisible(true);
     }//GEN-LAST:event_formWindowClosed

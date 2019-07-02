@@ -18,7 +18,7 @@ public class Token implements UserToken, Serializable {
 	 // to be an admin, groups for a user must include "ADMIN" group
 	 // ownership is a list of groups that user owns
 	// groups is just a list of groups the user is part of
-	 Token(String _server, String _username, ArrayList<java.lang.String> _groups, ArrayList<String> _ownership) {
+	 Token(String _server, String _username, ArrayList<String> _groups, ArrayList<String> _ownership) {
 		this.username      = _username;
 		this.issuingServer = _server;
 		this.groups        = _groups;
@@ -29,9 +29,7 @@ public class Token implements UserToken, Serializable {
 		return issuingServer;
 	}
 
-	public String getSubject() {
-		return username;
-	}
+	public String getSubject() { return username; }
 
 	public List<String> getGroups() {
 		return groups;

@@ -1,14 +1,9 @@
 /* File worker thread handles the business of uploading, downloading, and removing files for clients with valid tokens */
 
-import java.lang.Thread;
+import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 
 public class FileThread extends Thread
 {

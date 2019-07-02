@@ -1,81 +1,119 @@
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
 
 /* client application  to connect  with group server  */
+@SuppressWarnings("ALL")
 public class ClientApplication {
 
 	private static String gs_server_name;
 	private static int gs_port;
-	private static String fs_server_name;
-	private static int fs_port;
 
-	static GroupClient groupClient;
-	static FileClient fileClient;
+	private static GroupClient groupClient;
+	/**
+	 *
+	 */
+	private static FileClient fileClient;
 	static UserToken token;
+	private static PrivateKey clientSigPK;
+	private static PublicKey groupServerPublicKeyVir;
+
+	public static void main (String []args){
+
+		try {
+			 clientSigPK = getClietnPrivateKey(args[0]);
+			groupServerPublicKeyVir = getGroupServerPK(args[1]);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
 
 
-    public static void main (String []args){
-			groupClient = new GroupClient();
-			fileClient = new FileClient();
+		groupClient = new GroupClient();
+		fileClient = new FileClient();
 			boolean signedIn = false;
         while (true){
             Scanner scanner = new Scanner(System.in);
-						String username = null;
+			String username;
+			if(!signedIn){
+				System.out.print("Username: ");
+				username = scanner.nextLine();
+				signedIn = true;
+			}else{
+				username = token.getSubject();
+			}
 
-						if(signedIn == false){
-							System.out.print("Username: ");
-							username = scanner.nextLine();
-							signedIn = true;
-						}else{
-							username = token.getSubject();
-						}
-
-
-            System.out.println("\n1)Login to group server 2) Connect to File Server 3) Exit");
+			System.out.println("\n1)Login to group server 2) Connect to File Server 3) Exit");
             String input = scanner.next();
             if (!input.matches("[0-9]")){
                 System.out.println("Invalid input");
-                continue;
-            }
+			}
             else if (input.equals("1")) connectToGroupServer(username);
             else if (input.equals("2")) connectToFileServer(username);
 						else if (input.equals("3")) break;
-
             }
-
         }
 
-    private static void connectToFileServer(String username) {
-					Scanner scanner = new Scanner(System.in);
-					System.out.print("Enter GROUP server address: ");
-		 			gs_server_name = scanner.nextLine();
-					System.out.print("Enter GROUP server port number:");
-					gs_port = scanner.nextInt();
+	private static PublicKey getGroupServerPK(String pkBin) {
+		PublicKey pk = null;
+		FileInputStream fis = null;
+		try {
+			fis = new FileInputStream(pkBin);
+			ObjectInputStream is = new ObjectInputStream(fis);
+			pk = (PublicKey) is.readObject();
+		}catch (Exception e){
+			System.out.println("Couldn't open " + pkBin + " or invalid private key object");
+		}
+		return pk;
+	}
 
-					groupClient.connect(gs_server_name, gs_port);
-					token = (Token) groupClient.getToken(username); //update token
- 				  groupClient.disconnect();
+	private static PrivateKey getClietnPrivateKey(String pbKeyBin) throws IOException, ClassNotFoundException {
+		PrivateKey pk = null;
+		FileInputStream fis = null;
+		try {
+			fis = new FileInputStream(pbKeyBin);
+			ObjectInputStream is = new ObjectInputStream(fis);
+			pk = (PrivateKey) is.readObject();
+		}catch (Exception e){
+			System.out.println("Couldn't open " + pbKeyBin + " or invalid private key object");
+		}
+		return pk;
+	}
 
-						System.out.print("Enter FILE server address: ");
-						scanner.nextLine();
-						fs_server_name = scanner.nextLine();
+	private static void connectToFileServer(String username) {
+    	Scanner scanner = new Scanner(System.in);
+    	System.out.print("Enter GROUP server address: ");
+    	gs_server_name = scanner.nextLine();
+    	System.out.print("Enter GROUP server port number:");
+    	gs_port = scanner.nextInt();
+    	groupClient.connect(gs_server_name, gs_port);
+    	token = groupClient.getToken(username); //update token
+		groupClient.disconnect();
+		System.out.print("Enter FILE server address: ");
+		scanner.nextLine();
+		String fs_server_name = scanner.nextLine();
 						System.out.print("Enter FILE server port number: ");
-						fs_port = scanner.nextInt();
+		int fs_port = scanner.nextInt();
 
             fileClient = new FileClient();
             fileClient.connect(fs_server_name, fs_port);
 
             if (fileClient.isConnected()) System.out.println("-Connection established.");
             while(true){ // while you are in file server
-							System.out.println("1) List files\n" +
-				                   "2) Upload\n" +
-				                   "3) Download\n" +
-				                   "4) Delete\n" +
-				                   "5) Log out\n");
-              String input = scanner.next();
+            	System.out.println("1) List files\n" +
+						"2) Upload\n" +
+						"3) Download\n" +
+						"4) Delete\n" +
+						"5) Log out\n");
+                String input = scanner.next();
 
 				if (input.equals("1")) { // list files
 					System.out.println("\n" + fileClient.listFiles(token));
@@ -126,35 +164,38 @@ public class ClientApplication {
           return;
         }
 
-				if (!input.matches("[1-5]")) System.out.println("Invalid input.");
+        if (!input.matches("[1-5]")) System.out.println("Invalid input.");
 
     }
 }
 
 
-    // handle all group server operations
+	// handle all group server operations
      private static void connectToGroupServer(String username) {
-			 Scanner scanner = new Scanner(System.in);
-			 System.out.print("Enter GROUP server address: ");
-			 gs_server_name = scanner.nextLine();
-			 System.out.print("Enter GROUP server port number:");
-			 gs_port = scanner.nextInt();
 
-			 groupClient.connect(gs_server_name, gs_port);
-			 token = (Token) groupClient.getToken(username); //update token
+		 Scanner scanner = new Scanner(System.in);
+		 System.out.print("Enter GROUP server address: ");
+		 gs_server_name = scanner.nextLine();
+		 System.out.print("Enter GROUP server port number:");
+		 gs_port = scanner.nextInt();
+		 System.out.print("Enter password:");
+		 scanner.nextLine();
+		 String pw = scanner.nextLine();
 
-         System.out.println("Connecting to Group Server Menu");
+		 groupClient.connect(gs_server_name, gs_port, clientSigPK,groupServerPublicKeyVir, username);
+		 //verify password
+		 groupClient.verifyPassword(username, pw);
 
-				 if (groupClient.isConnected()) {
-             System.out.println("-Connection established.");
 
-             if(token != null) groupServerMenu();
-             else System.out.println("Couldn't verify your user name");
-         }
-
-         else
-             System.out.println("Error connecting to a group server");
-
+		 System.out.println("Connecting to Group Server Menu");
+		 if (groupClient.isConnected()) {
+			 System.out.println("Create secure session ");
+			 token = groupClient.getToken(username); //update token
+			 if(token != null) groupServerMenu();
+		 else System.out.println("Couldn't verify your user name");
+		 }
+		 else
+			 System.out.println("Error connecting to a group server");
      }
 
      // return true if the use in the admin group
@@ -172,7 +213,7 @@ public class ClientApplication {
         System.out.println("********** CLIENT USER MENU **********");
         while (true) {
 
-						token = (Token) groupClient.getToken(token.getSubject()); //update token
+						token = groupClient.getToken(token.getSubject()); //update token
 
 						System.out.println("\n********** CLIENT USER MENU **********");
             System.out.println("1) Create a user \n2) Delete a user\n3) Create a group " +
@@ -267,30 +308,29 @@ public class ClientApplication {
          String username = scanner.next();
          if (groupClient.createUser(username,token)){
              System.out.println("User " + username + " created successfully.");
-						 // refresh the server
+             // refresh the server
              groupClient.disconnect();
              groupClient.connect(gs_server_name, gs_port);
-				 }
+         }
          else System.out.println("Error creating a user.");
-
      }
 
 		 private static void addUserToGroup() {
 			 try {
-					 System.out.println("........... Add user to a group menu ..........");
-					 System.out.println("Enter a group name: ");
-					 Scanner scanner = new Scanner(System.in);
-					 String groupName = scanner.next();
-					 System.out.println("Enter a user name to be added to a group " + groupName + ": ");
-					 String userToBeAdd = scanner.next();
-					 if(groupClient.addUserToGroup(userToBeAdd,groupName,token)){
-							 System.out.println("User " + userToBeAdd + " added to group " + groupName + " successfully.");
-							 // refresh the server
-							 groupClient.disconnect();
-							 groupClient.connect(gs_server_name, gs_port);
-					 }
-					 else
-							 System.out.println("Error adding user to a group.");
+				 System.out.println("........... Add user to a group menu ..........");
+				 System.out.println("Enter a group name: ");
+				 Scanner scanner = new Scanner(System.in);
+				 String groupName = scanner.next();
+				 System.out.println("Enter a user name to be added to a group " + groupName + ": ");
+				 String userToBeAdd = scanner.next();
+				 if(groupClient.addUserToGroup(userToBeAdd,groupName,token)){
+						 System.out.println("User " + userToBeAdd + " added to group " + groupName + " successfully.");
+						 // refresh the server
+						 groupClient.disconnect();
+						 groupClient.connect(gs_server_name, gs_port);
+				 }
+				 else
+						 System.out.println("Error adding user to a group.");
 
 			 }catch (Exception Ignore){
 					 System.out.println("Error adding user to a group.");

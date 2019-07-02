@@ -1,6 +1,7 @@
-import java.io.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 public abstract class Client {
 
@@ -26,12 +27,7 @@ public abstract class Client {
 	}
 
 	public boolean isConnected() {
-		if (sock == null || !sock.isConnected()) {
-			return false;
-		}
-		else {
-			return true;
-		}
+		return sock != null && sock.isConnected();
 	}
 
 	public void disconnect()	 {
@@ -48,4 +44,15 @@ public abstract class Client {
 			}
 		}
 	}
+
+
+
+//	static class SecureSessionParameters implements Serializable {
+//		public DHParameterSpec dhParameterSpec;
+//		public PublicKey publicKey;
+//		public SecureSessionParameters(DHParameterSpec dhParameterSpec, PublicKey publicKey) {
+//			this.dhParameterSpec = dhParameterSpec;
+//			this.publicKey = publicKey;
+//		}
+//	}
 }

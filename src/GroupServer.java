@@ -12,18 +12,41 @@
 
 // import com.sun.istack.internal.Nullable;
 
+import javax.crypto.SecretKey;
+import javax.crypto.spec.DHParameterSpec;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.io.*;
-import java.util.*;
+import java.security.GeneralSecurityException;
+import java.security.KeyPair;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Scanner;
 
 
+@SuppressWarnings("ALL")
 public class GroupServer extends Server {
 
 	public static final int SERVER_PORT = 8765;
 	public UserList userList;
+	// store all client public keys to verifiy their connections <username, public key>
+	public HashMap <String,PublicKey> clientCertifcates;
+
+	KeyPair keyPair;
+	public PrivateKey privateKeySig;
+	public PrivateKey privateKeyDec;
+
+	public PublicKey publicKeyEnc;
+	public PublicKey publicKeyVir;
+
+	public SecretKey hashPWSecretKey;
+
 	// to manage group members => each group map to a list contains members belong to key group
 	public HashMap<String,List<String>> groupMembers ;
+	private DHParameterSpec dhParameterSpec;
 
 	public GroupServer() {
 		super(SERVER_PORT, "ALPHA");
@@ -46,16 +69,41 @@ public class GroupServer extends Server {
 		runtime.addShutdownHook(new ShutDownListener(this));
 
 
-		//Open user file to get user list
+		//Open required file , userlist , groupMemebers, and required keys
 		try
 		{
+			// open user list
 			FileInputStream fis = new FileInputStream(userFile);
 			userStream = new ObjectInputStream(fis);
 			userList = (UserList)userStream.readObject();
 
+			// open group memeber
 			fis = new FileInputStream("GroupMembers.bin");
 			groupStream = new ObjectInputStream(fis);
 			groupMembers = (HashMap) groupStream.readObject();
+
+			// open private key file
+			fis = new FileInputStream("rsaPrivateKeySig.bin");
+			groupStream = new ObjectInputStream(fis);
+			privateKeySig = (PrivateKey) groupStream.readObject();
+
+			// open rsa private key encryptor
+			fis = new FileInputStream("rsaPrivateKeySig.bin");
+			groupStream = new ObjectInputStream(fis);
+			privateKeyDec = (PrivateKey) groupStream.readObject();
+
+			// open hash secret key for passwords
+			fis = new FileInputStream("hashPWSecretKey.bin");
+			groupStream = new ObjectInputStream(fis);
+			hashPWSecretKey = (SecretKey) groupStream.readObject();
+
+			// open client cerificate for verifiying client sginature
+
+			// open hash secret key for passwords
+			fis = new FileInputStream("clientCertificates.bin");
+			groupStream = new ObjectInputStream(fis);
+			clientCertifcates = (HashMap<String, PublicKey>) groupStream.readObject();
+
 
 			System.out.println("DBG  show all users in the group servers");
 			userList.showAllUsers();
@@ -68,15 +116,115 @@ public class GroupServer extends Server {
 			System.out.print("Enter your username: ");
 			String username = console.next();
 
+
+			try {
+				System.out.println("Generating Public and private keys for Signature /Verifier. Don't share group server private key");
+				System.out.println("Generating Public and private keys for Encryption/ Decryption. Don't share group server private key");
+				RSA rsa = new RSA();
+				keyPair = rsa.generateKeyPair();
+			  	privateKeySig = keyPair.getPrivate();
+			  	publicKeyVir = keyPair.getPublic();
+				keyPair = rsa.generateKeyPair();
+				publicKeyEnc = keyPair.getPublic();
+				privateKeyDec = keyPair.getPrivate();
+
+
+			} catch (GeneralSecurityException e1) {
+				e1.printStackTrace();
+			}
+
+			try {
+				System.out.println("Genrating password Hashing Secret key");
+				HMAC hmac = new HMAC();
+				hashPWSecretKey = hmac.generateKey();
+			} catch (GeneralSecurityException e1) {
+				e1.printStackTrace();
+			}
+
+
+
+
 			//Create a new list, add current user to the ADMIN group. They now own the ADMIN group.
 			userList = new UserList();
 			groupMembers = new HashMap<>();  // init a group members
-			userList.addUser(username);
+			clientCertifcates = new HashMap<>(); // init client certificates
+			String pw = PW.generate(8); // generate pw of length n
+			byte [] pwHash = new byte[256];
+			try {
+				pwHash = HMAC.calculateHmac(hashPWSecretKey,pw.getBytes());
+			} catch (GeneralSecurityException e1) {
+				e1.printStackTrace();
+				System.exit(1);
+			}
+
+			System.out.println("Login Info");
+			System.out.println("Username: " + username);
+			System.out.println("Password: " + pw);
+
+			userList.addUser(username, new String(pwHash));
 			userList.addGroup(username, "ADMIN");
 			userList.addOwnership(username, "ADMIN");
 			List<String> members = new ArrayList<>();
+			// add username to group member
 			members.add(username);
 			groupMembers.put("ADMIN",members);
+			// create a new user "admin " public and private key. Save the public in the client certificates hashmap
+			//and give the private to the client
+			PublicKey clientPublicKey = keyPair.getPublic();
+			PrivateKey clientPrivateKey = keyPair.getPrivate();
+			clientCertifcates.put(username,clientPublicKey);
+			//generate a client certificate and store in client certificates
+
+
+
+			ObjectOutputStream outStreamGroup;
+			try {
+				// save the private key and give it to the client
+				outStreamGroup = new ObjectOutputStream(new FileOutputStream(username+"_clientPrivate.bin"));
+				outStreamGroup.writeObject(clientPrivateKey);
+				outStreamGroup.close();
+				// save user name and generated password to text file
+
+				BufferedWriter writer = new BufferedWriter(new FileWriter(username + "_PW.txt", true));
+				writer.append("username: " + username);
+				writer.append("\n");
+				writer.append("password: "+ pw);
+				writer.close();
+
+
+				// save clients cerificates
+				outStreamGroup = new ObjectOutputStream(new FileOutputStream("clientCertificates.bin"));
+				outStreamGroup.writeObject(clientCertifcates);
+				outStreamGroup.close();
+
+				// save group server private key signature
+				outStreamGroup = new ObjectOutputStream(new FileOutputStream("rsaPrivateKeySig.bin"));
+				outStreamGroup.writeObject(privateKeySig);
+				outStreamGroup.close();
+
+				// save group server public key verifier
+				outStreamGroup = new ObjectOutputStream(new FileOutputStream("rsaPublicKeyVir.bin"));
+				outStreamGroup.writeObject(publicKeyVir);
+				outStreamGroup.close();
+
+				// save group server public encryptor
+				outStreamGroup = new ObjectOutputStream(new FileOutputStream("rsaPublicKeyEnc.bin"));
+				outStreamGroup.writeObject(publicKeyEnc);
+				outStreamGroup.close();
+
+				// save rsa group server decyptor
+				outStreamGroup = new ObjectOutputStream(new FileOutputStream("rsaPrivateKeyDec.bin"));
+				outStreamGroup.writeObject(privateKeyDec);
+				outStreamGroup.close();
+
+				// save group server hashing secret key
+				outStreamGroup = new ObjectOutputStream(new FileOutputStream("hashPWSecretKey.bin"));
+				outStreamGroup.writeObject(hashPWSecretKey);
+				outStreamGroup.close();
+
+
+			}
+			catch (Exception ex){ ex.printStackTrace();}
 		}
 		catch(IOException e)
 		{
@@ -139,13 +287,16 @@ class ShutDownListener extends Thread
 
 		try
 		{
+			// save userList
 			outStream = new ObjectOutputStream(new FileOutputStream("UserList.bin"));
 			outStream.writeObject(my_gs.userList);
 			outStream.close();
 
+			// save GroupMembers
 			outStreamGroup = new ObjectOutputStream(new FileOutputStream("GroupMembers.bin"));
 			outStreamGroup.writeObject(my_gs.groupMembers);
 			outStreamGroup.close();
+
 
 		}
 		catch(Exception e)

@@ -1,15 +1,26 @@
 /* This thread does all the work. It communicates with the client through Envelopes.
  *
  */
-import java.lang.Thread;
+
+
+import javax.crypto.interfaces.DHPublicKey;
+import javax.crypto.spec.SecretKeySpec;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.io.*;
-import java.util.*;
+import java.security.GeneralSecurityException;
+import java.security.KeyPair;
+import java.security.PublicKey;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 public class GroupThread extends Thread
 {
 	private final Socket socket;
 	private GroupServer my_gs;
+	private byte[] agreedKeyGSDH;
 
 	public GroupThread(Socket _socket, GroupServer _gs)
 	{
@@ -261,6 +272,30 @@ public class GroupThread extends Thread
 					socket.close(); //Close the socket
 					proceed = false; //End this communication loop
 				}
+
+				else if (message.getMessage().equals("SecureSession")) {
+					response = establishSecureSessionWithClient(message);
+					if (response.getMessage().equals("OK")) {
+						System.out.println("secure session established");
+						output.writeObject(response);
+
+					} else {
+						System.out.println("couldn't established secure connections");
+						output.writeObject(response);
+					}
+				}
+				else if (message.getMessage().equals("VerifyPW")){
+				response = 	verifyPwAndUsernameFromClientApp(message);
+					if (response.getMessage().equals("OK")) {
+						System.out.println("password correct");
+						output.writeObject(response);
+
+					} else {
+						System.out.println("password incorrect");
+						output.writeObject(response);
+					}
+
+				}
 				else
 				{
 					response = new Envelope("FAIL"); //Server does not understand client request
@@ -275,7 +310,85 @@ public class GroupThread extends Thread
 		}
 	}
 
-	private boolean removeUserFromGroup(String groupName, UserToken yourToken, String userToDel) {
+	private Envelope verifyPwAndUsernameFromClientApp(Envelope message) {
+
+		byte [][] cipherUserNameWithIV = (byte[][]) message.getObjContents().get(0);
+		byte [][] cipherPasswordWithIV = (byte[][]) message.getObjContents().get(1);
+
+		AES aes = new AES();
+		byte username[] = new byte[0];
+		byte pw[] = new byte[0];
+		byte [] hashedPW = new byte[0];
+		SecretKeySpec secretKey = new SecretKeySpec(agreedKeyGSDH,"AES");
+
+		try {
+			 username = aes.cfbDecrypt(secretKey, cipherUserNameWithIV[0], cipherUserNameWithIV[1]);
+		} catch (GeneralSecurityException e) {
+			e.printStackTrace();
+		}
+		try {
+			 pw = aes.cfbDecrypt(secretKey, cipherPasswordWithIV[0], cipherPasswordWithIV[1]);
+		} catch (GeneralSecurityException e) {
+			e.printStackTrace();
+		}
+		if (!my_gs.userList.checkUser(new String(username)))
+			return  new Envelope("Fail");
+
+		HMAC hmac = new HMAC();
+		try {
+		hashedPW = 	hmac.calculateHmac(my_gs.hashPWSecretKey,pw);
+		} catch (GeneralSecurityException e) {
+			e.printStackTrace();
+		}
+
+		String userStr = new String(username);
+		String pwStr = new String(hashedPW);
+
+		if(my_gs.userList.getUser(userStr).getPwHash().equals(pwStr)){
+			return new Envelope("OK");
+		}
+		return new Envelope("FAIL");
+
+
+	}
+
+	private Envelope establishSecureSessionWithClient(Envelope message) {
+	    String username =  (String) message.getObjContents().get(0);
+        //Client.SecureSessionParameters secureSessionParameters = (Client.SecureSessionParameters) message.getObjContents().get(1);
+        PublicKey clientDHPK = (PublicKey) message.getObjContents().get(1);
+		byte [] sigbytes = (byte[]) message.getObjContents().get(2);
+		RSA rsa = new RSA();
+		byte [] bytesMsg = new byte[0];
+		try {
+			bytesMsg = rsa.serialize(clientDHPK);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		PublicKey pk = my_gs.clientCertifcates.get(username);
+		try {
+			if (rsa.verifyPkcs1Signature(pk,bytesMsg,sigbytes)){
+				DH dh = new DH();
+				KeyPair keyPairGSDH = dh.generateKeyPair(((DHPublicKey)clientDHPK).getParams());
+				agreedKeyGSDH  =  dh.initiatorAgreementBasic(keyPairGSDH.getPrivate(),clientDHPK);
+				byte [] sig = new byte[0];
+				Envelope msg = new Envelope("OK");
+				try {
+					sig =rsa.generatePkcs1Signature(my_gs.privateKeySig,rsa.serialize(keyPairGSDH.getPublic()));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				msg.addObject(sig);
+				msg.addObject(keyPairGSDH.getPublic());
+				return msg;
+			}
+		} catch (GeneralSecurityException e) {
+			e.printStackTrace();
+		}
+		return new Envelope("FAIL");
+	}
+
+    private boolean removeUserFromGroup(String groupName, UserToken yourToken, String userToDel) {
 		String requester = yourToken.getSubject();
 		System.err.println("group name " + groupName + " requester " + requester + " user to remove  " + userToDel);
 		System.err.println("ownership" + yourToken.getOwnership());
@@ -399,7 +512,16 @@ public class GroupThread extends Thread
 				}
 				else
 				{
-					my_gs.userList.addUser(username);
+
+					String pw = PW.generate(8); // generate pw of length n
+					try {
+						byte[] pwHash = HMAC.calculateHmac(my_gs.hashPWSecretKey,pw.getBytes());
+						my_gs.userList.addUser(username,new String(pwHash));
+						System.out.println("User Name: " + username);
+						System.out.println("Password: " + pw);
+					} catch (GeneralSecurityException e1) {
+						e1.printStackTrace();
+					}
 					return true;
 				}
 			}

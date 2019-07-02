@@ -1,7 +1,5 @@
-
+import javax.swing.*;
 import java.awt.event.WindowEvent;
-import javax.swing.DefaultListModel;
-import javax.swing.JOptionPane;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -505,7 +503,7 @@ public class GroupGUI extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Groups");
         addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosed(java.awt.event.WindowEvent evt) {
+            public void windowClosed(WindowEvent evt) {
                 formWindowClosed(evt);
             }
         });
@@ -784,7 +782,7 @@ public class GroupGUI extends javax.swing.JFrame {
         this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
     }//GEN-LAST:event_btnDisconnectActionPerformed
 
-    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+    private void formWindowClosed(WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
         if (gc.isConnected()) gc.disconnect();
  //       parent.setVisible(true);
     }//GEN-LAST:event_formWindowClosed
