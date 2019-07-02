@@ -51,4 +51,6 @@ public interface UserToken
     List<String> getOwnership();
 
     public void updateHashToken(PrivateKey k);
+
+	public boolean verifyHash(PublicKey k);
 }   //-- end interface UserToken

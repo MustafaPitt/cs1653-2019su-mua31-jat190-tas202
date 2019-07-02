@@ -7,6 +7,7 @@
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.security.*;
 
@@ -64,6 +65,31 @@ public class Token implements UserToken, Serializable {
 			}
 
 
+	}
+
+	public boolean verifyHash(PublicKey key) {
+		try {
+			// Calculate hash
+			MessageDigest d = MessageDigest.getInstance("SHA-256");
+			ObjectOutputStream os = new ObjectOutputStream(
+				new ByteArrayOutputStream());
+
+			os.writeObject(username);
+			os.writeObject(issuingServer);
+			os.writeObject(groups);
+			os.writeObject(ownership);
+			byte[] hashed_token = d.digest(out.toByteArray());
+
+			// Decrypt given hash
+			RSA rsa = new RSA();
+			signed_hash = rsa.verifyPkcs1Signature(key, hashed_token,
+				signed_hash_token);
+
+			return Arrays.equals(hashed_token, signed_hash);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false; // ???
+		}
 	}
 
 
