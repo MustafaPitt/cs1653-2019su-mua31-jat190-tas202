@@ -1,8 +1,9 @@
 import java.util.List;
+import java.security.*;
 
 /**
  * A simple interface to the token data structure that will be
- * returned by a group server.  
+ * returned by a group server.
  *
  * You will need to develop a class that implements this interface so
  * that your code can interface with the tokens created by your group
@@ -48,4 +49,6 @@ public interface UserToken
     public List<String> getGroups();
 
     List<String> getOwnership();
+
+    public void updateHashToken(PrivateKey k);
 }   //-- end interface UserToken

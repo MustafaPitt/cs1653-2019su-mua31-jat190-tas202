@@ -22,6 +22,7 @@ public class ClientApplication {
 	 */
 	private static FileClient fileClient;
 	static UserToken token;
+	static String username;
 	private static PrivateKey clientSigPK;
 	private static PublicKey groupServerPublicKeyVir;
 
@@ -39,28 +40,26 @@ public class ClientApplication {
 
 		groupClient = new GroupClient();
 		fileClient = new FileClient();
-			boolean signedIn = false;
+
         while (true){
             Scanner scanner = new Scanner(System.in);
-			String username;
-			if(!signedIn){
-				System.out.print("Username: ");
-				username = scanner.nextLine();
-				signedIn = true;
-			}else{
-				username = token.getSubject();
-			}
+						boolean signedIn = false;
+						if(!signedIn){
+							System.out.print("Username: ");
+							username = scanner.nextLine();
+							signedIn = true;
+						}
 
-			System.out.println("\n1)Login to group server 2) Connect to File Server 3) Exit");
+						System.out.println("\n1)Login to group server 2) Connect to File Server 3) Exit");
             String input = scanner.next();
-            if (!input.matches("[0-9]")){
-                System.out.println("Invalid input");
-			}
+          	if (!input.matches("[0-9]")){
+              System.out.println("Invalid input");
+						}
             else if (input.equals("1")) connectToGroupServer(username);
             else if (input.equals("2")) connectToFileServer(username);
 						else if (input.equals("3")) break;
-            }
         }
+    }
 
 	private static PublicKey getGroupServerPK(String pkBin) {
 		PublicKey pk = null;
@@ -184,7 +183,10 @@ public class ClientApplication {
 
 		 groupClient.connect(gs_server_name, gs_port, clientSigPK,groupServerPublicKeyVir, username);
 		 //verify password
-		 groupClient.verifyPassword(username, pw);
+		 if(!groupClient.verifyPassword(username, pw)){
+			 System.out.println("Incorrect username or password -- Cannot connect to Group Server.");
+			 return;
+		 }
 
 
 		 System.out.println("Connecting to Group Server Menu");
@@ -210,7 +212,6 @@ public class ClientApplication {
 
     private static void groupServerMenu() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("********** CLIENT USER MENU **********");
         while (true) {
 
 						token = groupClient.getToken(token.getSubject()); //update token

@@ -5,9 +5,7 @@
 
 import javax.crypto.interfaces.DHPublicKey;
 import javax.crypto.spec.SecretKeySpec;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.Socket;
 import java.security.GeneralSecurityException;
 import java.security.KeyPair;
@@ -15,6 +13,8 @@ import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+
+import java.security.MessageDigest;
 
 public class GroupThread extends Thread
 {
@@ -55,11 +55,34 @@ public class GroupThread extends Thread
 					else
 					{
 						UserToken yourToken = createToken(username); //Create a token
+						//hashes the token and signs it
+						yourToken.updateHashToken(my_gs.privateKeySig);
 
-						//Respond to the client. On error, the client will receive a null token
-						response = new Envelope("OK");
-						response.addObject(yourToken);
-						output.writeObject(response);
+						//encrypting token and signed hash token
+						ByteArrayOutputStream out = new ByteArrayOutputStream();
+						ObjectOutputStream os = new ObjectOutputStream(out);
+						AES aes = new AES();
+						byte[][] cipherTokenWithIV = new byte[0][0];
+
+						SecretKeySpec secretKey = new SecretKeySpec(agreedKeyGSDH,"AES");
+						boolean done = false;
+
+						try {
+							os.writeObject(yourToken);
+							cipherTokenWithIV = aes.cfbEncrypt(secretKey, out.toByteArray());
+						} catch (GeneralSecurityException e) {
+							e.printStackTrace();
+							output.writeObject(new Envelope("FAIL"));
+							done = true;
+						}
+
+						if(done == false){
+							//Respond to the client. On error, the client will receive a null token
+							response = new Envelope("OK");
+							response.addObject(cipherTokenWithIV);
+							output.writeObject(response);
+						}
+
 					}
 				}
 				else if(message.getMessage().equals("CUSER")) //Client wants to create a user

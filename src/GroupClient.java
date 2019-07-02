@@ -4,7 +4,7 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import javax.crypto.spec.DHParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-import java.io.IOException;
+import java.io.*;
 import java.security.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,6 +13,7 @@ import java.util.List;
 public class GroupClient extends Client implements GroupClientInterface {
 
 	private byte[] sharedKeyClientGS;
+
 
 
 	public boolean connect(final String server, final int port, PrivateKey pkSig, PublicKey publicKeyGSrsa, String username) {
@@ -51,7 +52,23 @@ public class GroupClient extends Client implements GroupClientInterface {
 
 				if(temp.size() == 1)
 				{
-					token = (UserToken)temp.get(0);
+					//decryption
+					byte [][] cipherTokenWithIV = (byte[][]) response.getObjContents().get(0);
+
+					AES aes = new AES();
+					byte [] bytetoken = new byte[0];
+					SecretKeySpec secretKey = new SecretKeySpec(sharedKeyClientGS,"AES");
+
+					try {
+						 bytetoken = aes.cfbDecrypt(secretKey, cipherTokenWithIV[0], cipherTokenWithIV[1]);
+					} catch (GeneralSecurityException e) {
+						e.printStackTrace();
+					}
+
+					//convert from byte[] to token
+					ByteArrayInputStream in = new ByteArrayInputStream(bytetoken);
+	        ObjectInputStream is = new ObjectInputStream(in);
+					token = (UserToken)is.readObject();
 					return token;
 				}
 			}
