@@ -6,6 +6,7 @@ import java.net.Socket;
 import java.security.GeneralSecurityException;
 import java.security.KeyPair;
 import java.security.PublicKey;
+import javax.crypto.spec.SecretKeySpec;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -275,6 +276,43 @@ public class FileThread extends Thread
 						System.out.println("couldn't established secure connections");
 						output.writeObject(response);
 					}
+				}
+
+				else if(e.getMessage().equals("Challange")){
+					byte[][] sharedKeyEncryptedN = (byte[][]) e.getObjContents().get(0);
+					//remove shared key encryption
+					AES aes = new AES();
+					SecretKeySpec secretKey = new SecretKeySpec(agreedKeyFSDH,"AES");
+					byte[] publicKeyEncryptedN = new byte[0];
+
+					RSA rsa = new RSA();
+					byte[] msgByte = new byte[0];
+					boolean fail = false;
+					try {
+						publicKeyEncryptedN = aes.cfbDecrypt(secretKey, sharedKeyEncryptedN[0], sharedKeyEncryptedN[1]);
+						//decrypt again to remove public key encryption
+						msgByte = rsa.cfbDecrypt(my_fs.privateKeySig, publicKeyEncryptedN);
+					} catch (Exception ex) {
+						ex.printStackTrace();
+						e = new Envelope("FAIL");
+						fail = true;
+					}
+
+					//now we have bigint n in byte[], we want to send it back encypted
+					//with the shared key
+					byte[][] encyrptedN = new byte[0][0];
+					if(fail == false){
+						try {
+							encyrptedN = aes.cfbEncrypt(secretKey, msgByte);
+							e = new Envelope("OK");
+						} catch (Exception ex) {
+							ex.printStackTrace();
+							e = new Envelope("FAIL");
+						}
+					}
+
+					e.addObject(encyrptedN);
+					output.writeObject(e);
 				}
 
 

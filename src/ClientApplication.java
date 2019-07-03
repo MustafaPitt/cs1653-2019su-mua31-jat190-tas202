@@ -119,7 +119,11 @@ public class ClientApplication {
 		int fs_port = scanner.nextInt();
 
     fileClient = new FileClient();
-  	fileClient.connect(fs_server_name, fs_port, clientSigPK, fileServerPublicKeyVir, username);
+  	if(!fileClient.connect(fs_server_name, fs_port, clientSigPK, fileServerPublicKeyVir, username)){
+			//if this returns false the fs can't be trusted
+			fileClient.disconnect();
+			return;
+		}
 
     if (fileClient.isConnected()) System.out.println("--Secure session with FS " + gs_port + " established--");
         while(true){ // while you are in file server
