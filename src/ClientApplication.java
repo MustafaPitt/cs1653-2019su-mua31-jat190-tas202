@@ -30,9 +30,13 @@ public class ClientApplication {
 	public static void main (String []args){
 
 		try {
-			 clientSigPK = getClientPrivateKey(args[0]);
+			if(args.length == 0 || args.length > 3) {
+				System.out.println("Usage: java -cp '.;bcprov' <client_priv_key> <GS_pub_key> <FS_pub_key>");
+				System.exit(0);
+			}
+			clientSigPK = getClientPrivateKey(args[0]);
 			groupServerPublicKeyVir = getPublicKey(args[1]);
-			if(args.length > 2){
+			if(args.length >= 2){
 				fileServerPublicKeyVir = getPublicKey(args[2]);
 			}
 		} catch (IOException e) {
@@ -117,7 +121,7 @@ public class ClientApplication {
     fileClient = new FileClient();
   	fileClient.connect(fs_server_name, fs_port, clientSigPK, fileServerPublicKeyVir, username);
 
-    if (fileClient.isConnected()) System.out.println("-Connection established.");
+    if (fileClient.isConnected()) System.out.println("--Secure session with FS " + gs_port + " established--");
         while(true){ // while you are in file server
             	System.out.println("1) List files\n" +
 						"2) Upload\n" +
