@@ -36,6 +36,38 @@ public class AES {
         return cipher.doFinal(cipherText);
     }
 
+	byte[][]cfbEncrypt(byte[] key, Object data) {
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		ObjectOutputStream os = new ObjectOutputStream(out);
+		byte[][] encrypted;
+
+		SecretKeySpec secretKey = new SecretKeySpec(key, "AES");
+		try {
+			os.writeObject(data);
+			encrypted = cfbEncrypt(key, out.toByteArray());
+			return encrypted;
+		} catch (GeneralSecurityException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	Object cfbDecrypt(byte[] key, byte[][] ciphertext) {
+		byte[] objbytes;
+		SecretKeySpec secretKey = new SecretKeySpec(key ,"AES");
+
+		try {
+			objbytes = cfbDecrypt(key, ciphertext[0], ciphertext[1]);
+			ByteArrayInputStream in = 
+			ObjectInputStream is = new ObjectInputStream(
+				new ByteArrayInputStream(objbytes));
+			return is.readObject();
+		} catch (GeneralSecurityException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
     String bytesToString(byte[] input){
         StringBuilder sb = new StringBuilder();
         for(byte b : input) {
