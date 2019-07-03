@@ -71,6 +71,10 @@ public class Token implements UserToken, Serializable {
 		try {
 			// Calculate hash
 			MessageDigest d = MessageDigest.getInstance("SHA-256");
+<<<<<<< HEAD
+=======
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+>>>>>>> fast_dh
 			ObjectOutputStream os = new ObjectOutputStream(
 				new ByteArrayOutputStream());
 
@@ -78,12 +82,21 @@ public class Token implements UserToken, Serializable {
 			os.writeObject(issuingServer);
 			os.writeObject(groups);
 			os.writeObject(ownership);
+<<<<<<< HEAD
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 			byte[] hashed_token = d.digest(out.toByteArray());
 
 			// Decrypt given hash
 			RSA rsa = new RSA();
 			return rsa.verifyPkcs1Signature(key, hashed_token, signed_hash_token);
+=======
+			byte[] hashed_token = d.digest(out.toByteArray());
+
+			// Verify.
+			return new RSA().verifyPkcs1Signature(key,
+				hashed_token, signed_hash_token);
+
+>>>>>>> fast_dh
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false; // ???

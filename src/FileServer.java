@@ -11,6 +11,7 @@ public class FileServer extends Server {
 	public static final int SERVER_PORT = 4321;
 	public static FileList fileList;
 
+<<<<<<< HEAD
 	HashMap <String,PublicKey> clientCertificates;
 
 	private KeyPair keyPair;
@@ -18,6 +19,15 @@ public class FileServer extends Server {
 	private PublicKey publicKeyVir;
 
 	FileServer() {
+=======
+	public HashMap <String,PublicKey> clientCertifcates;
+
+	private KeyPair keyPair;
+	public PrivateKey privateKeySig;
+	public PublicKey publicKeyVir;
+
+	public FileServer() {
+>>>>>>> fast_dh
 		super(SERVER_PORT, "FilePile");
 	}
 
@@ -44,6 +54,10 @@ public class FileServer extends Server {
 		catch(FileNotFoundException e)
 		{
 			System.out.println("FileList Does Not Exist. Creating FileList...");
+<<<<<<< HEAD
+=======
+
+>>>>>>> fast_dh
 			fileList = new FileList();
 
 		}
@@ -115,6 +129,70 @@ public class FileServer extends Server {
 			System.out.println("Group Server public key not found can't continue");
 		}
 
+<<<<<<< HEAD
+=======
+		//try to open rsa files
+		try{
+			FileInputStream fis = new FileInputStream(super.port + "_rsaPublic.bin");
+			fileStream = new ObjectInputStream(fis);
+			publicKeyVir = (PublicKey)fileStream.readObject();
+
+			fis = new FileInputStream(super.port + "_rsaPrivate.bin");
+			fileStream = new ObjectInputStream(fis);
+			privateKeySig = (PrivateKey)fileStream.readObject();
+
+			// open hash secret key for passwords
+			fis = new FileInputStream("clientCertificates.bin");
+			fileStream = new ObjectInputStream(fis);
+			clientCertifcates = (HashMap<String, PublicKey>) fileStream.readObject();
+
+
+		}catch(FileNotFoundException e){
+			System.out.println("rsa keys do not exist. Creating keys...");
+			try{
+				RSA rsa = new RSA();
+				keyPair = rsa.generateKeyPair();
+				privateKeySig = keyPair.getPrivate();
+				publicKeyVir = keyPair.getPublic();
+			} catch (GeneralSecurityException e1) {
+				e1.printStackTrace();
+			}
+
+
+			clientCertifcates = new HashMap<>(); // init client certificates
+
+			ObjectOutputStream outStreamGroup;
+			try {
+				// save keys
+				outStreamGroup = new ObjectOutputStream(new FileOutputStream(super.port + "_rsaPublic.bin"));
+				outStreamGroup.writeObject(publicKeyVir);
+				outStreamGroup.close();
+
+				outStreamGroup = new ObjectOutputStream(new FileOutputStream(super.port + "_rsaPrivate.bin"));
+				outStreamGroup.writeObject(privateKeySig);
+				outStreamGroup.close();
+
+				// save clients cerificates
+				outStreamGroup = new ObjectOutputStream(new FileOutputStream("clientCertificates.bin"));
+				outStreamGroup.writeObject(clientCertifcates);
+				outStreamGroup.close();
+
+			}catch(Exception ex){ ex.printStackTrace();}
+
+			fileList = new FileList();
+
+		}catch(Exception ex){ ex.printStackTrace();}
+
+		try{
+			FileInputStream fis = new FileInputStream("rsaPublicKeyVir.bin");
+			fileStream = new ObjectInputStream(fis);
+			publicKeyVir = (PublicKey)fileStream.readObject();
+		}catch(Exception e){
+			e.printStackTrace();
+			System.out.println("Group Server public key not found can't continue");
+		}
+
+>>>>>>> fast_dh
 		File file = new File("shared_files");
 		 if (file.mkdir()) {
 			 System.out.println("Created new shared_files directory");

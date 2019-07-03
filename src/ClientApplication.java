@@ -51,14 +51,15 @@ public class ClientApplication {
 
         while (true){
             Scanner scanner = new Scanner(System.in);
-			boolean signedIn = false;
-			if(!signedIn){
-				System.out.print("Username: ");
-				username = scanner.nextLine();
-				signedIn = true;
-			}
+						boolean signedIn = false;
+						if(!signedIn){
+							System.out.print("Username: ");
+							username = scanner.nextLine();
+							signedIn = true;
+						}
 
-			System.out.println("\n1)Login to group server 2) Connect to File Server 3) Exit");
+						System.out.println("\n1)Login to group server 2) Connect to File Server 3) Exit");
+
             String input = scanner.next();
           	if (!input.matches("[0-9]")){
               System.out.println("Invalid input");

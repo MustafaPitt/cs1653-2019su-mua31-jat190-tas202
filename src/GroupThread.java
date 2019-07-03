@@ -56,7 +56,10 @@ public class GroupThread extends Thread
 					{
 						UserToken yourToken = createToken(username); //Create a token
 						//hashes the token and signs it
+<<<<<<< HEAD
 						assert yourToken != null;
+=======
+>>>>>>> fast_dh
 						yourToken.updateHashToken(my_gs.privateKeySig);
 
 						//encrypting token and signed hash token
@@ -77,7 +80,11 @@ public class GroupThread extends Thread
 							done = true;
 						}
 
+<<<<<<< HEAD
 						if(!done){
+=======
+						if(done == false){
+>>>>>>> fast_dh
 							//Respond to the client. On error, the client will receive a null token
 							response = new Envelope("OK");
 							response.addObject(cipherTokenWithIV);

@@ -6,8 +6,14 @@ import javax.crypto.spec.DHParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
 import java.security.*;
+<<<<<<< HEAD
 import java.util.*;
 import java.math.BigInteger;
+=======
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+>>>>>>> fast_dh
 
 public class FileClient extends Client implements FileClientInterface {
 
@@ -22,6 +28,7 @@ public class FileClient extends Client implements FileClientInterface {
 			e.printStackTrace();
 		}
 
+<<<<<<< HEAD
 		//server challange
 		if(serverChallange(publicKeyFSrsa)){
 			System.out.println("File Server " + port + " is trusted.");
@@ -30,6 +37,8 @@ public class FileClient extends Client implements FileClientInterface {
 			return false;
 		}
 
+=======
+>>>>>>> fast_dh
 		return isConnected();
 	}
 
@@ -253,6 +262,7 @@ public class FileClient extends Client implements FileClientInterface {
 	public void establishSecureSessionWithFS(final int port, PrivateKey pkSig, PublicKey publicKeyFSrsa, String username)throws GeneralSecurityException {
 		BouncyCastleProvider bouncyCastleProvider =  new BouncyCastleProvider();
 		Security.addProvider(bouncyCastleProvider);
+<<<<<<< HEAD
 
 		System.out.println("Establishing Secure connections with File Server " + port);
 		DHParameterSpec dhParameterSpec = DH.generateParameters(); // these parameters need to delivered to alice and bob it contains G P
@@ -274,6 +284,29 @@ public class FileClient extends Client implements FileClientInterface {
 			System.exit(-1);
 		}
 
+=======
+
+		System.out.println("Establishing Secure connections with File Server " + port);
+		DHParameterSpec dhParameterSpec = DH.generateParameters(); // these parameters need to delivered to alice and bob it contains G P
+		KeyPair clientKP = DH.generateKeyPair(dhParameterSpec);
+
+		// now send client public dh with dhParameterSpec
+
+		// wrap the required keys and parameters
+		Envelope msg = new Envelope("SecureSession");
+		msg.addObject(username);
+		msg.addObject(clientKP.getPublic());
+
+		RSA rsa = new RSA();
+		byte [] msgByte = new byte[0];
+		try {
+			msgByte = rsa.serialize(clientKP.getPublic());// convert the msg object to bytes
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.exit(-1);
+		}
+
+>>>>>>> fast_dh
 		// sign the message
 		byte [] signature = rsa.generatePkcs1Signature(pkSig,msgByte);
 
@@ -313,6 +346,7 @@ public class FileClient extends Client implements FileClientInterface {
 
 	}
 
+<<<<<<< HEAD
 	public boolean serverChallange(PublicKey publicKeyFSrsa){
 		//generate BigInt
 		BigInteger n = new BigInteger(128, new SecureRandom());
@@ -374,4 +408,6 @@ public class FileClient extends Client implements FileClientInterface {
 		}return false;
 	}
 
+=======
+>>>>>>> fast_dh
 }

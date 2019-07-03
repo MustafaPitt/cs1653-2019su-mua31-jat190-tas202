@@ -1,14 +1,24 @@
 /* File worker thread handles the business of uploading, downloading, and removing files for clients with valid tokens */
 
 import javax.crypto.interfaces.DHPublicKey;
+<<<<<<< HEAD
+=======
+import javax.crypto.spec.SecretKeySpec;
+>>>>>>> fast_dh
 import java.io.*;
 import java.net.Socket;
 import java.security.GeneralSecurityException;
 import java.security.KeyPair;
 import java.security.PublicKey;
+<<<<<<< HEAD
 import javax.crypto.spec.SecretKeySpec;
+=======
+>>>>>>> fast_dh
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+
+import java.security.MessageDigest;
 
 public class FileThread extends Thread
 {
@@ -278,6 +288,7 @@ public class FileThread extends Thread
 					}
 				}
 
+<<<<<<< HEAD
 				else if(e.getMessage().equals("Challange")){
 					byte[][] sharedKeyEncryptedN = (byte[][]) e.getObjContents().get(0);
 					//remove shared key encryption
@@ -315,6 +326,8 @@ public class FileThread extends Thread
 					output.writeObject(e);
 				}
 
+=======
+>>>>>>> fast_dh
 
 			} while(proceed);
 		}
@@ -338,7 +351,11 @@ public class FileThread extends Thread
 			e.printStackTrace();
 		}
 
+<<<<<<< HEAD
 		PublicKey pk = my_fs.clientCertificates.get(username);
+=======
+		PublicKey pk = my_fs.clientCertifcates.get(username);
+>>>>>>> fast_dh
 		try {
 			if (rsa.verifyPkcs1Signature(pk,bytesMsg,sigbytes)){
 				DH dh = new DH();

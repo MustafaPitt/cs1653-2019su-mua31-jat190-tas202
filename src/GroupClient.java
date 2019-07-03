@@ -16,7 +16,11 @@ public class GroupClient extends Client implements GroupClientInterface {
 
 
 
+<<<<<<< HEAD
 	public boolean connect(final String server, final int port, PrivateKey pkSig, PublicKey publicKeyGsRSA, String username) {
+=======
+	public boolean connect(final String server, final int port, PrivateKey pkSig, PublicKey publicKeyGSrsa, String username) {
+>>>>>>> fast_dh
 		super.connect(server, port);
 		//new code
 		try {
@@ -59,16 +63,28 @@ public class GroupClient extends Client implements GroupClientInterface {
 					AES aes = new AES();
 					byte [] bytetoken = new byte[0];
 					SecretKeySpec secretKey = new SecretKeySpec(sharedKeyClientGS,"AES");
+<<<<<<< HEAD
 					try {
 						bytetoken = aes.cfbDecrypt(secretKey, cipherTokenWithIV[0], cipherTokenWithIV[1]);
+=======
+
+					try {
+						 bytetoken = aes.cfbDecrypt(secretKey, cipherTokenWithIV[0], cipherTokenWithIV[1]);
+>>>>>>> fast_dh
 					} catch (GeneralSecurityException e) {
 						e.printStackTrace();
 					}
 
+<<<<<<< HEAD
 
 					//convert from byte[] to token
 					ByteArrayInputStream in = new ByteArrayInputStream(bytetoken);
 	        		ObjectInputStream is = new ObjectInputStream(in);
+=======
+					//convert from byte[] to token
+					ByteArrayInputStream in = new ByteArrayInputStream(bytetoken);
+	        ObjectInputStream is = new ObjectInputStream(in);
+>>>>>>> fast_dh
 					token = (UserToken)is.readObject();
 					return token;
 				}
