@@ -44,49 +44,40 @@ public class Token implements UserToken, Serializable {
 	}
 
 	public void updateHashToken(PrivateKey key){
-			//hash the token
-			try{
-				MessageDigest d = MessageDigest.getInstance("SHA-256");
-
-				ByteArrayOutputStream out = new ByteArrayOutputStream();
-				ObjectOutputStream os = new ObjectOutputStream(out);
-				os.writeObject(username);
-				os.writeObject(issuingServer);
-				os.writeObject(groups);
-				os.writeObject(ownership);
-				byte[] hashed_token = d.digest(out.toByteArray());
-				//sign the token with given key
-				RSA rsa = new RSA();
-				signed_hash_token = rsa.generatePkcs1Signature(key, hashed_token);
-				
-			}catch(Exception e){
-				e.printStackTrace();
-				return;
-			}
-
-
+		try{
+			signed_hash_token = new RSA().generatePkcs1Signature(
+				key, getHash());
+		} catch(Exception e) {
+			e.printStackTrace();
+			return;
+		}
 	}
 
 	public boolean verifyHash(PublicKey key) {
 		try {
-			// Calculate hash
+			// Decrypt given hash
+			return new RSA().verifyPkcs1Signature(
+				key, getHash(), signed_hash_token);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false; // ???
+		}
+	}
+
+	public byte[] getHash() {
+		try {
 			MessageDigest d = MessageDigest.getInstance("SHA-256");
-			ObjectOutputStream os = new ObjectOutputStream(
-				new ByteArrayOutputStream());
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			ObjectOutputStream os = new ObjectOutputStream(out);
 
 			os.writeObject(username);
 			os.writeObject(issuingServer);
 			os.writeObject(groups);
 			os.writeObject(ownership);
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			byte[] hashed_token = d.digest(out.toByteArray());
 
-			// Decrypt given hash
-			RSA rsa = new RSA();
-			return rsa.verifyPkcs1Signature(key, hashed_token, signed_hash_token);
+			return d.digest(out.toByteArray());
 		} catch (Exception e) {
-			e.printStackTrace();
-			return false; // ???
+			return null;
 		}
 	}
 
