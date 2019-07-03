@@ -16,11 +16,11 @@ public class GroupClient extends Client implements GroupClientInterface {
 
 
 
-	public boolean connect(final String server, final int port, PrivateKey pkSig, PublicKey publicKeyGSrsa, String username) {
+	public boolean connect(final String server, final int port, PrivateKey pkSig, PublicKey publicKeyGsRSA, String username) {
 		super.connect(server, port);
 		//new code
 		try {
-			establishSecureSessionWithGS(pkSig, publicKeyGSrsa, username);
+			establishSecureSessionWithGS(pkSig, publicKeyGsRSA, username);
 		} catch (GeneralSecurityException e) {
 			e.printStackTrace();
 		}
@@ -43,6 +43,7 @@ public class GroupClient extends Client implements GroupClientInterface {
 			//Get the response from the server
 			response = (Envelope)input.readObject();
 
+
 			//Successful response
 			if(response.getMessage().equals("OK"))
 			{
@@ -58,16 +59,16 @@ public class GroupClient extends Client implements GroupClientInterface {
 					AES aes = new AES();
 					byte [] bytetoken = new byte[0];
 					SecretKeySpec secretKey = new SecretKeySpec(sharedKeyClientGS,"AES");
-
 					try {
-						 bytetoken = aes.cfbDecrypt(secretKey, cipherTokenWithIV[0], cipherTokenWithIV[1]);
+						bytetoken = aes.cfbDecrypt(secretKey, cipherTokenWithIV[0], cipherTokenWithIV[1]);
 					} catch (GeneralSecurityException e) {
 						e.printStackTrace();
 					}
 
+
 					//convert from byte[] to token
 					ByteArrayInputStream in = new ByteArrayInputStream(bytetoken);
-	        ObjectInputStream is = new ObjectInputStream(in);
+	        		ObjectInputStream is = new ObjectInputStream(in);
 					token = (UserToken)is.readObject();
 					return token;
 				}
@@ -335,9 +336,7 @@ public class GroupClient extends Client implements GroupClientInterface {
 
 		try {
 			message= (Envelope)input.readObject();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
+		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 
@@ -353,7 +352,6 @@ public class GroupClient extends Client implements GroupClientInterface {
 		}
 		sharedKeyClientGS = DH.recipientAgreementBasic(clientKP.getPrivate(),gsPkDH);
 		System.out.println("DBG " + Arrays.toString(sharedKeyClientGS));
-
 	}
 
 	public boolean verifyPassword(String username, String password){

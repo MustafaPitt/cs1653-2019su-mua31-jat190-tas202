@@ -7,14 +7,11 @@ import javax.crypto.interfaces.DHPublicKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
 import java.net.Socket;
-import java.security.GeneralSecurityException;
-import java.security.KeyPair;
-import java.security.PublicKey;
+import java.security.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
-
-import java.security.MessageDigest;
 
 public class GroupThread extends Thread
 {
@@ -56,6 +53,7 @@ public class GroupThread extends Thread
 					{
 						UserToken yourToken = createToken(username); //Create a token
 						//hashes the token and signs it
+						assert yourToken != null;
 						yourToken.updateHashToken(my_gs.privateKeySig);
 
 						//encrypting token and signed hash token
@@ -63,7 +61,7 @@ public class GroupThread extends Thread
 						ObjectOutputStream os = new ObjectOutputStream(out);
 						AES aes = new AES();
 						byte[][] cipherTokenWithIV = new byte[0][0];
-
+						System.out.println("DBG group thread 63 : printing Agreed key " + Arrays.toString(agreedKeyGSDH));
 						SecretKeySpec secretKey = new SecretKeySpec(agreedKeyGSDH,"AES");
 						boolean done = false;
 
@@ -73,15 +71,12 @@ public class GroupThread extends Thread
 						} catch (GeneralSecurityException e) {
 							e.printStackTrace();
 							output.writeObject(new Envelope("FAIL"));
-							done = true;
+							return;
 						}
-
-						if(done == false){
-							//Respond to the client. On error, the client will receive a null token
+						//Respond to the client. On error, the client will receive a null token
 							response = new Envelope("OK");
 							response.addObject(cipherTokenWithIV);
 							output.writeObject(response);
-						}
 
 					}
 				}
@@ -198,7 +193,7 @@ public class GroupThread extends Thread
 
 				else if(message.getMessage().equals("LMEMBERS")) //Client wants a list of members in a group
 				{
-				    /* TODO:  Write this handler */
+					/* TODO:  Write this handler */
 					if(message.getObjContents().size() < 2)
 					{
 						response = new Envelope("FAIL");
@@ -226,7 +221,7 @@ public class GroupThread extends Thread
 				}
 				else if(message.getMessage().equals("AUSERTOGROUP")) //Client wants to add user to a group
 				{
-				    /* TODO:  Write this handler */
+					/* TODO:  Write this handler */
 					if(message.getObjContents().size() < 2)
 					{
 						response = new Envelope("FAIL");
@@ -258,7 +253,7 @@ public class GroupThread extends Thread
 				}
 				else if(message.getMessage().equals("RUSERFROMGROUP")) //Client wants to remove user from a group
 				{
-				    /* TODO:  Write this handler */
+					/* TODO:  Write this handler */
 					if(message.getObjContents().size() < 2)
 					{
 						response = new Envelope("FAIL");
@@ -308,7 +303,7 @@ public class GroupThread extends Thread
 					}
 				}
 				else if (message.getMessage().equals("VerifyPW")){
-				response = 	verifyPwAndUsernameFromClientApp(message);
+					response = 	verifyPwAndUsernameFromClientApp(message);
 					if (response.getMessage().equals("OK")) {
 						System.out.println("password correct");
 						output.writeObject(response);
@@ -345,12 +340,12 @@ public class GroupThread extends Thread
 		SecretKeySpec secretKey = new SecretKeySpec(agreedKeyGSDH,"AES");
 
 		try {
-			 username = aes.cfbDecrypt(secretKey, cipherUserNameWithIV[0], cipherUserNameWithIV[1]);
+			username = aes.cfbDecrypt(secretKey, cipherUserNameWithIV[0], cipherUserNameWithIV[1]);
 		} catch (GeneralSecurityException e) {
 			e.printStackTrace();
 		}
 		try {
-			 pw = aes.cfbDecrypt(secretKey, cipherPasswordWithIV[0], cipherPasswordWithIV[1]);
+			pw = aes.cfbDecrypt(secretKey, cipherPasswordWithIV[0], cipherPasswordWithIV[1]);
 		} catch (GeneralSecurityException e) {
 			e.printStackTrace();
 		}
@@ -359,7 +354,7 @@ public class GroupThread extends Thread
 
 		HMAC hmac = new HMAC();
 		try {
-		hashedPW = 	hmac.calculateHmac(my_gs.hashPWSecretKey,pw);
+			hashedPW = 	hmac.calculateHmac(my_gs.hashPWSecretKey,pw);
 		} catch (GeneralSecurityException e) {
 			e.printStackTrace();
 		}
@@ -376,9 +371,9 @@ public class GroupThread extends Thread
 	}
 
 	private Envelope establishSecureSessionWithClient(Envelope message) {
-	    String username =  (String) message.getObjContents().get(0);
-        //Client.SecureSessionParameters secureSessionParameters = (Client.SecureSessionParameters) message.getObjContents().get(1);
-        PublicKey clientDHPK = (PublicKey) message.getObjContents().get(1);
+		String username =  (String) message.getObjContents().get(0);
+		//Client.SecureSessionParameters secureSessionParameters = (Client.SecureSessionParameters) message.getObjContents().get(1);
+		PublicKey clientDHPK = (PublicKey) message.getObjContents().get(1);
 		byte [] sigbytes = (byte[]) message.getObjContents().get(2);
 		RSA rsa = new RSA();
 		byte [] bytesMsg = new byte[0];
@@ -411,7 +406,7 @@ public class GroupThread extends Thread
 		return new Envelope("FAIL");
 	}
 
-  private boolean removeUserFromGroup(String groupName, UserToken yourToken, String userToDel) {
+	private boolean removeUserFromGroup(String groupName, UserToken yourToken, String userToDel) {
 		String requester = yourToken.getSubject();
 		System.err.println("group name " + groupName + " requester " + requester + " user to remove  " + userToDel);
 		System.err.println("ownership" + yourToken.getOwnership());
@@ -509,8 +504,7 @@ public class GroupThread extends Thread
 
 
 	//Method to create a user
-	private boolean createUser(String username, UserToken yourToken)
-	{
+	private boolean createUser(String username, UserToken yourToken) throws IOException {
 		String requester = yourToken.getSubject();
 		System.err.println("requester: " + requester);
 		System.err.println("All users: ");
@@ -535,16 +529,51 @@ public class GroupThread extends Thread
 				}
 				else
 				{
-
 					String pw = PW.generate(8); // generate pw of length n
 					try {
 						byte[] pwHash = HMAC.calculateHmac(my_gs.hashPWSecretKey,pw.getBytes());
 						my_gs.userList.addUser(username,new String(pwHash));
 						System.out.println("User Name: " + username);
 						System.out.println("Password: " + pw);
-					} catch (GeneralSecurityException e1) {
-						e1.printStackTrace();
-					}
+						//and give the private to the client
+						RSA rsa = new RSA();
+
+						// write the private key to the disk and give it to the client
+
+						ObjectOutputStream outStreamGroup = null;
+
+						KeyPair keyPair = rsa.generateKeyPair();
+						PublicKey clientPublicKey = keyPair.getPublic();
+						PrivateKey clientPrivateKey = keyPair.getPrivate();
+
+						try {
+							outStreamGroup = new ObjectOutputStream(new FileOutputStream(username + "_clientPrivate.bin"));
+							outStreamGroup.writeObject(clientPrivateKey);
+
+
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+						assert outStreamGroup != null;
+						outStreamGroup.close();
+						my_gs.clientCertifcates.put(username,clientPublicKey);
+					} catch (GeneralSecurityException | IOException e1) {
+						e1.printStackTrace(); }
+
+					// save clients certificates
+					ObjectOutputStream outStreamGroup;
+					outStreamGroup = new ObjectOutputStream(new FileOutputStream("clientCertificates.bin"));
+					outStreamGroup.writeObject(my_gs.clientCertifcates);
+					outStreamGroup.close();
+					// write username and password to a text file
+					BufferedWriter writer = null;
+					try {
+						writer = new BufferedWriter(new FileWriter(username + "_PW.txt", true));
+					} catch (IOException e) { e.printStackTrace();}
+					writer.append("username: " + username);
+					writer.append("\n");
+					writer.append("password: "+ pw);
+					writer.close();
 					return true;
 				}
 			}
@@ -575,8 +604,7 @@ public class GroupThread extends Thread
 				if(my_gs.userList.checkUser(username))
 				{
 					//User needs deleted from the groups they belong
-					ArrayList<String> deleteFromGroups = new ArrayList<String>();
-
+					ArrayList<String> deleteFromGroups = new ArrayList<>();
 					//This will produce a hard copy of the list of groups this user belongs
 					for(int index = 0; index < my_gs.userList.getUserGroups(username).size(); index++)
 					{
@@ -613,6 +641,28 @@ public class GroupThread extends Thread
 					//Delete the user from the user list
 					my_gs.userList.deleteUser(username);
 
+					// remove user public key from the client certificate
+					my_gs.clientCertifcates.remove(username);
+
+					// update file certificate.bin
+					// save clients certificates
+					ObjectOutputStream outStreamGroup = null;
+					try {
+						outStreamGroup = new ObjectOutputStream(new FileOutputStream("clientCertificates.bin"));
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					try {
+						assert outStreamGroup != null;
+						outStreamGroup.writeObject(my_gs.clientCertifcates);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					try {
+						outStreamGroup.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 
 					return true;
 				}

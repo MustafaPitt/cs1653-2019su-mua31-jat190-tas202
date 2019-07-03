@@ -11,17 +11,17 @@ public class FileServer extends Server {
 	public static final int SERVER_PORT = 4321;
 	public static FileList fileList;
 
-	public HashMap <String,PublicKey> clientCertifcates;
+	HashMap <String,PublicKey> clientCertificates;
 
 	private KeyPair keyPair;
-	public PrivateKey privateKeySig;
-	public PublicKey publicKeyVir;
+	PrivateKey privateKeySig;
+	private PublicKey publicKeyVir;
 
-	public FileServer() {
+	FileServer() {
 		super(SERVER_PORT, "FilePile");
 	}
 
-	public FileServer(int _port) {
+	FileServer(int _port) {
 		super(_port, "FilePile");
 	}
 
@@ -44,37 +44,39 @@ public class FileServer extends Server {
 		catch(FileNotFoundException e)
 		{
 			System.out.println("FileList Does Not Exist. Creating FileList...");
-
 			fileList = new FileList();
 
 		}
-		catch(IOException e)
-		{
-			System.out.println("Error reading from FileList file");
-			System.exit(-1);
-		}
-		catch(ClassNotFoundException e)
+		catch(IOException | ClassNotFoundException e)
 		{
 			System.out.println("Error reading from FileList file");
 			System.exit(-1);
 		}
 
+		// open Client Certificates
+		try{
+			FileInputStream fis = new FileInputStream("clientCertificates.bin");
+			fileStream = new ObjectInputStream(fis);
+			clientCertificates = (HashMap<String, PublicKey>) fileStream.readObject();
+			if (clientCertificates == null) {
+				System.out.println("System will shutdown. Couldn't verify client certificates");
+				System.exit(-1);
+			}
+		}catch (FileNotFoundException ignore){
+			System.out.println("System Couldn't open clients certificates. The system will shutdown");
+			System.exit(-1);
+		} catch (IOException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
 		//try to open rsa files
 		try{
-			FileInputStream fis = new FileInputStream(super.port + "_rsaPublic.bin");
+			FileInputStream fis = new FileInputStream(super.port + "FS_rsaPublic.bin");
 			fileStream = new ObjectInputStream(fis);
 			publicKeyVir = (PublicKey)fileStream.readObject();
 
-			fis = new FileInputStream(super.port + "_rsaPrivate.bin");
+			fis = new FileInputStream(super.port + "FS_rsaPrivate.bin");
 			fileStream = new ObjectInputStream(fis);
 			privateKeySig = (PrivateKey)fileStream.readObject();
-
-			// open hash secret key for passwords
-			fis = new FileInputStream("clientCertificates.bin");
-			fileStream = new ObjectInputStream(fis);
-			clientCertifcates = (HashMap<String, PublicKey>) fileStream.readObject();
-
-
 		}catch(FileNotFoundException e){
 			System.out.println("rsa keys do not exist. Creating keys...");
 			try{
@@ -86,24 +88,17 @@ public class FileServer extends Server {
 				e1.printStackTrace();
 			}
 
-
-			clientCertifcates = new HashMap<>(); // init client certificates
-
 			ObjectOutputStream outStreamGroup;
 			try {
 				// save keys
-				outStreamGroup = new ObjectOutputStream(new FileOutputStream(super.port + "_rsaPublic.bin"));
+				outStreamGroup = new ObjectOutputStream(new FileOutputStream(super.port + "FS_rsaPublic.bin"));
 				outStreamGroup.writeObject(publicKeyVir);
 				outStreamGroup.close();
 
-				outStreamGroup = new ObjectOutputStream(new FileOutputStream(super.port + "_rsaPrivate.bin"));
+				outStreamGroup = new ObjectOutputStream(new FileOutputStream(super.port + "FS_rsaPrivate.bin"));
 				outStreamGroup.writeObject(privateKeySig);
 				outStreamGroup.close();
 
-				// save clients cerificates
-				outStreamGroup = new ObjectOutputStream(new FileOutputStream("clientCertificates.bin"));
-				outStreamGroup.writeObject(clientCertifcates);
-				outStreamGroup.close();
 
 			}catch(Exception ex){ ex.printStackTrace();}
 
@@ -150,7 +145,7 @@ public class FileServer extends Server {
 			while(running)
 			{
 				sock = serverSock.accept();
-				thread = new FileThread(sock);
+				thread = new FileThread(sock, this);
 				thread.start();
 			}
 

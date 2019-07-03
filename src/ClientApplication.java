@@ -31,9 +31,9 @@ public class ClientApplication {
 
 		try {
 			 clientSigPK = getClientPrivateKey(args[0]);
-			groupServerPublicKeyVir = getServerPK(args[1]);
+			groupServerPublicKeyVir = getPublicKey(args[1]);
 			if(args.length > 2){
-				fileServerPublicKeyVir = getServerPK(args[2]);
+				fileServerPublicKeyVir = getPublicKey(args[2]);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -47,25 +47,25 @@ public class ClientApplication {
 
         while (true){
             Scanner scanner = new Scanner(System.in);
-						boolean signedIn = false;
-						if(!signedIn){
-							System.out.print("Username: ");
-							username = scanner.nextLine();
-							signedIn = true;
-						}
+			boolean signedIn = false;
+			if(!signedIn){
+				System.out.print("Username: ");
+				username = scanner.nextLine();
+				signedIn = true;
+			}
 
-						System.out.println("\n1)Login to group server 2) Connect to File Server 3) Exit");
+			System.out.println("\n1)Login to group server 2) Connect to File Server 3) Exit");
             String input = scanner.next();
           	if (!input.matches("[0-9]")){
               System.out.println("Invalid input");
 						}
             else if (input.equals("1")) connectToGroupServer(username);
             else if (input.equals("2")) connectToFileServer(username);
-						else if (input.equals("3")) break;
+            else if (input.equals("3")) break;
         }
     }
 
-	private static PublicKey getServerPK(String pkBin) {
+	private static PublicKey getPublicKey(String pkBin) {
 		PublicKey pk = null;
 		FileInputStream fis = null;
 		try {
@@ -73,7 +73,7 @@ public class ClientApplication {
 			ObjectInputStream is = new ObjectInputStream(fis);
 			pk = (PublicKey) is.readObject();
 		}catch (Exception e){
-			System.out.println("Couldn't open " + pkBin + " or invalid private key object");
+			System.out.println("Couldn't open " + pkBin + " or invalid key object");
 		}
 		return pk;
 	}
@@ -204,6 +204,7 @@ public class ClientApplication {
 		 System.out.println("Connecting to Group Server Menu");
 		 if (groupClient.isConnected()) {
 			 System.out.println("Create secure session ");
+
 			 token = groupClient.getToken(username); //update token
 			 if(token != null) groupServerMenu();
 		 else System.out.println("Couldn't verify your user name");
@@ -226,9 +227,11 @@ public class ClientApplication {
         Scanner scanner = new Scanner(System.in);
         while (true) {
 
-						token = groupClient.getToken(token.getSubject()); //update token
 
-						System.out.println("\n********** CLIENT USER MENU **********");
+        	token = groupClient.getToken(token.getSubject()); //update token
+
+
+			System.out.println("\n********** CLIENT USER MENU **********");
             System.out.println("1) Create a user \n2) Delete a user\n3) Create a group " +
                     "\n4) Delete a group \n5) List group members \n6) Add User to group \n7) Remove user from group \n8) Logout");
             String input = scanner.next();
@@ -277,8 +280,8 @@ public class ClientApplication {
             System.out.println("Group " + groupName + " deleted successfully.");
 						// refresh the server
 						groupClient.disconnect();
-            groupClient.connect(gs_server_name, gs_port);
-				}
+            groupClient.connect(gs_server_name, gs_port,clientSigPK, groupServerPublicKeyVir, token.getSubject());
+        }
         else System.out.println("Error deleting a group.");
 
     }
@@ -293,7 +296,7 @@ public class ClientApplication {
             System.out.println("Group " + groupName + " created successfully.");
 						// refresh the server
             groupClient.disconnect();
-            groupClient.connect(gs_server_name, gs_port);
+			groupClient.connect(gs_server_name, gs_port,clientSigPK, groupServerPublicKeyVir, token.getSubject());
         }
         else System.out.println("Error creating a group.");
 
@@ -308,7 +311,7 @@ public class ClientApplication {
             System.out.println("User " + username + " deleted successfully.");
 						// refresh the server
             groupClient.disconnect();
-            groupClient.connect(gs_server_name, gs_port);
+			groupClient.connect(gs_server_name, gs_port,clientSigPK, groupServerPublicKeyVir, token.getSubject());
 				}
         else System.out.println("Error deleting a user.");
 
@@ -323,7 +326,7 @@ public class ClientApplication {
              System.out.println("User " + username + " created successfully.");
              // refresh the server
              groupClient.disconnect();
-             groupClient.connect(gs_server_name, gs_port);
+			 groupClient.connect(gs_server_name, gs_port,clientSigPK, groupServerPublicKeyVir, token.getSubject());
          }
          else System.out.println("Error creating a user.");
      }
@@ -340,7 +343,7 @@ public class ClientApplication {
 						 System.out.println("User " + userToBeAdd + " added to group " + groupName + " successfully.");
 						 // refresh the server
 						 groupClient.disconnect();
-						 groupClient.connect(gs_server_name, gs_port);
+					 groupClient.connect(gs_server_name, gs_port,clientSigPK, groupServerPublicKeyVir, token.getSubject());
 				 }
 				 else
 						 System.out.println("Error adding user to a group.");
@@ -362,7 +365,7 @@ public class ClientApplication {
 	                System.out.println("User " + userToBeDel + " deleted from group " + groupName + " successfully.");
 	                // refresh the server
 	                groupClient.disconnect();
-	                groupClient.connect(gs_server_name, gs_port);
+					groupClient.connect(gs_server_name, gs_port,clientSigPK, groupServerPublicKeyVir, token.getSubject());
 	            }
 	            else
 	                System.out.println("Error deleting  user from group" + groupName + ".");

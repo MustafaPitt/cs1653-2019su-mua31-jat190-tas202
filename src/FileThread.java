@@ -1,7 +1,6 @@
 /* File worker thread handles the business of uploading, downloading, and removing files for clients with valid tokens */
 
 import javax.crypto.interfaces.DHPublicKey;
-import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
 import java.net.Socket;
 import java.security.GeneralSecurityException;
@@ -9,9 +8,6 @@ import java.security.KeyPair;
 import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-
-import java.security.MessageDigest;
 
 public class FileThread extends Thread
 {
@@ -19,9 +15,10 @@ public class FileThread extends Thread
 	private FileServer my_fs;
 	private byte[] agreedKeyFSDH;
 
-	public FileThread(Socket _socket)
+	public FileThread(Socket _socket, FileServer my_fs)
 	{
 		socket = _socket;
+		this.my_fs = my_fs;
 	}
 
 	public void run()
@@ -46,6 +43,7 @@ public class FileThread extends Thread
 					Token t = (Token)e.getObjContents().get(0);
 					if (t == null) {
 						response = new Envelope("FAIL-BADTOKEN");
+						System.out.println("Error: bad token. System Exit");
 					}
 
 					List<String> files = new ArrayList<String>();
@@ -302,7 +300,7 @@ public class FileThread extends Thread
 			e.printStackTrace();
 		}
 
-		PublicKey pk = my_fs.clientCertifcates.get(username);
+		PublicKey pk = my_fs.clientCertificates.get(username);
 		try {
 			if (rsa.verifyPkcs1Signature(pk,bytesMsg,sigbytes)){
 				DH dh = new DH();

@@ -96,6 +96,7 @@ public class GroupServer extends Server {
 
 			System.out.println("DBG  show all users in the group servers");
 			userList.showAllUsers();
+			fis.close();
 		}
 
 		catch(FileNotFoundException e)
@@ -297,7 +298,7 @@ class AutoSave extends Thread
 		{
 			try
 			{
-				Thread.sleep(300000); //Save group and user lists every 5 minutes
+				Thread.sleep(100000); //Save group and user lists every 5 minutes
 				System.out.println("Autosave group and user lists...");
 				ObjectOutputStream outStream;
 				try
@@ -317,6 +318,24 @@ class AutoSave extends Thread
 			catch(Exception e)
 			{
 				System.out.println("Autosave Interrupted");
+			}
+
+			FileInputStream fis = null;
+			try {
+				fis = new FileInputStream("clientCertificates.bin");
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+			ObjectInputStream groupStream = null;
+			try {
+				groupStream = new ObjectInputStream(fis);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			try {
+				my_gs.clientCertifcates = (HashMap<String, PublicKey>) groupStream.readObject();
+			} catch (IOException | ClassNotFoundException e) {
+				e.printStackTrace();
 			}
 		}while(true);
 	}
