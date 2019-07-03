@@ -25,12 +25,16 @@ public class ClientApplication {
 	static String username;
 	private static PrivateKey clientSigPK;
 	private static PublicKey groupServerPublicKeyVir;
+	private static PublicKey fileServerPublicKeyVir;
 
 	public static void main (String []args){
 
 		try {
-			 clientSigPK = getClietnPrivateKey(args[0]);
-			groupServerPublicKeyVir = getGroupServerPK(args[1]);
+			 clientSigPK = getClientPrivateKey(args[0]);
+			groupServerPublicKeyVir = getServerPK(args[1]);
+			if(args.length > 2){
+				fileServerPublicKeyVir = getServerPK(args[2]);
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
@@ -61,7 +65,7 @@ public class ClientApplication {
         }
     }
 
-	private static PublicKey getGroupServerPK(String pkBin) {
+	private static PublicKey getServerPK(String pkBin) {
 		PublicKey pk = null;
 		FileInputStream fis = null;
 		try {
@@ -74,7 +78,7 @@ public class ClientApplication {
 		return pk;
 	}
 
-	private static PrivateKey getClietnPrivateKey(String pbKeyBin) throws IOException, ClassNotFoundException {
+	private static PrivateKey getClientPrivateKey(String pbKeyBin) throws IOException, ClassNotFoundException {
 		PrivateKey pk = null;
 		FileInputStream fis = null;
 		try {
@@ -88,25 +92,33 @@ public class ClientApplication {
 	}
 
 	private static void connectToFileServer(String username) {
-    	Scanner scanner = new Scanner(System.in);
-    	System.out.print("Enter GROUP server address: ");
-    	gs_server_name = scanner.nextLine();
-    	System.out.print("Enter GROUP server port number:");
-    	gs_port = scanner.nextInt();
-    	groupClient.connect(gs_server_name, gs_port);
-    	token = groupClient.getToken(username); //update token
+		Scanner scanner = new Scanner(System.in);
+	 	System.out.print("Enter GROUP server address: ");
+	 	gs_server_name = scanner.nextLine();
+	 	System.out.print("Enter GROUP server port number:");
+	 	gs_port = scanner.nextInt();
+	 	System.out.print("Enter password:");
+	 	scanner.nextLine();
+	 	String pw = scanner.nextLine();
+
+	 	groupClient.connect(gs_server_name, gs_port, clientSigPK,groupServerPublicKeyVir, username);
+	 	//verify password
+	 	if(!groupClient.verifyPassword(username, pw)){
+		 	System.out.println("Incorrect username or password -- Cannot connect to Group Server.");
+		 	return;
+	 	}
+    token = groupClient.getToken(username); //update token
 		groupClient.disconnect();
 		System.out.print("Enter FILE server address: ");
-		scanner.nextLine();
 		String fs_server_name = scanner.nextLine();
-						System.out.print("Enter FILE server port number: ");
+		System.out.print("Enter FILE server port number: ");
 		int fs_port = scanner.nextInt();
 
-            fileClient = new FileClient();
-            fileClient.connect(fs_server_name, fs_port);
+    fileClient = new FileClient();
+  	fileClient.connect(fs_server_name, fs_port, clientSigPK, fileServerPublicKeyVir, username);
 
-            if (fileClient.isConnected()) System.out.println("-Connection established.");
-            while(true){ // while you are in file server
+    if (fileClient.isConnected()) System.out.println("-Connection established.");
+        while(true){ // while you are in file server
             	System.out.println("1) List files\n" +
 						"2) Upload\n" +
 						"3) Download\n" +

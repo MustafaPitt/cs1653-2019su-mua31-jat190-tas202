@@ -292,7 +292,7 @@ public class GroupClient extends Client implements GroupClientInterface {
 
 
 
-	void establishSecureSessionWithGS(PrivateKey pkSig,PublicKey publicKeyGSrsa, String username) throws GeneralSecurityException {
+	public void establishSecureSessionWithGS(PrivateKey pkSig,PublicKey publicKeyGSrsa, String username) throws GeneralSecurityException {
 		BouncyCastleProvider bouncyCastleProvider =  new BouncyCastleProvider();
 		Security.addProvider(bouncyCastleProvider);
 

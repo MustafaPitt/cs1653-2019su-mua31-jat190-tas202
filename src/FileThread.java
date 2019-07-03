@@ -1,13 +1,23 @@
 /* File worker thread handles the business of uploading, downloading, and removing files for clients with valid tokens */
 
+import javax.crypto.interfaces.DHPublicKey;
+import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
 import java.net.Socket;
+import java.security.GeneralSecurityException;
+import java.security.KeyPair;
+import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+
+import java.security.MessageDigest;
 
 public class FileThread extends Thread
 {
 	private final Socket socket;
+	private FileServer my_fs;
+	private byte[] agreedKeyFSDH;
 
 	public FileThread(Socket _socket)
 	{
@@ -256,6 +266,20 @@ public class FileThread extends Thread
 					socket.close();
 					proceed = false;
 				}
+
+				else if (e.getMessage().equals("SecureSession")) {
+					response = establishSecureSessionWithClient(e);
+					if (response.getMessage().equals("OK")) {
+						System.out.println("secure session established");
+						output.writeObject(response);
+
+					} else {
+						System.out.println("couldn't established secure connections");
+						output.writeObject(response);
+					}
+				}
+
+
 			} while(proceed);
 		}
 		catch(Exception e)
@@ -265,4 +289,39 @@ public class FileThread extends Thread
 		}
 	}
 
+	private Envelope establishSecureSessionWithClient(Envelope message) {
+		String username =  (String) message.getObjContents().get(0);
+		PublicKey clientDHPK = (PublicKey) message.getObjContents().get(1);
+		byte [] sigbytes = (byte[]) message.getObjContents().get(2);
+
+		RSA rsa = new RSA();
+		byte [] bytesMsg = new byte[0];
+		try {
+			bytesMsg = rsa.serialize(clientDHPK);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		PublicKey pk = my_fs.clientCertifcates.get(username);
+		try {
+			if (rsa.verifyPkcs1Signature(pk,bytesMsg,sigbytes)){
+				DH dh = new DH();
+				KeyPair keyPairFSDH = dh.generateKeyPair(((DHPublicKey)clientDHPK).getParams());
+				agreedKeyFSDH  =  dh.initiatorAgreementBasic(keyPairFSDH.getPrivate(),clientDHPK);
+				byte [] sig = new byte[0];
+				Envelope msg = new Envelope("OK");
+				try {
+					sig =rsa.generatePkcs1Signature(my_fs.privateKeySig, rsa.serialize(keyPairFSDH.getPublic()));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				msg.addObject(sig);
+				msg.addObject(keyPairFSDH.getPublic());
+				return msg;
+			}
+		} catch(GeneralSecurityException e){
+			e.printStackTrace();
+		}
+		return new Envelope("FAIL");
+	}
 }

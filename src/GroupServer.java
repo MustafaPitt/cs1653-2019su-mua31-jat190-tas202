@@ -35,11 +35,8 @@ public class GroupServer extends Server {
 	// store all client public keys to verifiy their connections <username, public key>
 	public HashMap <String,PublicKey> clientCertifcates;
 
-	KeyPair keyPair;
+	private KeyPair keyPair;
 	public PrivateKey privateKeySig;
-	public PrivateKey privateKeyDec;
-
-	public PublicKey publicKeyEnc;
 	public PublicKey publicKeyVir;
 
 	public SecretKey hashPWSecretKey;
@@ -87,23 +84,15 @@ public class GroupServer extends Server {
 			groupStream = new ObjectInputStream(fis);
 			privateKeySig = (PrivateKey) groupStream.readObject();
 
-			// open rsa private key encryptor
-			fis = new FileInputStream("rsaPrivateKeySig.bin");
-			groupStream = new ObjectInputStream(fis);
-			privateKeyDec = (PrivateKey) groupStream.readObject();
-
 			// open hash secret key for passwords
 			fis = new FileInputStream("hashPWSecretKey.bin");
 			groupStream = new ObjectInputStream(fis);
 			hashPWSecretKey = (SecretKey) groupStream.readObject();
 
-			// open client cerificate for verifiying client sginature
-
 			// open hash secret key for passwords
 			fis = new FileInputStream("clientCertificates.bin");
 			groupStream = new ObjectInputStream(fis);
 			clientCertifcates = (HashMap<String, PublicKey>) groupStream.readObject();
-
 
 			System.out.println("DBG  show all users in the group servers");
 			userList.showAllUsers();
@@ -122,11 +111,8 @@ public class GroupServer extends Server {
 				System.out.println("Generating Public and private keys for Encryption/ Decryption. Don't share group server private key");
 				RSA rsa = new RSA();
 				keyPair = rsa.generateKeyPair();
-			  	privateKeySig = keyPair.getPrivate();
-			  	publicKeyVir = keyPair.getPublic();
-				keyPair = rsa.generateKeyPair();
-				publicKeyEnc = keyPair.getPublic();
-				privateKeyDec = keyPair.getPrivate();
+			  privateKeySig = keyPair.getPrivate();
+			  publicKeyVir = keyPair.getPublic();
 
 
 			} catch (GeneralSecurityException e1) {
@@ -205,16 +191,6 @@ public class GroupServer extends Server {
 				// save group server public key verifier
 				outStreamGroup = new ObjectOutputStream(new FileOutputStream("rsaPublicKeyVir.bin"));
 				outStreamGroup.writeObject(publicKeyVir);
-				outStreamGroup.close();
-
-				// save group server public encryptor
-				outStreamGroup = new ObjectOutputStream(new FileOutputStream("rsaPublicKeyEnc.bin"));
-				outStreamGroup.writeObject(publicKeyEnc);
-				outStreamGroup.close();
-
-				// save rsa group server decyptor
-				outStreamGroup = new ObjectOutputStream(new FileOutputStream("rsaPrivateKeyDec.bin"));
-				outStreamGroup.writeObject(privateKeyDec);
 				outStreamGroup.close();
 
 				// save group server hashing secret key

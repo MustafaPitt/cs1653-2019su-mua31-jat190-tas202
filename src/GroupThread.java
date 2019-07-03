@@ -411,7 +411,7 @@ public class GroupThread extends Thread
 		return new Envelope("FAIL");
 	}
 
-    private boolean removeUserFromGroup(String groupName, UserToken yourToken, String userToDel) {
+  private boolean removeUserFromGroup(String groupName, UserToken yourToken, String userToDel) {
 		String requester = yourToken.getSubject();
 		System.err.println("group name " + groupName + " requester " + requester + " user to remove  " + userToDel);
 		System.err.println("ownership" + yourToken.getOwnership());
