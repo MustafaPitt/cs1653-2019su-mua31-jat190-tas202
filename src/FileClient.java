@@ -125,7 +125,12 @@ public class FileClient extends Client implements FileClientInterface {
 			 Envelope message = null, e = null;
 			 //Tell the server to return the member list
 			 message = new Envelope("LFILES");
-			 message.addObject(token); //Add requester's token
+
+			 // Encrypt the token
+			 AES aes = new AES();
+			 byte[][] token_encrypted = aes.cfbEncrypt(sharedKeyClientFS, token);
+			
+			 message.addObject(token_encrypted); //Add requester's token
 			 output.writeObject(message);
 
 			 e = (Envelope)input.readObject();
@@ -133,7 +138,9 @@ public class FileClient extends Client implements FileClientInterface {
 			 //If server indicates success, return the member list
 			 if(e.getMessage().equals("OK"))
 			 {
-				return (List<String>)e.getObjContents().get(0); //This cast creates compiler warnings. Sorry.
+				return (List<String>)aes.cfbDecrypt(sharedKeyClientFS,
+					(byte[][])e.getObjContents().get(0));
+					 //This cast creates compiler warnings. Sorry.
 			 }
 
 			 return null;

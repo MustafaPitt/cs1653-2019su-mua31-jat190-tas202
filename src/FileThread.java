@@ -29,7 +29,7 @@ public class FileThread extends Thread
 			System.out.println("*** New connection from " + socket.getInetAddress() + ":" + socket.getPort() + "***");
 			final ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
 			final ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
-			Envelope response;
+			Envelope response = null;
 
 			do
 			{
@@ -39,22 +39,38 @@ public class FileThread extends Thread
 				// Handler to list files that this user is allowed to see
 				if(e.getMessage().equals("LFILES"))
 				{
-				    /* TODO: Write this handler */
-					Token t = (Token)e.getObjContents().get(0);
-					if (t == null) {
+					// Decrypt message
+					AES aes = new AES();
+					byte[][] encrypted = (byte[][])e.getObjContents().get(0);
+					Token t = (Token)aes.cfbDecrypt(agreedKeyFSDH, encrypted);
+
+					// Verify token
+					if (t == null ||
+						!t.verifyHash(my_fs.getGroupPublicKey()))
+					{
 						response = new Envelope("FAIL-BADTOKEN");
 						System.out.println("Error: bad token. System Exit");
 					}
+					else { // Do the actual stuff
+						List<String> files = new ArrayList<String>();
 
-					List<String> files = new ArrayList<String>();
+						for (ShareFile sf : FileServer.fileList.getFiles()) {
+							if (t.getGroups().contains(sf.getGroup()))
+								files.add(sf.getPath());
+						}
 
-					for (ShareFile sf : FileServer.fileList.getFiles()) {
-						if (t.getGroups().contains(sf.getGroup()))
-							files.add(sf.getPath());
+						// Send response
+						encrypted = aes.cfbEncrypt(
+							agreedKeyFSDH, files);
+						if (encrypted != null) {
+							response = new Envelope("OK");
+							response.addObject(encrypted);
+						} else {
+							System.out.println("Failed to encrypt response!");
+							response = new Envelope("FAIL");
+						}
 					}
 
-					response = new Envelope("OK");
-					response.addObject(files);
 					output.writeObject(response);
 				}
 				if(e.getMessage().equals("UPLOADF"))

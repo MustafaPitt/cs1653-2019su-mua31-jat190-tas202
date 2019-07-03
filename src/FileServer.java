@@ -25,6 +25,10 @@ public class FileServer extends Server {
 		super(_port, "FilePile");
 	}
 
+	public PublicKey getGroupPublicKey() {
+		return publicKeyVir;
+	}
+
 	public void start() {
 		String fileFile = "FileList.bin";
 		ObjectInputStream fileStream;
