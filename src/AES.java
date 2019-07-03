@@ -4,8 +4,14 @@ import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 import java.security.GeneralSecurityException;
 import java.security.Security;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 public class AES {
     AES(){
@@ -36,33 +42,33 @@ public class AES {
         return cipher.doFinal(cipherText);
     }
 
-	byte[][]cfbEncrypt(byte[] key, Object data) {
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		ObjectOutputStream os = new ObjectOutputStream(out);
-		byte[][] encrypted;
-
-		SecretKeySpec secretKey = new SecretKeySpec(key, "AES");
+	byte[][] cfbEncrypt(byte[] key, Object data) {
 		try {
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			ObjectOutputStream os = new ObjectOutputStream(out);
+			byte[][] encrypted;
+
+			SecretKeySpec secretKey = new SecretKeySpec(key, "AES");
+
 			os.writeObject(data);
-			encrypted = cfbEncrypt(key, out.toByteArray());
+			encrypted = cfbEncrypt(secretKey, out.toByteArray());
 			return encrypted;
-		} catch (GeneralSecurityException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
 
 	Object cfbDecrypt(byte[] key, byte[][] ciphertext) {
-		byte[] objbytes;
-		SecretKeySpec secretKey = new SecretKeySpec(key ,"AES");
-
 		try {
-			objbytes = cfbDecrypt(key, ciphertext[0], ciphertext[1]);
-			ByteArrayInputStream in = 
+			byte[] objbytes;
+			SecretKeySpec secretKey = new SecretKeySpec(key ,"AES");
+
+			objbytes = cfbDecrypt(secretKey, ciphertext[0], ciphertext[1]);
 			ObjectInputStream is = new ObjectInputStream(
 				new ByteArrayInputStream(objbytes));
 			return is.readObject();
-		} catch (GeneralSecurityException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
