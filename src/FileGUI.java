@@ -49,52 +49,52 @@ public class FileGUI extends JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jFileChooser1 = new javax.swing.JFileChooser();
-        localMenu = new javax.swing.JPopupMenu();
-        cmdUpload = new javax.swing.JMenuItem();
-        remoteMenu = new javax.swing.JPopupMenu();
-        cmdDownload = new javax.swing.JMenuItem();
-        cmdRemoteDelete = new javax.swing.JMenuItem();
-        dlgUploadPrompt = new javax.swing.JDialog();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        txtUploadLocal = new javax.swing.JTextField();
-        txtUploadRemote = new javax.swing.JTextField();
-        txtUploadGroup = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
-        btnUploadOK = new javax.swing.JButton();
-        btnUploadCancel = new javax.swing.JButton();
-        dlgDownloadPrompt = new javax.swing.JDialog();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        txtDownloadRemote = new javax.swing.JTextField();
-        txtDownloadLocal = new javax.swing.JTextField();
-        btnDownloadCancel = new javax.swing.JButton();
-        btnDownloadOK = new javax.swing.JButton();
-        dlgDeletePrompt = new javax.swing.JDialog();
-        jLabel8 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
-        txtDeleteRemote = new javax.swing.JTextField();
-        btnDeleteCancel = new javax.swing.JButton();
-        btnDeleteOK = new javax.swing.JButton();
-        jPanel1 = new javax.swing.JPanel();
-        localPathField = new javax.swing.JTextField();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        localList = new javax.swing.JList<>();
-        localBrowse = new javax.swing.JButton();
-        jPanel2 = new javax.swing.JPanel();
-        remotePathField = new javax.swing.JTextField();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        remoteList = new javax.swing.JList<>();
-        btnUpload = new javax.swing.JButton();
-        btnDownload = new javax.swing.JButton();
-        btnRemoteDelete = new javax.swing.JButton();
-        btnDisconnect = new javax.swing.JButton();
-        jSeparator1 = new javax.swing.JSeparator();
+        jFileChooser1 = new JFileChooser();
+        localMenu = new JPopupMenu();
+        cmdUpload = new JMenuItem();
+        remoteMenu = new JPopupMenu();
+        cmdDownload = new JMenuItem();
+        cmdRemoteDelete = new JMenuItem();
+        dlgUploadPrompt = new JDialog();
+        jLabel1 = new JLabel();
+        jLabel2 = new JLabel();
+        jLabel3 = new JLabel();
+        txtUploadLocal = new JTextField();
+        txtUploadRemote = new JTextField();
+        txtUploadGroup = new JTextField();
+        jLabel4 = new JLabel();
+        btnUploadOK = new JButton();
+        btnUploadCancel = new JButton();
+        dlgDownloadPrompt = new JDialog();
+        jLabel5 = new JLabel();
+        jLabel6 = new JLabel();
+        jLabel7 = new JLabel();
+        txtDownloadRemote = new JTextField();
+        txtDownloadLocal = new JTextField();
+        btnDownloadCancel = new JButton();
+        btnDownloadOK = new JButton();
+        dlgDeletePrompt = new JDialog();
+        jLabel8 = new JLabel();
+        jLabel9 = new JLabel();
+        txtDeleteRemote = new JTextField();
+        btnDeleteCancel = new JButton();
+        btnDeleteOK = new JButton();
+        jPanel1 = new JPanel();
+        localPathField = new JTextField();
+        jScrollPane1 = new JScrollPane();
+        localList = new JList<>();
+        localBrowse = new JButton();
+        jPanel2 = new JPanel();
+        remotePathField = new JTextField();
+        jScrollPane2 = new JScrollPane();
+        remoteList = new JList<>();
+        btnUpload = new JButton();
+        btnDownload = new JButton();
+        btnRemoteDelete = new JButton();
+        btnDisconnect = new JButton();
+        jSeparator1 = new JSeparator();
 
-        jFileChooser1.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
+        jFileChooser1.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
         cmdUpload.setText("Upload");
         cmdUpload.addActionListener(new java.awt.event.ActionListener() {
@@ -147,59 +147,59 @@ public class FileGUI extends JFrame {
             }
         });
 
-        javax.swing.GroupLayout dlgUploadPromptLayout = new javax.swing.GroupLayout(dlgUploadPrompt.getContentPane());
+        GroupLayout dlgUploadPromptLayout = new GroupLayout(dlgUploadPrompt.getContentPane());
         dlgUploadPrompt.getContentPane().setLayout(dlgUploadPromptLayout);
         dlgUploadPromptLayout.setHorizontalGroup(
-            dlgUploadPromptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            dlgUploadPromptLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(dlgUploadPromptLayout.createSequentialGroup()
                 .addGap(12, 12, 12)
                 .addComponent(jLabel4)
                 .addContainerGap(143, Short.MAX_VALUE))
             .addGroup(dlgUploadPromptLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(dlgUploadPromptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(dlgUploadPromptLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                     .addGroup(dlgUploadPromptLayout.createSequentialGroup()
-                        .addGroup(dlgUploadPromptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addGroup(dlgUploadPromptLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3, GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel2, GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel1, GroupLayout.Alignment.TRAILING))
                         .addGap(18, 18, 18)
-                        .addGroup(dlgUploadPromptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtUploadGroup, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(txtUploadRemote, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(txtUploadLocal, javax.swing.GroupLayout.Alignment.TRAILING)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dlgUploadPromptLayout.createSequentialGroup()
+                        .addGroup(dlgUploadPromptLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                            .addComponent(txtUploadGroup, GroupLayout.Alignment.TRAILING)
+                            .addComponent(txtUploadRemote, GroupLayout.Alignment.TRAILING)
+                            .addComponent(txtUploadLocal, GroupLayout.Alignment.TRAILING)))
+                    .addGroup(GroupLayout.Alignment.TRAILING, dlgUploadPromptLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnUploadOK)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnUploadCancel)))
                 .addContainerGap())
         );
 
-        dlgUploadPromptLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnUploadCancel, btnUploadOK});
+        dlgUploadPromptLayout.linkSize(SwingConstants.HORIZONTAL, new java.awt.Component[] {btnUploadCancel, btnUploadOK});
 
         dlgUploadPromptLayout.setVerticalGroup(
-            dlgUploadPromptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            dlgUploadPromptLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(dlgUploadPromptLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(dlgUploadPromptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(dlgUploadPromptLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(txtUploadLocal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(dlgUploadPromptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtUploadLocal, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(dlgUploadPromptLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(txtUploadRemote, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(dlgUploadPromptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtUploadRemote, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(dlgUploadPromptLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(txtUploadGroup, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(dlgUploadPromptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtUploadGroup, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(dlgUploadPromptLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                     .addComponent(btnUploadCancel)
                     .addComponent(btnUploadOK))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         dlgDownloadPrompt.setTitle("Download file...");
@@ -226,54 +226,54 @@ public class FileGUI extends JFrame {
             }
         });
 
-        javax.swing.GroupLayout dlgDownloadPromptLayout = new javax.swing.GroupLayout(dlgDownloadPrompt.getContentPane());
+        GroupLayout dlgDownloadPromptLayout = new GroupLayout(dlgDownloadPrompt.getContentPane());
         dlgDownloadPrompt.getContentPane().setLayout(dlgDownloadPromptLayout);
         dlgDownloadPromptLayout.setHorizontalGroup(
-            dlgDownloadPromptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            dlgDownloadPromptLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(dlgDownloadPromptLayout.createSequentialGroup()
-                .addGroup(dlgDownloadPromptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(dlgDownloadPromptLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                     .addGroup(dlgDownloadPromptLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addGroup(dlgDownloadPromptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addGroup(dlgDownloadPromptLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel6, GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel7, GroupLayout.Alignment.TRAILING))
                         .addGap(18, 18, 18)
-                        .addGroup(dlgDownloadPromptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtDownloadRemote, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtDownloadLocal, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(dlgDownloadPromptLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                            .addComponent(txtDownloadRemote, GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 209, GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtDownloadLocal, GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 209, GroupLayout.PREFERRED_SIZE)))
                     .addGroup(dlgDownloadPromptLayout.createSequentialGroup()
                         .addGap(12, 12, 12)
                         .addComponent(jLabel5))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dlgDownloadPromptLayout.createSequentialGroup()
+                    .addGroup(GroupLayout.Alignment.TRAILING, dlgDownloadPromptLayout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(btnDownloadOK)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnDownloadCancel)))
                 .addContainerGap())
         );
 
-        dlgDownloadPromptLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {txtDownloadLocal, txtDownloadRemote});
+        dlgDownloadPromptLayout.linkSize(SwingConstants.HORIZONTAL, new java.awt.Component[] {txtDownloadLocal, txtDownloadRemote});
 
-        dlgDownloadPromptLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnDownloadCancel, btnDownloadOK});
+        dlgDownloadPromptLayout.linkSize(SwingConstants.HORIZONTAL, new java.awt.Component[] {btnDownloadCancel, btnDownloadOK});
 
         dlgDownloadPromptLayout.setVerticalGroup(
-            dlgDownloadPromptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            dlgDownloadPromptLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(dlgDownloadPromptLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel5)
                 .addGap(18, 18, 18)
-                .addGroup(dlgDownloadPromptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(dlgDownloadPromptLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(txtDownloadRemote, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(dlgDownloadPromptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtDownloadRemote, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(dlgDownloadPromptLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
-                    .addComponent(txtDownloadLocal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(dlgDownloadPromptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnDownloadOK, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnDownloadCancel, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(txtDownloadLocal, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(dlgDownloadPromptLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addComponent(btnDownloadOK, GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnDownloadCancel, GroupLayout.Alignment.TRAILING))
+                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         dlgDeletePrompt.setTitle("Delete...");
@@ -299,13 +299,13 @@ public class FileGUI extends JFrame {
             }
         });
 
-        javax.swing.GroupLayout dlgDeletePromptLayout = new javax.swing.GroupLayout(dlgDeletePrompt.getContentPane());
+        GroupLayout dlgDeletePromptLayout = new GroupLayout(dlgDeletePrompt.getContentPane());
         dlgDeletePrompt.getContentPane().setLayout(dlgDeletePromptLayout);
         dlgDeletePromptLayout.setHorizontalGroup(
-            dlgDeletePromptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            dlgDeletePromptLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(dlgDeletePromptLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(dlgDeletePromptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(dlgDeletePromptLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                     .addGroup(dlgDeletePromptLayout.createSequentialGroup()
                         .addComponent(jLabel8)
                         .addGap(0, 143, Short.MAX_VALUE))
@@ -313,33 +313,33 @@ public class FileGUI extends JFrame {
                         .addComponent(jLabel9)
                         .addGap(18, 18, 18)
                         .addComponent(txtDeleteRemote))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dlgDeletePromptLayout.createSequentialGroup()
+                    .addGroup(GroupLayout.Alignment.TRAILING, dlgDeletePromptLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnDeleteOK)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnDeleteCancel)))
                 .addContainerGap())
         );
 
-        dlgDeletePromptLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnDeleteCancel, btnDeleteOK});
+        dlgDeletePromptLayout.linkSize(SwingConstants.HORIZONTAL, new java.awt.Component[] {btnDeleteCancel, btnDeleteOK});
 
         dlgDeletePromptLayout.setVerticalGroup(
-            dlgDeletePromptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            dlgDeletePromptLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(dlgDeletePromptLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel8)
                 .addGap(18, 18, 18)
-                .addGroup(dlgDeletePromptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(dlgDeletePromptLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
-                    .addComponent(txtDeleteRemote, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(dlgDeletePromptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnDeleteOK, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnDeleteCancel, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(txtDeleteRemote, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(dlgDeletePromptLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addComponent(btnDeleteOK, GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnDeleteCancel, GroupLayout.Alignment.TRAILING))
+                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setTitle("Files");
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosed(WindowEvent evt) {
@@ -347,7 +347,7 @@ public class FileGUI extends JFrame {
             }
         });
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Local"));
+        jPanel1.setBorder(BorderFactory.createTitledBorder("Local"));
 
         localPathField.setEditable(false);
 
@@ -362,32 +362,32 @@ public class FileGUI extends JFrame {
             }
         });
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        GroupLayout jPanel1Layout = new GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+            jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(localPathField, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(localPathField, GroupLayout.PREFERRED_SIZE, 250, GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(localBrowse)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(localPathField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                    .addComponent(localPathField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                     .addComponent(localBrowse))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, GroupLayout.PREFERRED_SIZE, 280, GroupLayout.PREFERRED_SIZE))
         );
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Remote"));
+        jPanel2.setBorder(BorderFactory.createTitledBorder("Remote"));
 
         remotePathField.setEditable(false);
 
@@ -395,25 +395,25 @@ public class FileGUI extends JFrame {
         remoteList.setComponentPopupMenu(remoteMenu);
         jScrollPane2.setViewportView(remoteList);
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        GroupLayout jPanel2Layout = new GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+            jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 335, Short.MAX_VALUE)
-                    .addComponent(remotePathField, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane2, GroupLayout.DEFAULT_SIZE, 335, Short.MAX_VALUE)
+                    .addComponent(remotePathField, GroupLayout.PREFERRED_SIZE, 334, GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(remotePathField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(remotePathField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane2, GroupLayout.PREFERRED_SIZE, 280, GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         btnUpload.setText("Upload...");
@@ -444,42 +444,42 @@ public class FileGUI extends JFrame {
             }
         });
 
-        jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);
+        jSeparator1.setOrientation(SwingConstants.VERTICAL);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnUpload)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnDownload)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnRemoteDelete)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnDisconnect)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jPanel1, jPanel2});
+        layout.linkSize(SwingConstants.HORIZONTAL, new java.awt.Component[] {jPanel1, jPanel2});
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnDisconnect, btnDownload, btnRemoteDelete, btnUpload});
+        layout.linkSize(SwingConstants.HORIZONTAL, new java.awt.Component[] {btnDisconnect, btnDownload, btnRemoteDelete, btnUpload});
 
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                         .addComponent(btnUpload)
                         .addComponent(btnDownload)
                         .addComponent(btnRemoteDelete))
@@ -487,14 +487,14 @@ public class FileGUI extends JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnDisconnect)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 347, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jPanel2, GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 347, Short.MAX_VALUE)
+                    .addComponent(jPanel1, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jPanel1, jPanel2});
+        layout.linkSize(SwingConstants.VERTICAL, new java.awt.Component[] {jPanel1, jPanel2});
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -674,9 +674,9 @@ public class FileGUI extends JFrame {
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
         try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
             }
@@ -686,7 +686,7 @@ public class FileGUI extends JFrame {
             java.util.logging.Logger.getLogger(FileGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
             java.util.logging.Logger.getLogger(FileGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(FileGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
@@ -695,49 +695,49 @@ public class FileGUI extends JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnDeleteCancel;
-    private javax.swing.JButton btnDeleteOK;
-    private javax.swing.JButton btnDisconnect;
-    private javax.swing.JButton btnDownload;
-    private javax.swing.JButton btnDownloadCancel;
-    private javax.swing.JButton btnDownloadOK;
-    private javax.swing.JButton btnRemoteDelete;
-    private javax.swing.JButton btnUpload;
-    private javax.swing.JButton btnUploadCancel;
-    private javax.swing.JButton btnUploadOK;
-    private javax.swing.JMenuItem cmdDownload;
-    private javax.swing.JMenuItem cmdRemoteDelete;
-    private javax.swing.JMenuItem cmdUpload;
-    private javax.swing.JDialog dlgDeletePrompt;
-    private javax.swing.JDialog dlgDownloadPrompt;
-    private javax.swing.JDialog dlgUploadPrompt;
-    private javax.swing.JFileChooser jFileChooser1;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JButton localBrowse;
-    private javax.swing.JList<String> localList;
-    private javax.swing.JPopupMenu localMenu;
-    private javax.swing.JTextField localPathField;
-    private javax.swing.JList<String> remoteList;
-    private javax.swing.JPopupMenu remoteMenu;
-    private javax.swing.JTextField remotePathField;
-    private javax.swing.JTextField txtDeleteRemote;
-    private javax.swing.JTextField txtDownloadLocal;
-    private javax.swing.JTextField txtDownloadRemote;
-    private javax.swing.JTextField txtUploadGroup;
-    private javax.swing.JTextField txtUploadLocal;
-    private javax.swing.JTextField txtUploadRemote;
+    private JButton btnDeleteCancel;
+    private JButton btnDeleteOK;
+    private JButton btnDisconnect;
+    private JButton btnDownload;
+    private JButton btnDownloadCancel;
+    private JButton btnDownloadOK;
+    private JButton btnRemoteDelete;
+    private JButton btnUpload;
+    private JButton btnUploadCancel;
+    private JButton btnUploadOK;
+    private JMenuItem cmdDownload;
+    private JMenuItem cmdRemoteDelete;
+    private JMenuItem cmdUpload;
+    private JDialog dlgDeletePrompt;
+    private JDialog dlgDownloadPrompt;
+    private JDialog dlgUploadPrompt;
+    private JFileChooser jFileChooser1;
+    private JLabel jLabel1;
+    private JLabel jLabel2;
+    private JLabel jLabel3;
+    private JLabel jLabel4;
+    private JLabel jLabel5;
+    private JLabel jLabel6;
+    private JLabel jLabel7;
+    private JLabel jLabel8;
+    private JLabel jLabel9;
+    private JPanel jPanel1;
+    private JPanel jPanel2;
+    private JScrollPane jScrollPane1;
+    private JScrollPane jScrollPane2;
+    private JSeparator jSeparator1;
+    private JButton localBrowse;
+    private JList<String> localList;
+    private JPopupMenu localMenu;
+    private JTextField localPathField;
+    private JList<String> remoteList;
+    private JPopupMenu remoteMenu;
+    private JTextField remotePathField;
+    private JTextField txtDeleteRemote;
+    private JTextField txtDownloadLocal;
+    private JTextField txtDownloadRemote;
+    private JTextField txtUploadGroup;
+    private JTextField txtUploadLocal;
+    private JTextField txtUploadRemote;
     // End of variables declaration//GEN-END:variables
 }

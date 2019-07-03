@@ -22,14 +22,19 @@ public class ClientApplication {
 	 */
 	private static FileClient fileClient;
 	static UserToken token;
+	static String username;
 	private static PrivateKey clientSigPK;
 	private static PublicKey groupServerPublicKeyVir;
+	private static PublicKey fileServerPublicKeyVir;
 
 	public static void main (String []args){
 
 		try {
-			 clientSigPK = getClietnPrivateKey(args[0]);
-			groupServerPublicKeyVir = getGroupServerPK(args[1]);
+			 clientSigPK = getClientPrivateKey(args[0]);
+			groupServerPublicKeyVir = getPublicKey(args[1]);
+			if(args.length > 2){
+				fileServerPublicKeyVir = getPublicKey(args[2]);
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
@@ -39,30 +44,28 @@ public class ClientApplication {
 
 		groupClient = new GroupClient();
 		fileClient = new FileClient();
-			boolean signedIn = false;
+
         while (true){
             Scanner scanner = new Scanner(System.in);
-			String username;
+			boolean signedIn = false;
 			if(!signedIn){
 				System.out.print("Username: ");
 				username = scanner.nextLine();
 				signedIn = true;
-			}else{
-				username = token.getSubject();
 			}
 
 			System.out.println("\n1)Login to group server 2) Connect to File Server 3) Exit");
             String input = scanner.next();
-            if (!input.matches("[0-9]")){
-                System.out.println("Invalid input");
-			}
+          	if (!input.matches("[0-9]")){
+              System.out.println("Invalid input");
+						}
             else if (input.equals("1")) connectToGroupServer(username);
             else if (input.equals("2")) connectToFileServer(username);
-						else if (input.equals("3")) break;
-            }
+            else if (input.equals("3")) break;
         }
+    }
 
-	private static PublicKey getGroupServerPK(String pkBin) {
+	private static PublicKey getPublicKey(String pkBin) {
 		PublicKey pk = null;
 		FileInputStream fis = null;
 		try {
@@ -70,12 +73,12 @@ public class ClientApplication {
 			ObjectInputStream is = new ObjectInputStream(fis);
 			pk = (PublicKey) is.readObject();
 		}catch (Exception e){
-			System.out.println("Couldn't open " + pkBin + " or invalid private key object");
+			System.out.println("Couldn't open " + pkBin + " or invalid key object");
 		}
 		return pk;
 	}
 
-	private static PrivateKey getClietnPrivateKey(String pbKeyBin) throws IOException, ClassNotFoundException {
+	private static PrivateKey getClientPrivateKey(String pbKeyBin) throws IOException, ClassNotFoundException {
 		PrivateKey pk = null;
 		FileInputStream fis = null;
 		try {
@@ -89,25 +92,33 @@ public class ClientApplication {
 	}
 
 	private static void connectToFileServer(String username) {
-    	Scanner scanner = new Scanner(System.in);
-    	System.out.print("Enter GROUP server address: ");
-    	gs_server_name = scanner.nextLine();
-    	System.out.print("Enter GROUP server port number:");
-    	gs_port = scanner.nextInt();
-    	groupClient.connect(gs_server_name, gs_port);
-    	token = groupClient.getToken(username); //update token
+		Scanner scanner = new Scanner(System.in);
+	 	System.out.print("Enter GROUP server address: ");
+	 	gs_server_name = scanner.nextLine();
+	 	System.out.print("Enter GROUP server port number:");
+	 	gs_port = scanner.nextInt();
+	 	System.out.print("Enter password:");
+	 	scanner.nextLine();
+	 	String pw = scanner.nextLine();
+
+	 	groupClient.connect(gs_server_name, gs_port, clientSigPK,groupServerPublicKeyVir, username);
+	 	//verify password
+	 	if(!groupClient.verifyPassword(username, pw)){
+		 	System.out.println("Incorrect username or password -- Cannot connect to Group Server.");
+		 	return;
+	 	}
+    token = groupClient.getToken(username); //update token
 		groupClient.disconnect();
 		System.out.print("Enter FILE server address: ");
-		scanner.nextLine();
 		String fs_server_name = scanner.nextLine();
-						System.out.print("Enter FILE server port number: ");
+		System.out.print("Enter FILE server port number: ");
 		int fs_port = scanner.nextInt();
 
-            fileClient = new FileClient();
-            fileClient.connect(fs_server_name, fs_port);
+    fileClient = new FileClient();
+  	fileClient.connect(fs_server_name, fs_port, clientSigPK, fileServerPublicKeyVir, username);
 
-            if (fileClient.isConnected()) System.out.println("-Connection established.");
-            while(true){ // while you are in file server
+    if (fileClient.isConnected()) System.out.println("-Connection established.");
+        while(true){ // while you are in file server
             	System.out.println("1) List files\n" +
 						"2) Upload\n" +
 						"3) Download\n" +
@@ -184,12 +195,16 @@ public class ClientApplication {
 
 		 groupClient.connect(gs_server_name, gs_port, clientSigPK,groupServerPublicKeyVir, username);
 		 //verify password
-		 groupClient.verifyPassword(username, pw);
+		 if(!groupClient.verifyPassword(username, pw)){
+			 System.out.println("Incorrect username or password -- Cannot connect to Group Server.");
+			 return;
+		 }
 
 
 		 System.out.println("Connecting to Group Server Menu");
 		 if (groupClient.isConnected()) {
 			 System.out.println("Create secure session ");
+
 			 token = groupClient.getToken(username); //update token
 			 if(token != null) groupServerMenu();
 		 else System.out.println("Couldn't verify your user name");
@@ -210,12 +225,13 @@ public class ClientApplication {
 
     private static void groupServerMenu() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("********** CLIENT USER MENU **********");
         while (true) {
 
-						token = groupClient.getToken(token.getSubject()); //update token
 
-						System.out.println("\n********** CLIENT USER MENU **********");
+        	token = groupClient.getToken(token.getSubject()); //update token
+
+
+			System.out.println("\n********** CLIENT USER MENU **********");
             System.out.println("1) Create a user \n2) Delete a user\n3) Create a group " +
                     "\n4) Delete a group \n5) List group members \n6) Add User to group \n7) Remove user from group \n8) Logout");
             String input = scanner.next();

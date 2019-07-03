@@ -11,7 +11,7 @@ import java.awt.event.WindowEvent;
  *
  * @author JAT190
  */
-public class GroupGUI extends javax.swing.JFrame {
+public class GroupGUI extends JFrame {
     GroupClient gc;
     UserToken token;
     
@@ -50,73 +50,73 @@ public class GroupGUI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        dlgCreateGroup = new javax.swing.JDialog();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        txtCreateGroupName = new javax.swing.JTextField();
-        btnCreateGroupCancel = new javax.swing.JButton();
-        btnCreateGroupOK = new javax.swing.JButton();
-        dlgCreateUser = new javax.swing.JDialog();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        txtCreateUserName = new javax.swing.JTextField();
-        btnCreateUserCancel = new javax.swing.JButton();
-        bntCreateUserOK = new javax.swing.JButton();
-        dlgAddUserToGroup = new javax.swing.JDialog();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        txtAddUserToGroupUser = new javax.swing.JTextField();
-        txtAddUserToGroupGroup = new javax.swing.JTextField();
-        btnAddUserToGroupCancel = new javax.swing.JButton();
-        btnAddUserToGroupOK = new javax.swing.JButton();
-        dlgRemoveUserFromGroup = new javax.swing.JDialog();
-        jLabel8 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        txtRemoveUserFromGroupUser = new javax.swing.JTextField();
-        txtRemoveUserFromGroupGroup = new javax.swing.JTextField();
-        btnRemoveUserFromGroupCancel = new javax.swing.JButton();
-        btnRemoveUserFromGroupOK = new javax.swing.JButton();
-        dlgDeleteUser = new javax.swing.JDialog();
-        jLabel11 = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
-        txtDeleteUserUser = new javax.swing.JTextField();
-        btnDeleteUserCancel = new javax.swing.JButton();
-        btnDeleteUserOK = new javax.swing.JButton();
-        dlgDeleteGroup = new javax.swing.JDialog();
-        jLabel13 = new javax.swing.JLabel();
-        jLabel14 = new javax.swing.JLabel();
-        txtDeleteGroupGroup = new javax.swing.JTextField();
-        btnDeleteGroupCancel = new javax.swing.JButton();
-        btnDeleteGroupOK = new javax.swing.JButton();
-        jSeparator1 = new javax.swing.JSeparator();
-        jPanel2 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        groupList = new javax.swing.JList<>();
-        jPanel3 = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        userList = new javax.swing.JList<>();
-        jPanel1 = new javax.swing.JPanel();
-        lblTokenInfo = new javax.swing.JLabel();
-        jLabel15 = new javax.swing.JLabel();
-        jLabel16 = new javax.swing.JLabel();
-        jLabel17 = new javax.swing.JLabel();
-        lblUserName = new javax.swing.JLabel();
-        lblIssuer = new javax.swing.JLabel();
-        lblGroups = new javax.swing.JLabel();
-        lblOwnership = new javax.swing.JLabel();
-        jPanel4 = new javax.swing.JPanel();
-        btnCreateGroup = new javax.swing.JButton();
-        btnDeleteGroup = new javax.swing.JButton();
-        btnRemoveFromGroup = new javax.swing.JButton();
-        bntAddToGroup = new javax.swing.JButton();
-        jSeparator2 = new javax.swing.JSeparator();
-        jPanel5 = new javax.swing.JPanel();
-        btnCreateUser = new javax.swing.JButton();
-        btnDeleteUser = new javax.swing.JButton();
-        jSeparator3 = new javax.swing.JSeparator();
-        btnDisconnect = new javax.swing.JButton();
+        dlgCreateGroup = new JDialog();
+        jLabel1 = new JLabel();
+        jLabel2 = new JLabel();
+        txtCreateGroupName = new JTextField();
+        btnCreateGroupCancel = new JButton();
+        btnCreateGroupOK = new JButton();
+        dlgCreateUser = new JDialog();
+        jLabel3 = new JLabel();
+        jLabel4 = new JLabel();
+        txtCreateUserName = new JTextField();
+        btnCreateUserCancel = new JButton();
+        bntCreateUserOK = new JButton();
+        dlgAddUserToGroup = new JDialog();
+        jLabel5 = new JLabel();
+        jLabel6 = new JLabel();
+        jLabel7 = new JLabel();
+        txtAddUserToGroupUser = new JTextField();
+        txtAddUserToGroupGroup = new JTextField();
+        btnAddUserToGroupCancel = new JButton();
+        btnAddUserToGroupOK = new JButton();
+        dlgRemoveUserFromGroup = new JDialog();
+        jLabel8 = new JLabel();
+        jLabel9 = new JLabel();
+        jLabel10 = new JLabel();
+        txtRemoveUserFromGroupUser = new JTextField();
+        txtRemoveUserFromGroupGroup = new JTextField();
+        btnRemoveUserFromGroupCancel = new JButton();
+        btnRemoveUserFromGroupOK = new JButton();
+        dlgDeleteUser = new JDialog();
+        jLabel11 = new JLabel();
+        jLabel12 = new JLabel();
+        txtDeleteUserUser = new JTextField();
+        btnDeleteUserCancel = new JButton();
+        btnDeleteUserOK = new JButton();
+        dlgDeleteGroup = new JDialog();
+        jLabel13 = new JLabel();
+        jLabel14 = new JLabel();
+        txtDeleteGroupGroup = new JTextField();
+        btnDeleteGroupCancel = new JButton();
+        btnDeleteGroupOK = new JButton();
+        jSeparator1 = new JSeparator();
+        jPanel2 = new JPanel();
+        jScrollPane1 = new JScrollPane();
+        groupList = new JList<>();
+        jPanel3 = new JPanel();
+        jScrollPane2 = new JScrollPane();
+        userList = new JList<>();
+        jPanel1 = new JPanel();
+        lblTokenInfo = new JLabel();
+        jLabel15 = new JLabel();
+        jLabel16 = new JLabel();
+        jLabel17 = new JLabel();
+        lblUserName = new JLabel();
+        lblIssuer = new JLabel();
+        lblGroups = new JLabel();
+        lblOwnership = new JLabel();
+        jPanel4 = new JPanel();
+        btnCreateGroup = new JButton();
+        btnDeleteGroup = new JButton();
+        btnRemoveFromGroup = new JButton();
+        bntAddToGroup = new JButton();
+        jSeparator2 = new JSeparator();
+        jPanel5 = new JPanel();
+        btnCreateUser = new JButton();
+        btnDeleteUser = new JButton();
+        jSeparator3 = new JSeparator();
+        btnDisconnect = new JButton();
 
         dlgCreateGroup.setTitle("Create Group...");
         dlgCreateGroup.setModal(true);
@@ -139,44 +139,44 @@ public class GroupGUI extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout dlgCreateGroupLayout = new javax.swing.GroupLayout(dlgCreateGroup.getContentPane());
+        GroupLayout dlgCreateGroupLayout = new GroupLayout(dlgCreateGroup.getContentPane());
         dlgCreateGroup.getContentPane().setLayout(dlgCreateGroupLayout);
         dlgCreateGroupLayout.setHorizontalGroup(
-            dlgCreateGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            dlgCreateGroupLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(dlgCreateGroupLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(dlgCreateGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(dlgCreateGroupLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                     .addGroup(dlgCreateGroupLayout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addComponent(jLabel2)
                         .addGap(18, 18, 18)
-                        .addComponent(txtCreateGroupName, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(txtCreateGroupName, GroupLayout.PREFERRED_SIZE, 189, GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel1))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dlgCreateGroupLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnCreateGroupOK, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnCreateGroupCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(GroupLayout.Alignment.TRAILING, dlgCreateGroupLayout.createSequentialGroup()
+                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnCreateGroupOK, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnCreateGroupCancel, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
-        dlgCreateGroupLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnCreateGroupCancel, btnCreateGroupOK});
+        dlgCreateGroupLayout.linkSize(SwingConstants.HORIZONTAL, new java.awt.Component[] {btnCreateGroupCancel, btnCreateGroupOK});
 
         dlgCreateGroupLayout.setVerticalGroup(
-            dlgCreateGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            dlgCreateGroupLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(dlgCreateGroupLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(dlgCreateGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(dlgCreateGroupLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(txtCreateGroupName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(dlgCreateGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtCreateGroupName, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(dlgCreateGroupLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCreateGroupCancel)
                     .addComponent(btnCreateGroupOK))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         dlgCreateUser.setTitle("Create User...");
@@ -200,13 +200,13 @@ public class GroupGUI extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout dlgCreateUserLayout = new javax.swing.GroupLayout(dlgCreateUser.getContentPane());
+        GroupLayout dlgCreateUserLayout = new GroupLayout(dlgCreateUser.getContentPane());
         dlgCreateUser.getContentPane().setLayout(dlgCreateUserLayout);
         dlgCreateUserLayout.setHorizontalGroup(
-            dlgCreateUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            dlgCreateUserLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(dlgCreateUserLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(dlgCreateUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(dlgCreateUserLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                     .addGroup(dlgCreateUserLayout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addComponent(jLabel4)
@@ -215,27 +215,27 @@ public class GroupGUI extends javax.swing.JFrame {
                     .addGroup(dlgCreateUserLayout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addGap(0, 124, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dlgCreateUserLayout.createSequentialGroup()
+                    .addGroup(GroupLayout.Alignment.TRAILING, dlgCreateUserLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(bntCreateUserOK, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnCreateUserCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(bntCreateUserOK, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnCreateUserCancel, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         dlgCreateUserLayout.setVerticalGroup(
-            dlgCreateUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            dlgCreateUserLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(dlgCreateUserLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(dlgCreateUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(dlgCreateUserLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(txtCreateUserName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(dlgCreateUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtCreateUserName, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(dlgCreateUserLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCreateUserCancel)
                     .addComponent(bntCreateUserOK))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         dlgAddUserToGroup.setTitle("Add User to Group...");
@@ -261,53 +261,53 @@ public class GroupGUI extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout dlgAddUserToGroupLayout = new javax.swing.GroupLayout(dlgAddUserToGroup.getContentPane());
+        GroupLayout dlgAddUserToGroupLayout = new GroupLayout(dlgAddUserToGroup.getContentPane());
         dlgAddUserToGroup.getContentPane().setLayout(dlgAddUserToGroupLayout);
         dlgAddUserToGroupLayout.setHorizontalGroup(
-            dlgAddUserToGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            dlgAddUserToGroupLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(dlgAddUserToGroupLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(dlgAddUserToGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(dlgAddUserToGroupLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                     .addGroup(dlgAddUserToGroupLayout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addGap(0, 84, Short.MAX_VALUE))
                     .addGroup(dlgAddUserToGroupLayout.createSequentialGroup()
                         .addGap(10, 10, 10)
-                        .addGroup(dlgAddUserToGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING))
-                        .addGroup(dlgAddUserToGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(dlgAddUserToGroupLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel7, GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel6, GroupLayout.Alignment.TRAILING))
+                        .addGroup(dlgAddUserToGroupLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                             .addGroup(dlgAddUserToGroupLayout.createSequentialGroup()
                                 .addGap(18, 18, 18)
                                 .addComponent(txtAddUserToGroupGroup))
                             .addGroup(dlgAddUserToGroupLayout.createSequentialGroup()
                                 .addGap(18, 18, 18)
                                 .addComponent(txtAddUserToGroupUser))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dlgAddUserToGroupLayout.createSequentialGroup()
+                    .addGroup(GroupLayout.Alignment.TRAILING, dlgAddUserToGroupLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btnAddUserToGroupOK, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnAddUserToGroupCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnAddUserToGroupOK, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnAddUserToGroupCancel, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         dlgAddUserToGroupLayout.setVerticalGroup(
-            dlgAddUserToGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            dlgAddUserToGroupLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(dlgAddUserToGroupLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(dlgAddUserToGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(dlgAddUserToGroupLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(txtAddUserToGroupUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(dlgAddUserToGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtAddUserToGroupUser, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(dlgAddUserToGroupLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
-                    .addComponent(txtAddUserToGroupGroup, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(dlgAddUserToGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtAddUserToGroupGroup, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(dlgAddUserToGroupLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAddUserToGroupCancel)
                     .addComponent(btnAddUserToGroupOK))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         dlgRemoveUserFromGroup.setTitle("Remove User From Group...");
@@ -333,53 +333,53 @@ public class GroupGUI extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout dlgRemoveUserFromGroupLayout = new javax.swing.GroupLayout(dlgRemoveUserFromGroup.getContentPane());
+        GroupLayout dlgRemoveUserFromGroupLayout = new GroupLayout(dlgRemoveUserFromGroup.getContentPane());
         dlgRemoveUserFromGroup.getContentPane().setLayout(dlgRemoveUserFromGroupLayout);
         dlgRemoveUserFromGroupLayout.setHorizontalGroup(
-            dlgRemoveUserFromGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            dlgRemoveUserFromGroupLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(dlgRemoveUserFromGroupLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(dlgRemoveUserFromGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(dlgRemoveUserFromGroupLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                     .addGroup(dlgRemoveUserFromGroupLayout.createSequentialGroup()
                         .addComponent(jLabel8)
                         .addGap(0, 84, Short.MAX_VALUE))
                     .addGroup(dlgRemoveUserFromGroupLayout.createSequentialGroup()
                         .addGap(10, 10, 10)
-                        .addGroup(dlgRemoveUserFromGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addGroup(dlgRemoveUserFromGroupLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel10, GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel9, GroupLayout.Alignment.TRAILING))
                         .addGap(18, 18, 18)
-                        .addGroup(dlgRemoveUserFromGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(dlgRemoveUserFromGroupLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                             .addComponent(txtRemoveUserFromGroupUser)
                             .addComponent(txtRemoveUserFromGroupGroup)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dlgRemoveUserFromGroupLayout.createSequentialGroup()
+                    .addGroup(GroupLayout.Alignment.TRAILING, dlgRemoveUserFromGroupLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btnRemoveUserFromGroupOK, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnRemoveUserFromGroupCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnRemoveUserFromGroupOK, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnRemoveUserFromGroupCancel, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
 
-        dlgRemoveUserFromGroupLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnRemoveUserFromGroupCancel, btnRemoveUserFromGroupOK});
+        dlgRemoveUserFromGroupLayout.linkSize(SwingConstants.HORIZONTAL, new java.awt.Component[] {btnRemoveUserFromGroupCancel, btnRemoveUserFromGroupOK});
 
         dlgRemoveUserFromGroupLayout.setVerticalGroup(
-            dlgRemoveUserFromGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            dlgRemoveUserFromGroupLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(dlgRemoveUserFromGroupLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel8)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(dlgRemoveUserFromGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(dlgRemoveUserFromGroupLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
-                    .addComponent(txtRemoveUserFromGroupUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(dlgRemoveUserFromGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtRemoveUserFromGroupUser, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(dlgRemoveUserFromGroupLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10)
-                    .addComponent(txtRemoveUserFromGroupGroup, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(dlgRemoveUserFromGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtRemoveUserFromGroupGroup, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(dlgRemoveUserFromGroupLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                     .addComponent(btnRemoveUserFromGroupCancel)
                     .addComponent(btnRemoveUserFromGroupOK))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         dlgDeleteUser.setTitle("Delete User...");
@@ -403,13 +403,13 @@ public class GroupGUI extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout dlgDeleteUserLayout = new javax.swing.GroupLayout(dlgDeleteUser.getContentPane());
+        GroupLayout dlgDeleteUserLayout = new GroupLayout(dlgDeleteUser.getContentPane());
         dlgDeleteUser.getContentPane().setLayout(dlgDeleteUserLayout);
         dlgDeleteUserLayout.setHorizontalGroup(
-            dlgDeleteUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            dlgDeleteUserLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(dlgDeleteUserLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(dlgDeleteUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(dlgDeleteUserLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                     .addGroup(dlgDeleteUserLayout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addComponent(jLabel12)
@@ -418,27 +418,27 @@ public class GroupGUI extends javax.swing.JFrame {
                     .addGroup(dlgDeleteUserLayout.createSequentialGroup()
                         .addComponent(jLabel11)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dlgDeleteUserLayout.createSequentialGroup()
+                    .addGroup(GroupLayout.Alignment.TRAILING, dlgDeleteUserLayout.createSequentialGroup()
                         .addGap(0, 129, Short.MAX_VALUE)
-                        .addComponent(btnDeleteUserOK, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnDeleteUserCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnDeleteUserOK, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnDeleteUserCancel, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         dlgDeleteUserLayout.setVerticalGroup(
-            dlgDeleteUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            dlgDeleteUserLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(dlgDeleteUserLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel11)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(dlgDeleteUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(dlgDeleteUserLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel12)
-                    .addComponent(txtDeleteUserUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(dlgDeleteUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtDeleteUserUser, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(dlgDeleteUserLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                     .addComponent(btnDeleteUserCancel)
                     .addComponent(btnDeleteUserOK))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         dlgDeleteGroup.setTitle("Delete Group...");
@@ -462,45 +462,45 @@ public class GroupGUI extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout dlgDeleteGroupLayout = new javax.swing.GroupLayout(dlgDeleteGroup.getContentPane());
+        GroupLayout dlgDeleteGroupLayout = new GroupLayout(dlgDeleteGroup.getContentPane());
         dlgDeleteGroup.getContentPane().setLayout(dlgDeleteGroupLayout);
         dlgDeleteGroupLayout.setHorizontalGroup(
-            dlgDeleteGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            dlgDeleteGroupLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(dlgDeleteGroupLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(dlgDeleteGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(dlgDeleteGroupLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                     .addGroup(dlgDeleteGroupLayout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addComponent(jLabel14)
                         .addGap(18, 18, 18)
-                        .addComponent(txtDeleteGroupGroup, javax.swing.GroupLayout.DEFAULT_SIZE, 189, Short.MAX_VALUE))
+                        .addComponent(txtDeleteGroupGroup, GroupLayout.DEFAULT_SIZE, 189, Short.MAX_VALUE))
                     .addGroup(dlgDeleteGroupLayout.createSequentialGroup()
                         .addComponent(jLabel13)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dlgDeleteGroupLayout.createSequentialGroup()
+                    .addGroup(GroupLayout.Alignment.TRAILING, dlgDeleteGroupLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btnDeleteGroupOK, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnDeleteGroupCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnDeleteGroupOK, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnDeleteGroupCancel, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         dlgDeleteGroupLayout.setVerticalGroup(
-            dlgDeleteGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            dlgDeleteGroupLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(dlgDeleteGroupLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel13)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(dlgDeleteGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(dlgDeleteGroupLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel14)
-                    .addComponent(txtDeleteGroupGroup, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(dlgDeleteGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtDeleteGroupGroup, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(dlgDeleteGroupLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                     .addComponent(btnDeleteGroupCancel)
                     .addComponent(btnDeleteGroupOK))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setTitle("Groups");
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosed(WindowEvent evt) {
@@ -508,9 +508,9 @@ public class GroupGUI extends javax.swing.JFrame {
             }
         });
 
-        jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);
+        jSeparator1.setOrientation(SwingConstants.VERTICAL);
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Groups"));
+        jPanel2.setBorder(BorderFactory.createTitledBorder("Groups"));
 
         groupList.setModel(new DefaultListModel());
         groupList.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -520,46 +520,46 @@ public class GroupGUI extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(groupList);
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        GroupLayout jPanel2Layout = new GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 295, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, GroupLayout.DEFAULT_SIZE, 295, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Users"));
+        jPanel3.setBorder(BorderFactory.createTitledBorder("Users"));
 
         userList.setModel(new DefaultListModel());
         jScrollPane2.setViewportView(userList);
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        GroupLayout jPanel3Layout = new GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            jPanel3Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 295, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, GroupLayout.DEFAULT_SIZE, 295, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            jPanel3Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane2)
                 .addContainerGap())
         );
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Token Information"));
+        jPanel1.setBorder(BorderFactory.createTitledBorder("Token Information"));
 
         lblTokenInfo.setText("User:");
 
@@ -577,45 +577,45 @@ public class GroupGUI extends javax.swing.JFrame {
 
         lblOwnership.setText("jLabel22");
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        GroupLayout jPanel1Layout = new GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblTokenInfo, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel16, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel17, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblUserName, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
-                    .addComponent(lblIssuer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblGroups, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblOwnership, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addComponent(lblTokenInfo, GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel15, GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel16, GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel17, GroupLayout.Alignment.TRAILING))
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addComponent(lblUserName, GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
+                    .addComponent(lblIssuer, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblGroups, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblOwnership, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                     .addComponent(lblTokenInfo)
                     .addComponent(lblUserName))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel15)
                     .addComponent(lblIssuer))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel16)
                     .addComponent(lblGroups))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel17)
                     .addComponent(lblOwnership))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         btnCreateGroup.setText("Create Group...");
@@ -646,36 +646,36 @@ public class GroupGUI extends javax.swing.JFrame {
             }
         });
 
-        jSeparator2.setOrientation(javax.swing.SwingConstants.VERTICAL);
+        jSeparator2.setOrientation(SwingConstants.VERTICAL);
 
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        GroupLayout jPanel4Layout = new GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                     .addComponent(btnCreateGroup)
                     .addComponent(btnDeleteGroup)
                     .addComponent(bntAddToGroup)
                     .addComponent(btnRemoveFromGroup))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jSeparator2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel4Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {bntAddToGroup, btnCreateGroup, btnDeleteGroup, btnRemoveFromGroup});
+        jPanel4Layout.linkSize(SwingConstants.HORIZONTAL, new java.awt.Component[] {bntAddToGroup, btnCreateGroup, btnDeleteGroup, btnRemoveFromGroup});
 
         jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+            jPanel4Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addComponent(btnCreateGroup)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnDeleteGroup)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(bntAddToGroup)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnRemoveFromGroup))
-            .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jSeparator2, GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 110, GroupLayout.PREFERRED_SIZE)
         );
 
         btnCreateUser.setText("Create User...");
@@ -692,18 +692,18 @@ public class GroupGUI extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        GroupLayout jPanel5Layout = new GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(btnCreateUser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(btnDeleteUser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            jPanel5Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addComponent(btnCreateUser, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btnDeleteUser, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            jPanel5Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addComponent(btnCreateUser)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnDeleteUser))
         );
 
@@ -714,55 +714,55 @@ public class GroupGUI extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jPanel1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                         .addGap(19, 19, 19)
-                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jSeparator1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel5, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jSeparator3)
-                            .addComponent(btnDisconnect, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(btnDisconnect, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jPanel2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jPanel2, jPanel3});
+        layout.linkSize(SwingConstants.HORIZONTAL, new java.awt.Component[] {jPanel2, jPanel3});
 
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.LEADING))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                            .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 3, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jPanel1, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jSeparator1, GroupLayout.Alignment.LEADING))
+                        .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addComponent(jPanel5, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(jSeparator3, GroupLayout.PREFERRED_SIZE, 3, GroupLayout.PREFERRED_SIZE)
                             .addGap(44, 44, 44)))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
                         .addComponent(btnDisconnect)
-                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jPanel4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel2, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel3, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -1054,9 +1054,9 @@ public class GroupGUI extends javax.swing.JFrame {
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
         try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
             }
@@ -1066,7 +1066,7 @@ public class GroupGUI extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(GroupGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
             java.util.logging.Logger.getLogger(GroupGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(GroupGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
@@ -1076,72 +1076,72 @@ public class GroupGUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton bntAddToGroup;
-    private javax.swing.JButton bntCreateUserOK;
-    private javax.swing.JButton btnAddUserToGroupCancel;
-    private javax.swing.JButton btnAddUserToGroupOK;
-    private javax.swing.JButton btnCreateGroup;
-    private javax.swing.JButton btnCreateGroupCancel;
-    private javax.swing.JButton btnCreateGroupOK;
-    private javax.swing.JButton btnCreateUser;
-    private javax.swing.JButton btnCreateUserCancel;
-    private javax.swing.JButton btnDeleteGroup;
-    private javax.swing.JButton btnDeleteGroupCancel;
-    private javax.swing.JButton btnDeleteGroupOK;
-    private javax.swing.JButton btnDeleteUser;
-    private javax.swing.JButton btnDeleteUserCancel;
-    private javax.swing.JButton btnDeleteUserOK;
-    private javax.swing.JButton btnDisconnect;
-    private javax.swing.JButton btnRemoveFromGroup;
-    private javax.swing.JButton btnRemoveUserFromGroupCancel;
-    private javax.swing.JButton btnRemoveUserFromGroupOK;
-    private javax.swing.JDialog dlgAddUserToGroup;
-    private javax.swing.JDialog dlgCreateGroup;
-    private javax.swing.JDialog dlgCreateUser;
-    private javax.swing.JDialog dlgDeleteGroup;
-    private javax.swing.JDialog dlgDeleteUser;
-    private javax.swing.JDialog dlgRemoveUserFromGroup;
-    private javax.swing.JList<String> groupList;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel17;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JSeparator jSeparator3;
-    private javax.swing.JLabel lblGroups;
-    private javax.swing.JLabel lblIssuer;
-    private javax.swing.JLabel lblOwnership;
-    private javax.swing.JLabel lblTokenInfo;
-    private javax.swing.JLabel lblUserName;
-    private javax.swing.JTextField txtAddUserToGroupGroup;
-    private javax.swing.JTextField txtAddUserToGroupUser;
-    private javax.swing.JTextField txtCreateGroupName;
-    private javax.swing.JTextField txtCreateUserName;
-    private javax.swing.JTextField txtDeleteGroupGroup;
-    private javax.swing.JTextField txtDeleteUserUser;
-    private javax.swing.JTextField txtRemoveUserFromGroupGroup;
-    private javax.swing.JTextField txtRemoveUserFromGroupUser;
-    private javax.swing.JList<String> userList;
+    private JButton bntAddToGroup;
+    private JButton bntCreateUserOK;
+    private JButton btnAddUserToGroupCancel;
+    private JButton btnAddUserToGroupOK;
+    private JButton btnCreateGroup;
+    private JButton btnCreateGroupCancel;
+    private JButton btnCreateGroupOK;
+    private JButton btnCreateUser;
+    private JButton btnCreateUserCancel;
+    private JButton btnDeleteGroup;
+    private JButton btnDeleteGroupCancel;
+    private JButton btnDeleteGroupOK;
+    private JButton btnDeleteUser;
+    private JButton btnDeleteUserCancel;
+    private JButton btnDeleteUserOK;
+    private JButton btnDisconnect;
+    private JButton btnRemoveFromGroup;
+    private JButton btnRemoveUserFromGroupCancel;
+    private JButton btnRemoveUserFromGroupOK;
+    private JDialog dlgAddUserToGroup;
+    private JDialog dlgCreateGroup;
+    private JDialog dlgCreateUser;
+    private JDialog dlgDeleteGroup;
+    private JDialog dlgDeleteUser;
+    private JDialog dlgRemoveUserFromGroup;
+    private JList<String> groupList;
+    private JLabel jLabel1;
+    private JLabel jLabel10;
+    private JLabel jLabel11;
+    private JLabel jLabel12;
+    private JLabel jLabel13;
+    private JLabel jLabel14;
+    private JLabel jLabel15;
+    private JLabel jLabel16;
+    private JLabel jLabel17;
+    private JLabel jLabel2;
+    private JLabel jLabel3;
+    private JLabel jLabel4;
+    private JLabel jLabel5;
+    private JLabel jLabel6;
+    private JLabel jLabel7;
+    private JLabel jLabel8;
+    private JLabel jLabel9;
+    private JPanel jPanel1;
+    private JPanel jPanel2;
+    private JPanel jPanel3;
+    private JPanel jPanel4;
+    private JPanel jPanel5;
+    private JScrollPane jScrollPane1;
+    private JScrollPane jScrollPane2;
+    private JSeparator jSeparator1;
+    private JSeparator jSeparator2;
+    private JSeparator jSeparator3;
+    private JLabel lblGroups;
+    private JLabel lblIssuer;
+    private JLabel lblOwnership;
+    private JLabel lblTokenInfo;
+    private JLabel lblUserName;
+    private JTextField txtAddUserToGroupGroup;
+    private JTextField txtAddUserToGroupUser;
+    private JTextField txtCreateGroupName;
+    private JTextField txtCreateUserName;
+    private JTextField txtDeleteGroupGroup;
+    private JTextField txtDeleteUserUser;
+    private JTextField txtRemoveUserFromGroupGroup;
+    private JTextField txtRemoveUserFromGroupUser;
+    private JList<String> userList;
     // End of variables declaration//GEN-END:variables
 }
