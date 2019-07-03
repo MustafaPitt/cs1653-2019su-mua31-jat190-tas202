@@ -163,13 +163,13 @@ public class FileClient extends Client implements FileClientInterface {
 
 		try
 		 {
-
+			 AES aes = new AES();
 			 Envelope message = null, env = null;
 			 //Tell the server to return the member list
 			 message = new Envelope("UPLOADF");
-			 message.addObject(destFile);
-			 message.addObject(group);
-			 message.addObject(token); //Add requester's token
+			 message.addObject(aes.cfbEncrypt(sharedKeyClientFS, destFile));
+			 message.addObject(aes.cfbEncrypt(sharedKeyClientFS, group));
+			 message.addObject(aes.cfbEncrypt(sharedKeyClientFS, token));
 			 output.writeObject(message);
 
 
@@ -205,8 +205,9 @@ public class FileClient extends Client implements FileClientInterface {
 						return false;
 					}
 
-					message.addObject(buf);
-					message.addObject(new Integer(n));
+					message.addObject(aes.cfbEncrypt(sharedKeyClientFS, buf));
+					message.addObject(aes.cfbEncrypt(sharedKeyClientFS, new Integer(n)));
+
 
 					output.writeObject(message);
 

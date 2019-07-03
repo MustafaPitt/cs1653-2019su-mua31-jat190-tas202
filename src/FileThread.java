@@ -92,11 +92,19 @@ public class FileThread extends Thread
 							response = new Envelope("FAIL-BADTOKEN");
 						}
 						else {
-							String remotePath = (String)e.getObjContents().get(0);
-							String group = (String)e.getObjContents().get(1);
-							UserToken yourToken = (UserToken)e.getObjContents().get(2); //Extract token
+							AES aes = new AES();
+							String remotePath = (String)aes.cfbDecrypt(agreedKeyFSDH,
+								(byte[][])e.getObjContents().get(0));
+							String group = (String)aes.cfbDecrypt(agreedKeyFSDH,
+								(byte[][])e.getObjContents().get(1));
+							UserToken yourToken = (UserToken)aes.cfbDecrypt(agreedKeyFSDH,
+								(byte[][])e.getObjContents().get(2));
 
-							if (FileServer.fileList.checkFile(remotePath)) {
+							if (!yourToken.verifyHash(my_fs.getGroupPublicKey())) {
+								System.out.println("Error: Invalid token signature");
+								response = new Envelope("FAIL-BADTOKEN");
+							}
+							else if (FileServer.fileList.checkFile(remotePath)) {
 								System.out.printf("Error: file already exists at %s\n", remotePath);
 								response = new Envelope("FAIL-FILEEXISTS"); //Success
 							}
@@ -115,7 +123,8 @@ public class FileThread extends Thread
 
 								e = (Envelope)input.readObject();
 								while (e.getMessage().compareTo("CHUNK")==0) {
-									fos.write((byte[])e.getObjContents().get(0), 0, (Integer)e.getObjContents().get(1));
+									fos.write((byte[])aes.cfbDecrypt(agreedKeyFSDH, (byte[][]) e.getObjContents().get(0)), 0,
+										(Integer)aes.cfbDecrypt(agreedKeyFSDH, (byte[][])e.getObjContents().get(1)));
 									response = new Envelope("READY"); //Success
 									output.writeObject(response);
 									e = (Envelope)input.readObject();
