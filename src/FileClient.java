@@ -323,6 +323,7 @@ public class FileClient extends Client implements FileClientInterface {
 		AES aes = new AES();
 		byte[][] cipherNWithIV = new byte[0][0];
 		SecretKeySpec secretKey = new SecretKeySpec(sharedKeyClientFS,"AES");
+		System.out.println("client shared: " + sharedKeyClientFS);
 
 		try {
 			//convert n to bytes and encrypt with server public key

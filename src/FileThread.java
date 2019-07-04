@@ -1,6 +1,7 @@
 /* File worker thread handles the business of uploading, downloading, and removing files for clients with valid tokens */
 
 import javax.crypto.interfaces.DHPublicKey;
+import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
 import java.net.Socket;
 import java.security.GeneralSecurityException;
@@ -9,6 +10,9 @@ import java.security.PublicKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+
+import java.security.MessageDigest;
 
 public class FileThread extends Thread
 {
@@ -283,6 +287,7 @@ public class FileThread extends Thread
 					//remove shared key encryption
 					AES aes = new AES();
 					SecretKeySpec secretKey = new SecretKeySpec(agreedKeyFSDH,"AES");
+					System.out.println("FS shared: " + agreedKeyFSDH);
 					byte[] publicKeyEncryptedN = new byte[0];
 
 					RSA rsa = new RSA();
@@ -315,7 +320,6 @@ public class FileThread extends Thread
 					output.writeObject(e);
 				}
 
-
 			} while(proceed);
 		}
 		catch(Exception e)
@@ -339,6 +343,7 @@ public class FileThread extends Thread
 		}
 
 		PublicKey pk = my_fs.clientCertificates.get(username);
+
 		try {
 			if (rsa.verifyPkcs1Signature(pk,bytesMsg,sigbytes)){
 				DH dh = new DH();
