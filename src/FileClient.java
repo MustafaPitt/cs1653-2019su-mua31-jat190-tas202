@@ -27,6 +27,8 @@ public class FileClient extends Client implements FileClientInterface {
 	}
 
 	public boolean delete(String filename, UserToken token) {
+		AES aes = new AES();
+
 		String remotePath;
 		if (filename.charAt(0)=='/') {
 			remotePath = filename.substring(1);
@@ -35,8 +37,8 @@ public class FileClient extends Client implements FileClientInterface {
 			remotePath = filename;
 		}
 		Envelope env = new Envelope("DELETEF"); //Success
-	    env.addObject(remotePath);
-	    env.addObject(token);
+	    env.addObject(aes.cfbEncrypt(sharedKeyClientFS, remotePath));
+	    env.addObject(aes.cfbEncrypt(sharedKeyClientFS, token));
 	    try {
 			output.writeObject(env);
 		    env = (Envelope)input.readObject();
@@ -64,6 +66,7 @@ public class FileClient extends Client implements FileClientInterface {
 
 				File file = new File(destFile);
 			    try {
+					AES aes = new AES();
 
 
 				    if (!file.exists()) {
@@ -71,14 +74,17 @@ public class FileClient extends Client implements FileClientInterface {
 					    FileOutputStream fos = new FileOutputStream(file);
 
 					    Envelope env = new Envelope("DOWNLOADF"); //Success
-					    env.addObject(sourceFile);
-					    env.addObject(token);
+					    env.addObject(aes.cfbEncrypt(sharedKeyClientFS, sourceFile));
+					    env.addObject(aes.cfbEncrypt(sharedKeyClientFS, token));
 					    output.writeObject(env);
 
 					    env = (Envelope)input.readObject();
 
 						while (env.getMessage().compareTo("CHUNK")==0) {
-								fos.write((byte[])env.getObjContents().get(0), 0, (Integer)env.getObjContents().get(1));
+								fos.write((byte[])aes.cfbDecrypt(sharedKeyClientFS,
+									(byte[][])env.getObjContents().get(0)), 0, 
+									(Integer)aes.cfbDecrypt(sharedKeyClientFS,
+									(byte[][])env.getObjContents().get(1)));
 								System.out.printf(".");
 								env = new Envelope("DOWNLOADF"); //Success
 								output.writeObject(env);

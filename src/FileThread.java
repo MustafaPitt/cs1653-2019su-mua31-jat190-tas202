@@ -147,11 +147,20 @@ public class FileThread extends Thread
 					output.writeObject(response);
 				}
 				else if (e.getMessage().compareTo("DOWNLOADF")==0) {
+					AES aes = new AES();
 
-					String remotePath = (String)e.getObjContents().get(0);
-					Token t = (Token)e.getObjContents().get(1);
+					String remotePath = (String)aes.cfbDecrypt(agreedKeyFSDH, (byte[][])e.getObjContents().get(0));
+
+					Token t = (Token)aes.cfbDecrypt(agreedKeyFSDH, (byte[][])e.getObjContents().get(1));
+
 					ShareFile sf = FileServer.fileList.getFile("/"+remotePath);
-					if (sf == null) {
+
+					if (!t.verifyHash(my_fs.getGroupPublicKey())) {
+						System.out.println("Error: Invalid token signature");
+						e = new Envelope("ERROR_BADTOKEN");
+						output.writeObject(e);
+					}
+					else if (sf == null) {
 						System.out.printf("Error: File %s doesn't exist\n", remotePath);
 						e = new Envelope("ERROR_FILEMISSING");
 						output.writeObject(e);
@@ -171,7 +180,6 @@ public class FileThread extends Thread
 							System.out.printf("Error file %s missing from disk\n", "_"+remotePath.replace('/', '_'));
 							e = new Envelope("ERROR_NOTONDISK");
 							output.writeObject(e);
-
 						}
 						else {
 							FileInputStream fis = new FileInputStream(f);
@@ -191,15 +199,12 @@ public class FileThread extends Thread
 
 								}
 
-
-								e.addObject(buf);
-								e.addObject(new Integer(n));
+								e.addObject(aes.cfbEncrypt(agreedKeyFSDH, buf));
+								e.addObject(aes.cfbEncrypt(agreedKeyFSDH, new Integer(n)));
 
 								output.writeObject(e);
 
 								e = (Envelope)input.readObject();
-
-
 							}
 							while (fis.available()>0);
 
@@ -239,11 +244,19 @@ public class FileThread extends Thread
 					}
 				}
 				else if (e.getMessage().compareTo("DELETEF")==0) {
+					AES aes = new AES();
 
-					String remotePath = (String)e.getObjContents().get(0);
-					Token t = (Token)e.getObjContents().get(1);
+					String remotePath = (String)aes.cfbDecrypt(agreedKeyFSDH,
+						(byte[][])e.getObjContents().get(0));
+
+					Token t = (Token)aes.cfbDecrypt(agreedKeyFSDH,
+						(byte[][])e.getObjContents().get(1));
 					ShareFile sf = FileServer.fileList.getFile("/"+remotePath);
-					if (sf == null) {
+					if (!t.verifyHash(my_fs.getGroupPublicKey())) {
+						System.out.println("Error: Invalid token signature.");
+						e = new Envelope("ERROR_BADTOKEN");
+					}
+					else if (sf == null) {
 						System.out.printf("Error: File %s doesn't exist\n", remotePath);
 						e = new Envelope("ERROR_DOESNTEXIST");
 					}
