@@ -11,13 +11,13 @@ public class FileServer extends Server {
 	public static final int SERVER_PORT = 4321;
 	public static FileList fileList;
 
-	HashMap <String,PublicKey> clientCertificates;
+	public HashMap <String,PublicKey> clientCertificates;
 
 	private KeyPair keyPair;
-	PrivateKey privateKeySig;
-	private PublicKey publicKeyVir;
+	public PrivateKey privateKeySig;
+	public PublicKey publicKeyVir;
 
-	FileServer() {
+	public FileServer() {
 		super(SERVER_PORT, "FilePile");
 	}
 
@@ -103,6 +103,67 @@ public class FileServer extends Server {
 				outStreamGroup.writeObject(privateKeySig);
 				outStreamGroup.close();
 
+
+			}catch(Exception ex){ ex.printStackTrace();}
+
+			fileList = new FileList();
+
+		}catch(Exception ex){ ex.printStackTrace();}
+
+		try{
+			FileInputStream fis = new FileInputStream("rsaPublicKeyVir.bin");
+			fileStream = new ObjectInputStream(fis);
+			publicKeyVir = (PublicKey)fileStream.readObject();
+		}catch(Exception e){
+			e.printStackTrace();
+			System.out.println("Group Server public key not found can't continue");
+		}
+
+		//try to open rsa files
+		try{
+			FileInputStream fis = new FileInputStream(super.port + "_rsaPublic.bin");
+			fileStream = new ObjectInputStream(fis);
+			publicKeyVir = (PublicKey)fileStream.readObject();
+
+			fis = new FileInputStream(super.port + "_rsaPrivate.bin");
+			fileStream = new ObjectInputStream(fis);
+			privateKeySig = (PrivateKey)fileStream.readObject();
+
+			// open hash secret key for passwords
+			fis = new FileInputStream("clientCertificates.bin");
+			fileStream = new ObjectInputStream(fis);
+			clientCertificates = (HashMap<String, PublicKey>) fileStream.readObject();
+
+
+		}catch(FileNotFoundException e){
+			System.out.println("rsa keys do not exist. Creating keys...");
+			try{
+				RSA rsa = new RSA();
+				keyPair = rsa.generateKeyPair();
+				privateKeySig = keyPair.getPrivate();
+				publicKeyVir = keyPair.getPublic();
+			} catch (GeneralSecurityException e1) {
+				e1.printStackTrace();
+			}
+
+
+			clientCertificates = new HashMap<>(); // init client certificates
+
+			ObjectOutputStream outStreamGroup;
+			try {
+				// save keys
+				outStreamGroup = new ObjectOutputStream(new FileOutputStream(super.port + "_rsaPublic.bin"));
+				outStreamGroup.writeObject(publicKeyVir);
+				outStreamGroup.close();
+
+				outStreamGroup = new ObjectOutputStream(new FileOutputStream(super.port + "_rsaPrivate.bin"));
+				outStreamGroup.writeObject(privateKeySig);
+				outStreamGroup.close();
+
+				// save clients cerificates
+				outStreamGroup = new ObjectOutputStream(new FileOutputStream("clientCertificates.bin"));
+				outStreamGroup.writeObject(clientCertificates);
+				outStreamGroup.close();
 
 			}catch(Exception ex){ ex.printStackTrace();}
 

@@ -6,9 +6,8 @@ import javax.crypto.spec.DHParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
 import java.security.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+import java.math.BigInteger;
 
 public class FileClient extends Client implements FileClientInterface {
 
@@ -21,6 +20,14 @@ public class FileClient extends Client implements FileClientInterface {
 			establishSecureSessionWithFS(port, pkSig, publicKeyFSrsa, username);
 		} catch (GeneralSecurityException e) {
 			e.printStackTrace();
+		}
+
+		//server challange
+		if(serverChallange(publicKeyFSrsa)){
+			System.out.println("File Server " + port + " is trusted.");
+		}else{
+			System.out.println("File Server " + port + " is NOT trusted.");
+			return false;
 		}
 
 		return isConnected();
@@ -318,6 +325,67 @@ public class FileClient extends Client implements FileClientInterface {
 		sharedKeyClientFS = DH.recipientAgreementBasic(clientKP.getPrivate(),gsPkDH);
 		System.out.println("DBG " + Arrays.toString(sharedKeyClientFS));
 
+	}
+
+	public boolean serverChallange(PublicKey publicKeyFSrsa){
+		//generate BigInt
+		BigInteger n = new BigInteger(128, new SecureRandom());
+		//encrypt n with servers public key
+		RSA rsa = new RSA();
+		byte [] msgByte = new byte[0];
+
+		AES aes = new AES();
+		byte[][] cipherNWithIV = new byte[0][0];
+		SecretKeySpec secretKey = new SecretKeySpec(sharedKeyClientFS,"AES");
+
+		try {
+			//convert n to bytes and encrypt with server public key
+			msgByte = rsa.cfbEncrypt(publicKeyFSrsa, n.toByteArray());
+			//also encrypt with shared DH key
+			cipherNWithIV = aes.cfbEncrypt(secretKey, msgByte);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.exit(-1);
+		}
+
+		//create and send the Envelope to the FS
+		Envelope msg = new Envelope("Challange");
+		msg.addObject(cipherNWithIV);
+
+		try {
+			output.writeObject(msg);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Couldn't establish a secure connection");
+		}
+
+		//recieve response
+		Envelope message = null;
+
+		try {
+			message = (Envelope)input.readObject();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		byte[][] encryptedN = (byte[][]) message.getObjContents().get(0);
+		//decrypt with shared key
+		try {
+			msgByte = aes.cfbDecrypt(secretKey, encryptedN[0], encryptedN[1]);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.exit(-1);
+		}
+
+		//convert byte[] back to bigint
+		BigInteger serverN = new BigInteger(msgByte);
+
+		System.out.println("n = " + n + " serverN = " + serverN);
+		//compare n to serverN
+		if(serverN.equals(n)){
+			return true;
+		}return false;
 	}
 
 }

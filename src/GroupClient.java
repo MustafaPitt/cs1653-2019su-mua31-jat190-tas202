@@ -59,12 +59,12 @@ public class GroupClient extends Client implements GroupClientInterface {
 					AES aes = new AES();
 					byte [] bytetoken = new byte[0];
 					SecretKeySpec secretKey = new SecretKeySpec(sharedKeyClientGS,"AES");
+
 					try {
-						bytetoken = aes.cfbDecrypt(secretKey, cipherTokenWithIV[0], cipherTokenWithIV[1]);
+						 bytetoken = aes.cfbDecrypt(secretKey, cipherTokenWithIV[0], cipherTokenWithIV[1]);
 					} catch (GeneralSecurityException e) {
 						e.printStackTrace();
 					}
-
 
 					//convert from byte[] to token
 					ByteArrayInputStream in = new ByteArrayInputStream(bytetoken);

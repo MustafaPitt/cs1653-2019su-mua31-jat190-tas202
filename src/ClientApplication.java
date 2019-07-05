@@ -51,14 +51,15 @@ public class ClientApplication {
 
         while (true){
             Scanner scanner = new Scanner(System.in);
-			boolean signedIn = false;
-			if(!signedIn){
-				System.out.print("Username: ");
-				username = scanner.nextLine();
-				signedIn = true;
-			}
+						boolean signedIn = false;
+						if(!signedIn){
+							System.out.print("Username: ");
+							username = scanner.nextLine();
+							signedIn = true;
+						}
 
-			System.out.println("\n1)Login to group server 2) Connect to File Server 3) Exit");
+						System.out.println("\n1)Login to group server 2) Connect to File Server 3) Exit");
+
             String input = scanner.next();
           	if (!input.matches("[0-9]")){
               System.out.println("Invalid input");
@@ -119,7 +120,11 @@ public class ClientApplication {
 		int fs_port = scanner.nextInt();
 
     fileClient = new FileClient();
-  	fileClient.connect(fs_server_name, fs_port, clientSigPK, fileServerPublicKeyVir, username);
+  	if(!fileClient.connect(fs_server_name, fs_port, clientSigPK, fileServerPublicKeyVir, username)){
+			//if this returns false the fs can't be trusted
+			fileClient.disconnect();
+			return;
+		}
 
     if (fileClient.isConnected()) System.out.println("--Secure session with FS " + gs_port + " established--");
         while(true){ // while you are in file server
