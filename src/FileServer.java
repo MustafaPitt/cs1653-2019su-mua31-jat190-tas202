@@ -14,10 +14,10 @@ public class FileServer extends Server {
 	public HashMap <String,PublicKey> clientCertificates;
 
 	private KeyPair keyPair;
-	public PrivateKey privateKeySig;
-	public PublicKey publicKeyVir;
+	PrivateKey privateKeySig;
+	private PublicKey publicKeyVir;
 
-	public FileServer() {
+	FileServer() {
 		super(SERVER_PORT, "FilePile");
 	}
 
@@ -118,14 +118,13 @@ public class FileServer extends Server {
 			e.printStackTrace();
 			System.out.println("Group Server public key not found can't continue");
 		}
-
 		//try to open rsa files
 		try{
-			FileInputStream fis = new FileInputStream(super.port + "_rsaPublic.bin");
+			FileInputStream fis = new FileInputStream(super.port + "FS_rsaPublic.bin");
 			fileStream = new ObjectInputStream(fis);
 			publicKeyVir = (PublicKey)fileStream.readObject();
 
-			fis = new FileInputStream(super.port + "_rsaPrivate.bin");
+			fis = new FileInputStream(super.port + "FS_rsaPrivate.bin");
 			fileStream = new ObjectInputStream(fis);
 			privateKeySig = (PrivateKey)fileStream.readObject();
 
@@ -152,11 +151,11 @@ public class FileServer extends Server {
 			ObjectOutputStream outStreamGroup;
 			try {
 				// save keys
-				outStreamGroup = new ObjectOutputStream(new FileOutputStream(super.port + "_rsaPublic.bin"));
+				outStreamGroup = new ObjectOutputStream(new FileOutputStream(super.port + "FS_rsaPublic.bin"));
 				outStreamGroup.writeObject(publicKeyVir);
 				outStreamGroup.close();
 
-				outStreamGroup = new ObjectOutputStream(new FileOutputStream(super.port + "_rsaPrivate.bin"));
+				outStreamGroup = new ObjectOutputStream(new FileOutputStream(super.port + "FS_rsaPrivate.bin"));
 				outStreamGroup.writeObject(privateKeySig);
 				outStreamGroup.close();
 

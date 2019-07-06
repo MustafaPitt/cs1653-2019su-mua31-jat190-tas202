@@ -51,15 +51,14 @@ public class ClientApplication {
 
         while (true){
             Scanner scanner = new Scanner(System.in);
-						boolean signedIn = false;
-						if(!signedIn){
-							System.out.print("Username: ");
-							username = scanner.nextLine();
-							signedIn = true;
-						}
+			boolean signedIn = false;
+			if(!signedIn){
+				System.out.print("Username: ");
+				username = scanner.nextLine();
+				signedIn = true;
+			}
 
-						System.out.println("\n1)Login to group server 2) Connect to File Server 3) Exit");
-
+			System.out.println("\n1)Login to group server 2) Connect to File Server 3) Exit");
             String input = scanner.next();
           	if (!input.matches("[0-9]")){
               System.out.println("Invalid input");
@@ -289,8 +288,8 @@ public class ClientApplication {
             System.out.println("Group " + groupName + " deleted successfully.");
 						// refresh the server
 						groupClient.disconnect();
-            groupClient.connect(gs_server_name, gs_port);
-				}
+            groupClient.connect(gs_server_name, gs_port,clientSigPK, groupServerPublicKeyVir, token.getSubject());
+        }
         else System.out.println("Error deleting a group.");
 
     }
@@ -305,7 +304,7 @@ public class ClientApplication {
             System.out.println("Group " + groupName + " created successfully.");
 						// refresh the server
             groupClient.disconnect();
-            groupClient.connect(gs_server_name, gs_port);
+			groupClient.connect(gs_server_name, gs_port,clientSigPK, groupServerPublicKeyVir, token.getSubject());
         }
         else System.out.println("Error creating a group.");
 
@@ -320,7 +319,7 @@ public class ClientApplication {
             System.out.println("User " + username + " deleted successfully.");
 						// refresh the server
             groupClient.disconnect();
-            groupClient.connect(gs_server_name, gs_port);
+			groupClient.connect(gs_server_name, gs_port,clientSigPK, groupServerPublicKeyVir, token.getSubject());
 				}
         else System.out.println("Error deleting a user.");
 
@@ -335,7 +334,7 @@ public class ClientApplication {
              System.out.println("User " + username + " created successfully.");
              // refresh the server
              groupClient.disconnect();
-             groupClient.connect(gs_server_name, gs_port);
+			 groupClient.connect(gs_server_name, gs_port,clientSigPK, groupServerPublicKeyVir, token.getSubject());
          }
          else System.out.println("Error creating a user.");
      }
@@ -352,7 +351,7 @@ public class ClientApplication {
 						 System.out.println("User " + userToBeAdd + " added to group " + groupName + " successfully.");
 						 // refresh the server
 						 groupClient.disconnect();
-						 groupClient.connect(gs_server_name, gs_port);
+					 groupClient.connect(gs_server_name, gs_port,clientSigPK, groupServerPublicKeyVir, token.getSubject());
 				 }
 				 else
 						 System.out.println("Error adding user to a group.");
@@ -374,7 +373,7 @@ public class ClientApplication {
 	                System.out.println("User " + userToBeDel + " deleted from group " + groupName + " successfully.");
 	                // refresh the server
 	                groupClient.disconnect();
-	                groupClient.connect(gs_server_name, gs_port);
+					groupClient.connect(gs_server_name, gs_port,clientSigPK, groupServerPublicKeyVir, token.getSubject());
 	            }
 	            else
 	                System.out.println("Error deleting  user from group" + groupName + ".");
