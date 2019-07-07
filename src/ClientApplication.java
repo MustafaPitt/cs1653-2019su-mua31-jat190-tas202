@@ -27,8 +27,8 @@ public class ClientApplication {
 	private static PublicKey groupServerPublicKeyVir;
 	private static PublicKey fileServerPublicKeyVir;
 
-	private static String gsPubKeyFile = "id_gs.pub";
-	private static String fsPubKeyFile = "id_fs.pub";
+	private static String gsPubKeyFile = "rsaPublicKeyVir.bin";
+	private static String fsPubKeyFile = "FS_rsaPublic.bin";
 
 	public static void main (String []args){
 
@@ -39,7 +39,7 @@ public class ClientApplication {
 			}
 			clientSigPK = getClientPrivateKey(args[0]);
 			groupServerPublicKeyVir = getPublicKey(gsPubKeyFile);
-			fileServerPublicKeyVir  = getPublicKey(fsPubKeyFile);
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
@@ -49,10 +49,10 @@ public class ClientApplication {
 
 		groupClient = new GroupClient();
 		fileClient = new FileClient();
+		boolean signedIn = false;
+    while (true){
+      Scanner scanner = new Scanner(System.in);
 
-        while (true){
-            Scanner scanner = new Scanner(System.in);
-			boolean signedIn = false;
 			if(!signedIn){
 				System.out.print("Username: ");
 				username = scanner.nextLine();
@@ -118,6 +118,7 @@ public class ClientApplication {
 		String fs_server_name = scanner.nextLine();
 		System.out.print("Enter FILE server port number: ");
 		int fs_port = scanner.nextInt();
+		fileServerPublicKeyVir  = getPublicKey(fs_port + fsPubKeyFile);
 
     fileClient = new FileClient();
   	if(!fileClient.connect(fs_server_name, fs_port, clientSigPK, fileServerPublicKeyVir, username)){
@@ -128,6 +129,7 @@ public class ClientApplication {
 
     if (fileClient.isConnected()) System.out.println("--Secure session with FS " + gs_port + " established--");
         while(true){ // while you are in file server
+						System.out.println("\n********** FILE SERVER OPERATIONS **********");
             	System.out.println("1) List files\n" +
 						"2) Upload\n" +
 						"3) Download\n" +
@@ -209,11 +211,6 @@ public class ClientApplication {
 			 return;
 		 }
 
-
-		 System.out.println("Connecting to Group Server Menu");
-		 if (groupClient.isConnected()) {
-			 System.out.println("Create secure session ");
-
 			 token = groupClient.getToken(username); //update token
 			 if(token != null) groupServerMenu();
 		 else System.out.println("Couldn't verify your user name");
@@ -240,7 +237,7 @@ public class ClientApplication {
         	token = groupClient.getToken(token.getSubject()); //update token
 
 
-			System.out.println("\n********** CLIENT USER MENU **********");
+			System.out.println("\n********** GROUP SERVER OPERATIONS **********");
             System.out.println("1) Create a user \n2) Delete a user\n3) Create a group " +
                     "\n4) Delete a group \n5) List group members \n6) Add User to group \n7) Remove user from group \n8) Logout");
             String input = scanner.next();

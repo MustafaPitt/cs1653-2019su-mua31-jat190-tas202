@@ -24,9 +24,9 @@ public class FileClient extends Client implements FileClientInterface {
 
 		//server challange
 		if(serverChallange(publicKeyFSrsa)){
-			System.out.println("File Server " + port + " is trusted.");
+			System.out.println("--File Server " + port + " is trusted.--");
 		}else{
-			System.out.println("File Server " + port + " is NOT trusted.");
+			System.out.println("--File Server " + port + " is NOT trusted.--");
 			return false;
 		}
 
@@ -89,7 +89,7 @@ public class FileClient extends Client implements FileClientInterface {
 
 						while (env.getMessage().compareTo("CHUNK")==0) {
 								fos.write((byte[])aes.cfbDecrypt(sharedKeyClientFS,
-									(byte[][])env.getObjContents().get(0)), 0, 
+									(byte[][])env.getObjContents().get(0)), 0,
 									(Integer)aes.cfbDecrypt(sharedKeyClientFS,
 									(byte[][])env.getObjContents().get(1)));
 								System.out.printf(".");
@@ -142,7 +142,7 @@ public class FileClient extends Client implements FileClientInterface {
 			 // Encrypt the token
 			 AES aes = new AES();
 			 byte[][] token_encrypted = aes.cfbEncrypt(sharedKeyClientFS, token);
-			
+
 			 message.addObject(token_encrypted); //Add requester's token
 			 output.writeObject(message);
 
@@ -268,7 +268,7 @@ public class FileClient extends Client implements FileClientInterface {
 		BouncyCastleProvider bouncyCastleProvider =  new BouncyCastleProvider();
 		Security.addProvider(bouncyCastleProvider);
 
-		System.out.println("Establishing Secure connections with File Server " + port);
+		System.out.println("--Establishing Secure connections with File Server " + port + "--");
 		DHParameterSpec dhParameterSpec = DH.generateParameters(); // these parameters need to delivered to alice and bob it contains G P
 		KeyPair clientKP = DH.generateKeyPair(dhParameterSpec);
 
@@ -317,7 +317,7 @@ public class FileClient extends Client implements FileClientInterface {
 		PublicKey gsPkDH = (PublicKey) message.getObjContents().get(1);
 		try {
 			if(rsa.verifyPkcs1Signature(publicKeyFSrsa,rsa.serialize(gsPkDH),sigFS)){
-				System.out.println("Now we established secure session successfully with file server " + port);
+				System.out.println("--Now we established secure session successfully with file server " + port + "--");
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

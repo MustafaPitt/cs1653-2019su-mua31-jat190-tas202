@@ -297,7 +297,7 @@ public class GroupClient extends Client implements GroupClientInterface {
 		BouncyCastleProvider bouncyCastleProvider =  new BouncyCastleProvider();
 		Security.addProvider(bouncyCastleProvider);
 
-		System.out.println("Establishing Secure connections with Group Server");
+		System.out.println("--Establishing Secure connections with Group Server--");
 		DHParameterSpec dhParameterSpec = null;
 		// generate dhParameterSpec
 		dhParameterSpec = DH.generateParameters(); // these parameters need to delivered to alice and bob it contains G P
@@ -345,7 +345,7 @@ public class GroupClient extends Client implements GroupClientInterface {
 		PublicKey gsPkDH = (PublicKey) message.getObjContents().get(1);
 		try {
 			if(rsa.verifyPkcs1Signature(publicKeyGSrsa,rsa.serialize(gsPkDH),sigGS)){
-				System.out.println("Now we established secure session successfully with group server");
+				System.out.println("--Now we established secure session successfully with group server--\n");
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
