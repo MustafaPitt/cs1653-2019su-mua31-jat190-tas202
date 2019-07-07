@@ -211,13 +211,10 @@ public class ClientApplication {
 			 return;
 		 }
 
-			 token = groupClient.getToken(username); //update token
-			 if(token != null) groupServerMenu();
+		 token = groupClient.getToken(username); //update token
+		 if(token != null) groupServerMenu();
 		 else System.out.println("Couldn't verify your user name");
 		 }
-		 else
-			 System.out.println("Error connecting to a group server");
-     }
 
      // return true if the use in the admin group
     private static boolean isUserInAdminGroup(List<String> groups) {
