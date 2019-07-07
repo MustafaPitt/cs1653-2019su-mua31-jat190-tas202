@@ -61,7 +61,6 @@ public class GroupThread extends Thread
 						ObjectOutputStream os = new ObjectOutputStream(out);
 						AES aes = new AES();
 						byte[][] cipherTokenWithIV = new byte[0][0];
-						System.out.println("DBG group thread 63 : printing Agreed key " + Arrays.toString(agreedKeyGSDH));
 						SecretKeySpec secretKey = new SecretKeySpec(agreedKeyGSDH,"AES");
 						boolean done = false;
 

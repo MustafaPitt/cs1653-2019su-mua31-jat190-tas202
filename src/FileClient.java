@@ -323,8 +323,6 @@ public class FileClient extends Client implements FileClientInterface {
 			e.printStackTrace();
 		}
 		sharedKeyClientFS = DH.recipientAgreementBasic(clientKP.getPrivate(),gsPkDH);
-		System.out.println("DBG " + Arrays.toString(sharedKeyClientFS));
-
 	}
 
 	public boolean serverChallange(PublicKey publicKeyFSrsa){
@@ -337,11 +335,12 @@ public class FileClient extends Client implements FileClientInterface {
 		AES aes = new AES();
 		byte[][] cipherNWithIV = new byte[0][0];
 		SecretKeySpec secretKey = new SecretKeySpec(sharedKeyClientFS,"AES");
-		System.out.println("client shared: " + sharedKeyClientFS);
+	//	System.out.println("client shared: " + sharedKeyClientFS);
 
 		try {
 			//convert n to bytes and encrypt with server public key
 			msgByte = rsa.cfbEncrypt(publicKeyFSrsa, n.toByteArray());
+
 			//also encrypt with shared DH key
 			cipherNWithIV = aes.cfbEncrypt(secretKey, msgByte);
 		} catch (Exception e) {
@@ -380,13 +379,11 @@ public class FileClient extends Client implements FileClientInterface {
 		}
 
 		//convert byte[] back to bigint
-		BigInteger serverN = new BigInteger(msgByte);
+		// This will probably never be 0.
+		BigInteger serverN = new BigInteger(1, msgByte);
 
-		System.out.println("n = " + n + " serverN = " + serverN);
 		//compare n to serverN
-		if(serverN.equals(n)){
-			return true;
-		}return false;
+		return serverN.equals(n);
 	}
 
 }

@@ -326,7 +326,7 @@ public class FileThread extends Thread
 					//remove shared key encryption
 					AES aes = new AES();
 					SecretKeySpec secretKey = new SecretKeySpec(agreedKeyFSDH,"AES");
-					System.out.println("FS shared: " + agreedKeyFSDH);
+					//System.out.println("FS shared: " + agreedKeyFSDH);
 					byte[] publicKeyEncryptedN = new byte[0];
 
 					RSA rsa = new RSA();
@@ -334,6 +334,7 @@ public class FileThread extends Thread
 					boolean fail = false;
 					try {
 						publicKeyEncryptedN = aes.cfbDecrypt(secretKey, sharedKeyEncryptedN[0], sharedKeyEncryptedN[1]);
+
 						//decrypt again to remove public key encryption
 						msgByte = rsa.cfbDecrypt(my_fs.privateKeySig, publicKeyEncryptedN);
 					} catch (Exception ex) {

@@ -351,7 +351,6 @@ public class GroupClient extends Client implements GroupClientInterface {
 			e.printStackTrace();
 		}
 		sharedKeyClientGS = DH.recipientAgreementBasic(clientKP.getPrivate(),gsPkDH);
-		System.out.println("DBG " + Arrays.toString(sharedKeyClientGS));
 	}
 
 	public boolean verifyPassword(String username, String password){

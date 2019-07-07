@@ -27,18 +27,19 @@ public class ClientApplication {
 	private static PublicKey groupServerPublicKeyVir;
 	private static PublicKey fileServerPublicKeyVir;
 
+	private static String gsPubKeyFile = "id_gs.pub";
+	private static String fsPubKeyFile = "id_fs.pub";
+
 	public static void main (String []args){
 
 		try {
-			if(args.length == 0 || args.length > 3) {
-				System.out.println("Usage: java -cp '.;bcprov' <client_priv_key> <GS_pub_key> <FS_pub_key>");
+			if(args.length != 1) {
+				System.out.println("Usage: java -cp '.;bcprov' <client_priv_key>");
 				System.exit(0);
 			}
 			clientSigPK = getClientPrivateKey(args[0]);
-			groupServerPublicKeyVir = getPublicKey(args[1]);
-			if(args.length >= 2){
-				fileServerPublicKeyVir = getPublicKey(args[2]);
-			}
+			groupServerPublicKeyVir = getPublicKey(gsPubKeyFile);
+			fileServerPublicKeyVir  = getPublicKey(fsPubKeyFile);
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
