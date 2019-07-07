@@ -162,14 +162,18 @@ public class GroupServer extends Server {
 			clientCertifcates.put(username,clientPublicKey);
 			//generate a client certificate and store in client certificates
 
-
-
 			ObjectOutputStream outStreamGroup;
 			try {
 				// save the private key and give it to the client
 				outStreamGroup = new ObjectOutputStream(new FileOutputStream(username+"_clientPrivate.bin"));
 				outStreamGroup.writeObject(clientPrivateKey);
 				outStreamGroup.close();
+
+				// save the public key and give it to the client
+				outStreamGroup = new ObjectOutputStream(new FileOutputStream(username+"_clientPublic.bin"));
+				outStreamGroup.writeObject(clientPublicKey);
+				outStreamGroup.close();
+
 				// save user name and generated password to text file
 
 				BufferedWriter writer = new BufferedWriter(new FileWriter(username + "_PW.txt", true));
