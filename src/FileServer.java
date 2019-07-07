@@ -11,8 +11,6 @@ public class FileServer extends Server {
 	public static final int SERVER_PORT = 4321;
 	public static FileList fileList;
 
-	public HashMap <String,PublicKey> clientCertificates;
-
 	private KeyPair keyPair;
 	PrivateKey privateKeySig;
 	private PublicKey publicKeyVir;
@@ -57,21 +55,7 @@ public class FileServer extends Server {
 			System.exit(-1);
 		}
 
-		// open Client Certificates
-		try{
-			FileInputStream fis = new FileInputStream("clientCertificates.bin");
-			fileStream = new ObjectInputStream(fis);
-			clientCertificates = (HashMap<String, PublicKey>) fileStream.readObject();
-			if (clientCertificates == null) {
-				System.out.println("System will shutdown. Couldn't verify client certificates");
-				System.exit(-1);
-			}
-		}catch (FileNotFoundException ignore){
-			System.out.println("System Couldn't open clients certificates. The system will shutdown");
-			System.exit(-1);
-		} catch (IOException | ClassNotFoundException e) {
-			e.printStackTrace();
-		}
+
 		//try to open rsa files
 		try{
 			FileInputStream fis = new FileInputStream(super.port + "FS_rsaPublic.bin");
@@ -128,11 +112,6 @@ public class FileServer extends Server {
 			fileStream = new ObjectInputStream(fis);
 			privateKeySig = (PrivateKey)fileStream.readObject();
 
-			// open hash secret key for passwords
-			fis = new FileInputStream("clientCertificates.bin");
-			fileStream = new ObjectInputStream(fis);
-			clientCertificates = (HashMap<String, PublicKey>) fileStream.readObject();
-
 
 		}catch(FileNotFoundException e){
 			System.out.println("rsa keys do not exist. Creating keys...");
@@ -146,7 +125,7 @@ public class FileServer extends Server {
 			}
 
 
-			clientCertificates = new HashMap<>(); // init client certificates
+
 
 			ObjectOutputStream outStreamGroup;
 			try {
@@ -159,10 +138,6 @@ public class FileServer extends Server {
 				outStreamGroup.writeObject(privateKeySig);
 				outStreamGroup.close();
 
-				// save clients cerificates
-				outStreamGroup = new ObjectOutputStream(new FileOutputStream("clientCertificates.bin"));
-				outStreamGroup.writeObject(clientCertificates);
-				outStreamGroup.close();
 
 			}catch(Exception ex){ ex.printStackTrace();}
 
