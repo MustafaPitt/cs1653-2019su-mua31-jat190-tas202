@@ -1,9 +1,27 @@
-# Running the program:
-1. Open 3 terminals all in the src/ directory.
-2. In one run: java RunFileServer <port_num>
-3. In another run: java RunGroupServer <port_num>
-4. If this is the first time running RunGroupServer, enter a username to be the admin upon request.
-5. In the final run: java ClientApplication
+# Running each program
+* The file server can be run with the command
+  `java .:/path/to/bc.jar
+  FileServer <port number>`.
+* The group server can be run with the command
+  `java .:/path/to/bc.jar
+  GroupServer <port number>`.
+* The client application can be run with the command
+  `java .:/path/to/bc.jar ClientApplication <private_key> <public_key>`
+
+# Getting set up
+If the programs are running in separate directories or on separate
+computers, some preliminary setup is required. These are the out-of-band
+communications that are needed to first exchange all of the required
+keys.
+1. From the group server's directory, run the group server to generate a
+   keypair and create the admin user. 
+4. Copy the group server's public key to the file server's directory and
+the client application's directory.
+5. Copy the created user's keypair to the client application directory.
+5. From the file server's directory, run the file server to
+generate a keypair.
+6. Copy the file server's public key to the client application's
+directory.
 
 # ClientApplication Operations:
 1. Upon starting ClientApplication, you will be asked for your username, enter it.
@@ -30,10 +48,3 @@
 4. Entering 3 will prompt you to enter a source filename and a destination filename to download a file from the system.
 5. Entering 4 will prompt you to enter a filename to delete.
 6. Entering 5 will log you out of the file server.
-
-
-# Known Error:
-1. Reproduction steps: Upload a file to FS, Download same file, Delete same file
-2. --> Error deleting file <filename>
-3. This, however, doesn't not occur when doing the same steps minus the download.
-4. We did not implement upload, download, or delete so I don't think this is our error.
