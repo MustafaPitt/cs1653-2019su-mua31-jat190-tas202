@@ -60,7 +60,6 @@ hosts.
 * [T1] When a new user is created, the group server will generate that user a password. This password will be manually distributed to the user. When a user attempts to log in, they will need to provide their username and password.
 * [T2] When the group server returns the token, it will also return the signed hash of the token for future verification.
 * [T4] A Diffie-Hellman shared key is established between the client and group server to begin. Then with each consecutive message relayed the client and group server will encrypt their message with the shared Diffie-Hellman Key.
-* * Client public key is also sent during first message.
 
 ![Client - GS](report_img/client_gs.jpg)
 
@@ -68,6 +67,8 @@ hosts.
 * [T2] When the client presents the file server their token, they will also send the signed hash of it signed by the group servers private key. With this the file server can verify that the token has not been modified.
 * [T3] The second phase on the picture below shows the challenge / response protocol. The user sends the file server a large random number encrypted with the fileservers public key. A trustworthy fileserver will be able to decrypt it with its private key and then return the number.
 * [T4] A Diffie-Hellman shared key is established between the client and file server to begin. Then with each consecutive message relayed the client and file server will encrypt their message with the shared Diffie-Hellman Key.
+* * Client public key is also sent during first message.
+
 ![Client - GS](report_img/client_fs.jpg)
 
 ### Conclusion
