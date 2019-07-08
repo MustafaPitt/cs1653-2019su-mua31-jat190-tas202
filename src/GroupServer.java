@@ -109,7 +109,6 @@ public class GroupServer extends Server {
 
 			try {
 				System.out.println("Generating Public and private keys for Signature /Verifier. Don't share group server private key");
-				System.out.println("Generating Public and private keys for Encryption/ Decryption. Don't share group server private key");
 				RSA rsa = new RSA();
 				keyPair = rsa.generateKeyPair();
 			  privateKeySig = keyPair.getPrivate();

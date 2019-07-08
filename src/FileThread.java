@@ -371,7 +371,6 @@ public class FileThread extends Thread
 	}
 
 	private Envelope establishSecureSessionWithClient(Envelope message) {
-		System.out.println(message.getObjContents().get(0));
 		userPubKey = (PublicKey) message.getObjContents().get(0);
 		PublicKey clientDHPK = (PublicKey) message.getObjContents().get(1);
 		byte [] sigbytes = (byte[]) message.getObjContents().get(2);
