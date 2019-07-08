@@ -60,6 +60,7 @@ hosts.
 * [T1] When a new user is created, the group server will generate that user a password. This password will be manually distributed to the user. When a user attempts to log in, they will need to provide their username and password.
 * [T2] When the group server returns the token, it will also return the signed hash of the token for future verification.
 * [T4] A Diffie-Hellman shared key is established between the client and group server to begin. Then with each consecutive message relayed the client and group server will encrypt their message with the shared Diffie-Hellman Key.
+* * Client public key is also sent during first message.
 
 ![Client - GS](report_img/client_gs.jpg)
 
@@ -70,4 +71,4 @@ hosts.
 ![Client - GS](report_img/client_fs.jpg)
 
 ### Conclusion
-We started by analyzing each threat and thinking of a direct way to address each. For instance, to address threat 2, the issue of token modification can be directly checked if each token is hashed and signed, because then the server that checks the token will be able to verify if that token was modified or not. This same process was used for each threat. Some minor errors arose with a few initial plans, and were later re-thought out. For example, we initially wanted to combat threat 3 with a challenge / response protocol using a the value as a timestamp. We later realized this would be hard to implement with our given devices since we cannot make sure the servers are synchronized easily. We then changed the value sent to be a random BigInteger. Most of the interplay of the designs can be seen in the diagrams above. Addressing threat 4 had the most interplay since it relates to encrypting each channel of communication and each other threat uses these same connections. 
+We started by analyzing each threat and thinking of a direct way to address each. For instance, to address threat 2, the issue of token modification can be directly checked if each token is hashed and signed, because then the server that checks the token will be able to verify if that token was modified or not. This same process was used for each threat. Some minor errors arose with a few initial plans, and were later re-thought out. For example, we initially wanted to combat threat 3 with a challenge / response protocol using a the value as a timestamp. We later realized this would be hard to implement with our given devices since we cannot make sure the servers are synchronized easily. We then changed the value sent to be a random BigInteger. Most of the interplay of the designs can be seen in the diagrams above. Addressing threat 4 had the most interplay since it relates to encrypting each channel of communication and each other threat uses these same connections.
