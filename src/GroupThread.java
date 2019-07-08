@@ -548,10 +548,16 @@ public class GroupThread extends Thread
 						PublicKey clientPublicKey = keyPair.getPublic();
 						PrivateKey clientPrivateKey = keyPair.getPrivate();
 
-						try {
+						try { // save user private key
 							outStreamGroup = new ObjectOutputStream(new FileOutputStream(username + "_clientPrivate.bin"));
 							outStreamGroup.writeObject(clientPrivateKey);
 
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+						try { // save user public key
+							outStreamGroup = new ObjectOutputStream(new FileOutputStream(username + "_clientPublic.bin"));
+							outStreamGroup.writeObject(clientPublicKey);
 
 						} catch (IOException e) {
 							e.printStackTrace();
