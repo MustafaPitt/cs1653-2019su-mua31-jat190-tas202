@@ -386,6 +386,12 @@ public class GroupThread extends Thread
 		}
 
 		PublicKey pk = my_gs.clientCertifcates.get(username);
+		if (pk == null) {
+			System.out.println("User " + username +
+				" tried to connect with an unknown key!");
+			return new Envelope("FAIL");
+		}
+
 		try {
 			if (rsa.verifyPkcs1Signature(pk,bytesMsg,sigbytes)){
 				DH dh = new DH();

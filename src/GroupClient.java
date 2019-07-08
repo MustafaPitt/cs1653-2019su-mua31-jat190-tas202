@@ -22,7 +22,8 @@ public class GroupClient extends Client implements GroupClientInterface {
 		try {
 			establishSecureSessionWithGS(pkSig, publicKeyGsRSA, username);
 		} catch (GeneralSecurityException e) {
-			e.printStackTrace();
+//			e.printStackTrace();
+			return false;
 		}
 
 		return isConnected();
@@ -341,6 +342,10 @@ public class GroupClient extends Client implements GroupClientInterface {
 		}
 
 		assert message != null;
+		if (message.getMessage().equals("FAIL")) {
+			System.out.println("Invalid key provided.");
+			throw new GeneralSecurityException();
+		}
 		byte [] sigGS =  (byte[]) message.getObjContents().get(0);
 		PublicKey gsPkDH = (PublicKey) message.getObjContents().get(1);
 		try {

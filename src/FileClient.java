@@ -13,11 +13,16 @@ public class FileClient extends Client implements FileClientInterface {
 
 	private byte[] sharedKeyClientFS;
 
-	public boolean connect(final String server, final int port, PrivateKey pkSig, PublicKey publicKeyFSrsa, String username) {
+	// pkSig is user's private key
+	// userPubKey is user's public key
+	// publicKeyFSrsa is file server's public key.
+	public boolean connect(final String server, final int port,
+	PrivateKey pkSig, PublicKey userPubKey, PublicKey publicKeyFSrsa)
+	{
 		super.connect(server, port);
 		//new code
 		try {
-			establishSecureSessionWithFS(port, pkSig, publicKeyFSrsa, username);
+			establishSecureSessionWithFS(port, pkSig, userPubKey, publicKeyFSrsa);
 		} catch (GeneralSecurityException e) {
 			e.printStackTrace();
 		}
@@ -264,7 +269,8 @@ public class FileClient extends Client implements FileClientInterface {
 		 return true;
 	}
 
-	public void establishSecureSessionWithFS(final int port, PrivateKey pkSig, PublicKey publicKeyFSrsa, String username)throws GeneralSecurityException {
+	public void establishSecureSessionWithFS(final int port, PrivateKey
+pkSig, PublicKey userPubKey, PublicKey publicKeyFSrsa)throws GeneralSecurityException {
 		BouncyCastleProvider bouncyCastleProvider =  new BouncyCastleProvider();
 		Security.addProvider(bouncyCastleProvider);
 
@@ -276,7 +282,8 @@ public class FileClient extends Client implements FileClientInterface {
 
 		// wrap the required keys and parameters
 		Envelope msg = new Envelope("SecureSession");
-		msg.addObject(username);
+		System.out.println(userPubKey);
+		msg.addObject(userPubKey);
 		msg.addObject(clientKP.getPublic());
 
 		RSA rsa = new RSA();

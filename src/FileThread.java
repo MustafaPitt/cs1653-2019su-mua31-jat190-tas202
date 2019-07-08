@@ -19,7 +19,9 @@ public class FileThread extends Thread
 {
 	private final Socket socket;
 	private FileServer my_fs;
+
 	private byte[] agreedKeyFSDH;
+	private PublicKey userPubKey;
 
 	public FileThread(Socket _socket, FileServer my_fs)
 	{
@@ -369,7 +371,8 @@ public class FileThread extends Thread
 	}
 
 	private Envelope establishSecureSessionWithClient(Envelope message) {
-		String username =  (String) message.getObjContents().get(0);
+		System.out.println(message.getObjContents().get(0));
+		userPubKey = (PublicKey) message.getObjContents().get(0);
 		PublicKey clientDHPK = (PublicKey) message.getObjContents().get(1);
 		byte [] sigbytes = (byte[]) message.getObjContents().get(2);
 
@@ -381,10 +384,10 @@ public class FileThread extends Thread
 			e.printStackTrace();
 		}
 
-		PublicKey pk = my_fs.clientCertificates.get(username);
+//		PublicKey pk = my_fs.clientCertificates.get(username);
 
 		try {
-			if (rsa.verifyPkcs1Signature(pk,bytesMsg,sigbytes)){
+			if (rsa.verifyPkcs1Signature(userPubKey,bytesMsg,sigbytes)){
 				DH dh = new DH();
 				KeyPair keyPairFSDH = dh.generateKeyPair(((DHPublicKey)clientDHPK).getParams());
 				agreedKeyFSDH  =  dh.initiatorAgreementBasic(keyPairFSDH.getPrivate(),clientDHPK);

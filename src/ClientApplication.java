@@ -24,6 +24,7 @@ public class ClientApplication {
 	static UserToken token;
 	static String username;
 	private static PrivateKey clientSigPK;
+	private static PublicKey  clientPubKey;
 	private static PublicKey groupServerPublicKeyVir;
 	private static PublicKey fileServerPublicKeyVir;
 
@@ -33,11 +34,12 @@ public class ClientApplication {
 	public static void main (String []args){
 
 		try {
-			if(args.length != 1) {
-				System.out.println("Usage: java -cp '.;bcprov' <client_priv_key>");
+			if(args.length != 2) {
+				System.out.println("Usage: java -cp '.;bcprov' <user_private_key> <user_public_key>");
 				System.exit(0);
 			}
 			clientSigPK = getClientPrivateKey(args[0]);
+			clientPubKey = getPublicKey(args[1]);
 			groupServerPublicKeyVir = getPublicKey(gsPubKeyFile);
 
 		} catch (IOException e) {
@@ -106,7 +108,12 @@ public class ClientApplication {
 	 	scanner.nextLine();
 	 	String pw = scanner.nextLine();
 
-	 	groupClient.connect(gs_server_name, gs_port, clientSigPK,groupServerPublicKeyVir, username);
+	 	if (!groupClient.connect(gs_server_name, gs_port,
+				clientSigPK,groupServerPublicKeyVir, username)) {
+			System.out.println("Error connecting.");
+			return;
+		}
+
 	 	//verify password
 	 	if(!groupClient.verifyPassword(username, pw)){
 		 	System.out.println("Incorrect username or password -- Cannot connect to Group Server.");
@@ -121,7 +128,8 @@ public class ClientApplication {
 		fileServerPublicKeyVir  = getPublicKey(fs_port + fsPubKeyFile);
 
     fileClient = new FileClient();
-  	if(!fileClient.connect(fs_server_name, fs_port, clientSigPK, fileServerPublicKeyVir, username)){
+  	if(!fileClient.connect(fs_server_name, fs_port, clientSigPK,
+		clientPubKey, fileServerPublicKeyVir)){
 			//if this returns false the fs can't be trusted
 			fileClient.disconnect();
 			return;
@@ -204,7 +212,12 @@ public class ClientApplication {
 		 scanner.nextLine();
 		 String pw = scanner.nextLine();
 
-		 groupClient.connect(gs_server_name, gs_port, clientSigPK,groupServerPublicKeyVir, username);
+		 if (!groupClient.connect(gs_server_name, gs_port,
+				clientSigPK,groupServerPublicKeyVir, username)) {
+			System.out.println("Error connecting.");
+			return;
+		}
+
 		 //verify password
 		 if(!groupClient.verifyPassword(username, pw)){
 			 System.out.println("Incorrect username or password -- Cannot connect to Group Server.");
