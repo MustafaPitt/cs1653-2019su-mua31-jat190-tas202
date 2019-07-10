@@ -33,12 +33,14 @@ public class GroupClient extends Client implements GroupClientInterface {
 	{
 		try
 		{
+			AES aes = new AES();
+
 			UserToken token = null;
 			Envelope message = null, response = null;
 
 			//Tell the server to return a token.
 			message = new Envelope("GET");
-			message.addObject(username); //Add user name string
+			message.addObject(aes.cfbEncrypt(sharedKeyClientGS,username)); //Add user name string
 			output.writeObject(message);
 
 			//Get the response from the server
@@ -57,7 +59,6 @@ public class GroupClient extends Client implements GroupClientInterface {
 					//decryption
 					byte [][] cipherTokenWithIV = (byte[][]) response.getObjContents().get(0);
 
-					AES aes = new AES();
 					byte [] bytetoken = new byte[0];
 					SecretKeySpec secretKey = new SecretKeySpec(sharedKeyClientGS,"AES");
 					try {
@@ -90,11 +91,12 @@ public class GroupClient extends Client implements GroupClientInterface {
 	{
 		try
 		{
+			AES aes = new AES();
 			Envelope message = null, response = null;
 			//Tell the server to create a user
 			message = new Envelope("CUSER");
-			message.addObject(username); //Add user name string
-			message.addObject(token); //Add the requester's token
+			message.addObject(aes.cfbEncrypt(sharedKeyClientGS,username)); //Add user name string
+			message.addObject(aes.cfbEncrypt(sharedKeyClientGS,token)); //Add the requester's token
 			output.writeObject(message);
 
 			response = (Envelope)input.readObject();
@@ -119,12 +121,13 @@ public class GroupClient extends Client implements GroupClientInterface {
 	{
 		try
 		{
+			AES aes = new AES();
 			Envelope message = null, response = null;
 
 			//Tell the server to delete a user
 			message = new Envelope("DUSER");
-			message.addObject(username); //Add user name
-			message.addObject(token);  //Add requester's token
+			message.addObject(aes.cfbEncrypt(sharedKeyClientGS,username)); //Add user name
+			message.addObject(aes.cfbEncrypt(sharedKeyClientGS,token));  //Add requester's token
 			output.writeObject(message);
 
 			response = (Envelope)input.readObject();
@@ -149,11 +152,12 @@ public class GroupClient extends Client implements GroupClientInterface {
 	{
 		try
 		{
+			AES aes = new AES();
 			Envelope message = null, response = null;
 			//Tell the server to create a group
 			message = new Envelope("CGROUP");
-			message.addObject(groupname); //Add the group name string
-			message.addObject(token); //Add the requester's token
+			message.addObject(aes.cfbEncrypt(sharedKeyClientGS,groupname)); //Add the group name string
+			message.addObject(aes.cfbEncrypt(sharedKeyClientGS,token)); //Add the requester's token
 			output.writeObject(message);
 
 			response = (Envelope)input.readObject();
@@ -178,11 +182,12 @@ public class GroupClient extends Client implements GroupClientInterface {
 	{
 		try
 		{
+			AES aes = new AES();
 			Envelope message = null, response = null;
 			//Tell the server to delete a group
 			message = new Envelope("DGROUP");
-			message.addObject(groupname); //Add group name string
-			message.addObject(token); //Add requester's token
+			message.addObject(aes.cfbEncrypt(sharedKeyClientGS,groupname)); //Add group name string
+			message.addObject(aes.cfbEncrypt(sharedKeyClientGS,token)); //Add requester's token
 			output.writeObject(message);
 
 			response = (Envelope)input.readObject();
@@ -207,18 +212,21 @@ public class GroupClient extends Client implements GroupClientInterface {
 	{
 		try
 		{
+			AES aes = new AES();
 			Envelope message = null, response = null;
 			//Tell the server to return the member list
 			message = new Envelope("LMEMBERS");
-			message.addObject(group); //Add group name string
-			message.addObject(token); //Add requester's token
+			message.addObject(aes.cfbEncrypt(sharedKeyClientGS,group)); //Add group name string
+			message.addObject(aes.cfbEncrypt(sharedKeyClientGS,token)); //Add requester's token
 			output.writeObject(message);
 
 			response = (Envelope)input.readObject();
 					//If server indicates success, return the member list
 			if(response.getMessage().equals("OK"))
 			{
-				return (List<String>)response.getObjContents().get(0); //This cast creates compiler warnings. Sorry.
+				byte[][] encrypted = (byte[][])response.getObjContents().get(0);
+				List<String> groupMembers = (List<String>)aes.cfbDecrypt(sharedKeyClientGS, encrypted);
+				return groupMembers; //This cast creates compiler warnings. Sorry.
 			}
 
 			return null;
@@ -236,12 +244,13 @@ public class GroupClient extends Client implements GroupClientInterface {
 	{
 		try
 		{
+			AES aes = new AES();
 			Envelope message = null, response = null;
 			//Tell the server to add a user to the group
 			message = new Envelope("AUSERTOGROUP");
-			message.addObject(groupname); //Add group name string
-			message.addObject(token); //Add requester's token
-			message.addObject(userToAdd); //Add user name string
+			message.addObject(aes.cfbEncrypt(sharedKeyClientGS,groupname)); //Add group name string
+			message.addObject(aes.cfbEncrypt(sharedKeyClientGS,token)); //Add requester's token
+			message.addObject(aes.cfbEncrypt(sharedKeyClientGS,userToAdd)); //Add user name string
 			output.writeObject(message);
 
 			response = (Envelope)input.readObject();
@@ -265,13 +274,14 @@ public class GroupClient extends Client implements GroupClientInterface {
 	{
 		try
 		{
+			AES aes = new AES();
 			Envelope message = null, response = null;
 			//Tell the server to remove a user from the group
 			message = new Envelope("RUSERFROMGROUP");
-			message.addObject(groupName); //Add group name string
-			message.addObject(token); //Add requester's token
+			message.addObject(aes.cfbEncrypt(sharedKeyClientGS,groupName)); //Add group name string
+			message.addObject(aes.cfbEncrypt(sharedKeyClientGS,token)); //Add requester's token
 
-			message.addObject(username); //Add user name string
+			message.addObject(aes.cfbEncrypt(sharedKeyClientGS,username)); //Add user name string
 
 			output.writeObject(message);
 

@@ -42,7 +42,11 @@ public class GroupThread extends Thread
 
 				if(message.getMessage().equals("GET"))//Client wants a token
 				{
-					String username = (String)message.getObjContents().get(0); //Get the username
+					// Decrypt message
+					AES aes = new AES();
+					byte[][] encrypted = (byte[][])message.getObjContents().get(0);
+					String username = (String)aes.cfbDecrypt(agreedKeyGSDH, encrypted); //Get the username
+
 					if(username == null)
 					{
 						response = new Envelope("FAIL");
@@ -59,7 +63,7 @@ public class GroupThread extends Thread
 						//encrypting token and signed hash token
 						ByteArrayOutputStream out = new ByteArrayOutputStream();
 						ObjectOutputStream os = new ObjectOutputStream(out);
-						AES aes = new AES();
+
 						byte[][] cipherTokenWithIV = new byte[0][0];
 						SecretKeySpec secretKey = new SecretKeySpec(agreedKeyGSDH,"AES");
 						boolean done = false;
@@ -96,8 +100,12 @@ public class GroupThread extends Thread
 						{
 							if(message.getObjContents().get(1) != null)
 							{
-								String username = (String)message.getObjContents().get(0); //Extract the username
-								UserToken yourToken = (UserToken)message.getObjContents().get(1); //Extract the token
+								// Decrypt message
+								AES aes = new AES();
+								byte[][] encrypted = (byte[][])message.getObjContents().get(0);
+								String username = (String)aes.cfbDecrypt(agreedKeyGSDH, encrypted); //Get the username
+								encrypted = (byte[][])message.getObjContents().get(1);
+								Token yourToken = (Token)aes.cfbDecrypt(agreedKeyGSDH, encrypted); //Get the username
 
 								if(createUser(username, yourToken))
 								{
@@ -125,8 +133,12 @@ public class GroupThread extends Thread
 						{
 							if(message.getObjContents().get(1) != null)
 							{
-								String username = (String)message.getObjContents().get(0); //Extract the username
-								UserToken yourToken = (UserToken)message.getObjContents().get(1); //Extract the token
+								// Decrypt message
+								AES aes = new AES();
+								byte[][] encrypted = (byte[][])message.getObjContents().get(0);
+								String username = (String)aes.cfbDecrypt(agreedKeyGSDH, encrypted); //Get the username
+								encrypted = (byte[][])message.getObjContents().get(1);
+								Token yourToken = (Token)aes.cfbDecrypt(agreedKeyGSDH, encrypted); //Get the username
 
 								if(deleteUser(username, yourToken))
 								{
@@ -152,12 +164,15 @@ public class GroupThread extends Thread
 						{
 							if(message.getObjContents().get(1) != null)
 							{
-								String groupName = (String)message.getObjContents().get(0); //Extract the username
-								UserToken yourToken = (UserToken)message.getObjContents().get(1); //Extract the token
+								// Decrypt message
+								AES aes = new AES();
+								byte[][] encrypted = (byte[][])message.getObjContents().get(0);
+								String groupName = (String)aes.cfbDecrypt(agreedKeyGSDH, encrypted); //Get the username
+								encrypted = (byte[][])message.getObjContents().get(1);
+								Token yourToken = (Token)aes.cfbDecrypt(agreedKeyGSDH, encrypted); //Get the username
 
 								if(createGroup(groupName, yourToken))
 								{
-									System.err.println("got here 4");
 									response = new Envelope("OK"); //Success
 								}
 							}
@@ -180,8 +195,13 @@ public class GroupThread extends Thread
 						{
 							if(message.getObjContents().get(1) != null)
 							{
-								String groupName = (String)message.getObjContents().get(0); //Extract the username
-								UserToken yourToken = (UserToken)message.getObjContents().get(1); //Extract the token
+								// Decrypt message
+								AES aes = new AES();
+								byte[][] encrypted = (byte[][])message.getObjContents().get(0);
+								String groupName = (String)aes.cfbDecrypt(agreedKeyGSDH, encrypted); //Get the username
+								encrypted = (byte[][])message.getObjContents().get(1);
+								Token yourToken = (Token)aes.cfbDecrypt(agreedKeyGSDH, encrypted); //Get the username
+
 								if(deleteGroup(groupName, yourToken))
 								{
 									response = new Envelope("OK"); //Success
@@ -208,12 +228,17 @@ public class GroupThread extends Thread
 						{
 							if(message.getObjContents().get(1) != null)
 							{
-								String groupName = (String)message.getObjContents().get(0); //Extract the username
-								UserToken yourToken = (UserToken)message.getObjContents().get(1); //Extract the token
+								// Decrypt message
+								AES aes = new AES();
+								byte[][] encrypted = (byte[][])message.getObjContents().get(0);
+								String groupName = (String)aes.cfbDecrypt(agreedKeyGSDH, encrypted); //Get the username
+								encrypted = (byte[][])message.getObjContents().get(1);
+								Token yourToken = (Token)aes.cfbDecrypt(agreedKeyGSDH, encrypted); //Get the username
+
 								List<String> groupMembers = listAllMembersInGroup(groupName, yourToken);
 
 								response = new Envelope("OK"); //Success
-								response.addObject(groupMembers);
+								response.addObject(aes.cfbEncrypt(agreedKeyGSDH, groupMembers));
 							}
 						}
 					}
@@ -236,10 +261,16 @@ public class GroupThread extends Thread
 						{
 							if(message.getObjContents().get(1) != null)
 							{
-								System.err.println("dbg add user to a group ");
-								String groupName = (String)message.getObjContents().get(0); //Extract the group name
-								UserToken yourToken = (UserToken)message.getObjContents().get(1); //Extract the token
-								String userToAdd = (String)message.getObjContents().get(2); //Extract the user name to be added
+								// Decrypt message
+								AES aes = new AES();
+								byte[][] encrypted = (byte[][])message.getObjContents().get(0);
+								String groupName = (String)aes.cfbDecrypt(agreedKeyGSDH, encrypted); //Get the username
+								encrypted = (byte[][])message.getObjContents().get(1);
+								Token yourToken = (Token)aes.cfbDecrypt(agreedKeyGSDH, encrypted); //Get the username
+								encrypted = (byte[][])message.getObjContents().get(2);
+								String userToAdd = (String)aes.cfbDecrypt(agreedKeyGSDH, encrypted); //Get the username
+
+
 								if(addUserToGroup(groupName,yourToken,userToAdd))
 								{
 									response = new Envelope("OK"); //Success
@@ -268,12 +299,16 @@ public class GroupThread extends Thread
 						{
 							if(message.getObjContents().get(1) != null)
 							{
-								System.err.println("dbg del user from a group ");
-								String groupName = (String)message.getObjContents().get(0); //Extract the group name
-								UserToken yourToken = (UserToken)message.getObjContents().get(1); //Extract the token
-								String userToRemove = (String)message.getObjContents().get(2); //Extract the user name to be deleted
-								System.err.println("DBG Grp Thrd group name " + groupName + " user to remove " + userToRemove);
-								if(removeUserFromGroup(groupName,yourToken,userToRemove))
+								// Decrypt message
+								AES aes = new AES();
+								byte[][] encrypted = (byte[][])message.getObjContents().get(0);
+								String groupName = (String)aes.cfbDecrypt(agreedKeyGSDH, encrypted); //Get the username
+								encrypted = (byte[][])message.getObjContents().get(1);
+								Token yourToken = (Token)aes.cfbDecrypt(agreedKeyGSDH, encrypted); //Get the username
+								encrypted = (byte[][])message.getObjContents().get(2);
+								String userToRemove = (String)aes.cfbDecrypt(agreedKeyGSDH, encrypted); //Get the username
+
+							if(removeUserFromGroup(groupName,yourToken,userToRemove))
 								{
 									response = new Envelope("OK"); //Success
 								}
