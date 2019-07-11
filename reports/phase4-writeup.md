@@ -5,7 +5,7 @@
 # Phase 3 Report
 
 # brainstorm
-T5 = Message reorder, replay, mod --- idea is to add a submsg to each envelope that has a sequence # and/or a time durration
+T5 = Message reorder, replay, mod --- idea is to add a submsg to each envelope that has a sequence # and/or a time duration
         reorder = for each msg on a line of communication create a random int that will be a counter for that session. Send it with each message and increment for each message.
         replay = already secure (due to DH)
         mod = hash and sign each message
@@ -19,7 +19,7 @@ T6 = File Leakage ----  Files when uploaded will be encrypted w/ with a group ke
 
               Note: All outdated encrypted files on FS will be leaked once the key is updated (member is removed). --Don't have to fix this yet because it is backwards secrecy.
 
-T7 = Token Theft ---- Add a field to each token that includes the public key of the FS it will immediately be used on. The client   knows the FS's pubkey, they will send this to the GS when their token is generated and it will be added to a field then. Then this token will be usable only on the FSwith the corresponding private key it has associated with it. If it is stolen it can still only be used on that FS.
+T7 = Token Theft ---- Add a field to each token that includes the public key of the FS it will immediately be used on. The client   knows the FS's pubkey, they will send this to the GS when their token is generated and it will be added to a field then. Then this token will be usable only on the FS with the corresponding private key it has associated with it. If it is stolen it can still only be used on that FS.
 
 ### Introduction
 
@@ -33,8 +33,17 @@ T7 = Token Theft ---- Add a field to each token that includes the public key of 
 
 
 ### Client <----> Group Server Overview
+* [T5] All messages include a sequence number and a signed hash of the contents of the message. The sequence number will be a randomly generated integer by the client that is incremented with each message sent between client and GS. Both of these will be encrypted with the DH shared key.
+* [T6] When create group is called, the GS will generate a groupkey based on the algorithm described above. The GS stores this mapping and also places this mapping on a group members token the next time the token is update. (Not part of picture). When remove user is called, the GS will now also generate update to the key, again based on the algorithm above.
+* [T7] As seen in the picture, the FS public key will be added to a token upon FS connection, by the GS's getToken().
+
+![Client - GS](report_img/p4_client_gs.jpg)
 
 ### Client <----> File Server Overview
+* [T5] All messages include a sequence number and a signed hash of the contents of the message. The sequence number will be a randomly generated integer by the client that is incremented with each message sent between client and FS. Both of these will be encrypted with the DH shared key.
+* [T6] When upload is called, the client will first encrypt the file being stored with the latest version of the groups key. The message will be sent as seen below. When download is called, the download will operate as normal, except the FS will return the version number of the group key that was used to encrypt the file downloaded. Now the client will decrypt that file with the correct version of the group key.
+* [T7] Upon connecting to a FS, verify the FS public key on the token is a match to the one of the FS we connected to.
 
+![Client - GS](report_img/p4_client_fs.jpg)
 
 ### Conclusion
