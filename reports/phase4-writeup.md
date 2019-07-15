@@ -23,10 +23,17 @@ T7 = Token Theft ---- Add a field to each token that includes the public key of 
 
 ### Introduction
 
+In this phase of the project we are adding more security to our group-based file-sharing system. In the this phase we will address threats mostly pertaining to active attacks to communications and a faulty file server. Many of the security techniques implemented were learned in class to address specific threats. Some of the security mechanisms and protocols that we used include: message authentication, managing groupkeys, and limiting the abilities of compromised tokens. Our message authentication basically means we will check each messages ordering with a sequence number, and will make sure it is not able to be replayed for information or modified with a signed hash of the message. Next, to limit the damage that would be done by a faulty file server releasing information, all files stored will now be encrypted by the group that stores its group key. Group keys need to be effectively managed because of members joining and leaving. Lastly, if a faulty server were to give a user's token to another user we will prevent further use by limiting each issued token to only that particular server.
 
 ### Message Reorder, Replay, and Modification (T5)
 
 ### File Leakage (T6)
+
+The threat of file leakage comes from the issue that we can't trust the fileservers. If they were to leak the files they have stored on them, then our system would no longer be confidential. Currently in our implementation files are stored on the file server in plaintext, and if they were leaked would be readable to anyone. This is a major issue if we need the stored information to be kept private.
+
+To fix this threat a few steps need to be taken. First, when a group is formed a group key will be generated on the group server and stored in each member of the group's token when they retrieve it. The algorithm to generate it will be Ki = h(longterm_Secret || i), and only the trusted group server will know the longterm_Secret so that no member of the group will know it and be able to predict future keys. Whenever a group removes a member, the old group key will be saved in an hashmap of version to key on the group server as well as on the members tokens. Then a new group key will be generated so that the member of the group who was removed will o longer know the current key. Now, whenever a file is uploaded from the client to the file server, they will first encrypt the file with the group key so that if that file server were to leak it, then no one would be able to get the plaintext except for the members of the group. The last change made is when a member downloads the file they will decrypt it with the correct version of the group key.
+
+This implementation is effective because it prevents leaked files from being read by the public. The group key can be a bit of work to manage and may cause some issues, but overall is an effective way of addressing the issue. Some issues that arise from this implementation are that since files can be stored on the file server encrypted will old versions of the group key it is possible for members who have been removed from a group to decipher these leaked files and sabotage the group. However this is backwards secrecy and does not need to be addressed yet in this phase of the project.
 
 ### Token Theft (T7)
 
