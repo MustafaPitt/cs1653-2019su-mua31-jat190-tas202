@@ -18,7 +18,35 @@ To fix this threat a few steps need to be taken. First, when a group is formed a
 This implementation is effective because it prevents leaked files from being read by the public. The group key can be a bit of work to manage and may cause some issues, but overall is an effective way of addressing the issue. Some issues that arise from this implementation are that since files can be stored on the file server encrypted will old versions of the group key it is possible for members who have been removed from a group to decipher these leaked files and sabotage the group. However this is backwards secrecy and does not need to be addressed yet in this phase of the project.
 
 ### Token Theft (T7)
+It is also possible that a file server may steal a user's token and
+attempt to impersonate that user. For example, if Bob connects to a file
+server using a token he received from the group server, the file server
+may store this token without Bob's knowledge. It could then give this
+token to another user, who would be able to connect to any file server,
+pretending to be Bob. This other user does not need to know Bob's
+password to obtain his token, since Bob already entered it before
+originally connecting. The user would have access to Bob's files, which
+is probably not a good thing.
 
+To prevent this kind of token theft, we implement a mechanism where the
+user tells the group server which file server they would like to connect
+to, and it is marked in the token. File servers will then only accept
+tokens that are marked for them. This prevents leaked tokens from being
+used anywhere except for on the server that stole them. To implement
+this, the user can specify a file server's public key when requesting a
+token, and the group server will include this key in the token. Then,
+when connecting to a file server, if the token does not contain its
+public key, it will not allow the user to connect.
+
+This addition should mitigate the damage that can be caused by token
+theft. Suppose a file server steals a token under this system, and gives
+it to another user. If that user attempts to use the token to connect to
+another file server, it will be rejected because it does not contain the
+correct public key. The user cannot modify the key that is contained in
+the token, since doing so would cause the group server's signature to
+become invalid, also resulting in rejection. Use of the stolen token is
+limited to the file server that stole it, since that server is the only
+one that has a key that matches what is contained in the token.
 
 
 ### Client <----> Group Server Overview
