@@ -7,8 +7,6 @@
 
 In this phase of the project we are adding more security to our group-based file-sharing system. In the this phase we will address threats mostly pertaining to active attacks to communications and a faulty file server. Many of the security techniques implemented were learned in class to address specific threats. Some of the security mechanisms and protocols that we used include: message authentication, managing groupkeys, and limiting the abilities of compromised tokens. Our message authentication basically means we will check each messages ordering with a sequence number, and will make sure it is not able to be replayed for information or modified with a signed hash of the message. Next, to limit the damage that would be done by a faulty file server releasing information, all files stored will now be encrypted by the group that stores its group key. Group keys need to be effectively managed because of members joining and leaving. Lastly, if a faulty server were to give a user's token to another user we will prevent further use by limiting each issued token to only that particular server.
 
-### Message Reorder, Replay, and Modification (T5)
-
 
 ### Message Reorder, Replay, and Modification (T5)
 
