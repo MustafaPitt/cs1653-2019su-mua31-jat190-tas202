@@ -9,7 +9,61 @@ In this phase of the project we are adding more security to our group-based file
 
 ### Message Reorder, Replay, and Modification (T5)
 
+
+### Message Reorder, Replay, and Modification (T5)
+
+
+The adversary can cause threats by reordering, replaying and/or, modifying messages. If the attacker reorders a message, 
+they can possibly execute a sequence of operations that should not occur. On a replay attack, an adversary can keep resending
+messages to obtain confidential information. Lastly, an attacker can modify a message and the receiver won't get the actual 
+messages that they were meant to receive causing incongruence.
+ 
+
+For the reorder attack after establishing a secure connection between client and the group server and client and the file server,
+the sender will start sequence number that will be encrypted and sent with each message. In our case the client will send it 
+to the servers. Each message will be checked before processed the requests. Any message not within the sequence will be
+dropped. For example, if the receiver expects to get message with sequence 47 and got a number < or > than expected, then we will
+have detected a replay attack and will aborted the connection. For the modification attack, we will send a copy of each message that is 
+hashed and signed. Then the receiver can do these same steps to make sure the message is unmodified. Last, replay attacks will not work
+against our system because we already are encrypting each message with a session diffie-hellman encryption.
+  
+  
+For the replay and modification attack we already established authentication connection between client-group server and
+between client-file server using Diffie Hellman. The client using groups server and file server public keys to exchange
+the agreed key. After that all messages will be signed and encrypted. And using the sequence number and signed hashed messages to 
+detect reorders or modifications are effective ways to address this threat.
+
+
+  
+
 ### File Leakage (T6)
+
+### Message Reorder, Replay, and Modification (T5)
+
+
+The adversary can cause threats by reordering, replaying and/or, modifying messages. If the attacker reorders a message, 
+they can possibly execute a sequence of operations that should not occur. On a replay attack, an adversary can keep resending
+messages to obtain confidential information. Lastly, an attacker can modify a message and the receiver won't get the actual 
+messages that they were meant to receive causing incongruence.
+ 
+
+For the reorder attack after establishing a secure connection between client and the group server and client and the file server,
+the sender will start sequence number that will be encrypted and sent with each message. In our case the client will send it 
+to the servers. Each message will be checked before processed the requests. Any message not within the sequence will be
+dropped. For example, if the receiver expects to get message with sequence 47 and got a number < or > than expected, then we will
+have detected a replay attack and will aborted the connection. For the modification attack, we will send a copy of each message that is 
+hashed and signed. Then the receiver can do these same steps to make sure the message is unmodified. Last, replay attacks will not work
+against our system because we already are encrypting each message with a session diffie-hellman encryption.
+  
+  
+For the replay and modification attack we already established authentication connection between client-group server and
+between client-file server using Diffie Hellman. The client using groups server and file server public keys to exchange
+the agreed key. After that all messages will be signed and encrypted. And using the sequence number and signed hashed messages to 
+detect reorders or modifications are effective ways to address this threat.
+
+
+  
+
 
 The threat of file leakage comes from the issue that we can't trust the fileservers. If they were to leak the files they have stored on them, then our system would no longer be confidential. Currently in our implementation files are stored on the file server in plaintext, and if they were leaked would be readable to anyone. This is a major issue if we need the stored information to be kept private.
 
