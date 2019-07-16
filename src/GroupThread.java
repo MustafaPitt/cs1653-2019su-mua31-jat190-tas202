@@ -19,6 +19,10 @@ public class GroupThread extends Thread
 	private GroupServer my_gs;
 	private byte[] agreedKeyGSDH;
 
+	private PublicKey verify_key;
+
+	private Long seqnum;
+
 	public GroupThread(Socket _socket, GroupServer _gs)
 	{
 		socket = _socket;
@@ -42,16 +46,42 @@ public class GroupThread extends Thread
 
 				if(message.getMessage().equals("GET"))//Client wants a token
 				{
+
+					if (!message.verify(verify_key)) {
+						System.out.println("The message has been modified!");
+						socket.close();
+						proceed = false;
+						break;
+					}
+
 					// Decrypt message
 					AES aes = new AES();
 					byte[][] encrypted = (byte[][])message.getObjContents().get(0);
 					String username = (String)aes.cfbDecrypt(agreedKeyGSDH, encrypted); //Get the username
+					encrypted = (byte[][])message.getObjContents().get(1);
+					Long recv_seq = (Long)aes.cfbDecrypt(agreedKeyGSDH, encrypted);
+
+					System.out.println("r: " + recv_seq + "\ns: "+seqnum) ;
+					if (!recv_seq.equals(seqnum)) {
+						System.out.println("The message has been replayed!");
+						socket.close();
+						proceed = false;
+						break;
+					}
+
+					seqnum++;
+
+					byte[][] enc_seqnum =
+						aes.cfbEncrypt(agreedKeyGSDH, seqnum);
 
 					if(username == null)
 					{
 						response = new Envelope("FAIL");
 						response.addObject(null);
+						response.addObject(enc_seqnum);
+						response.sign(my_gs.privateKeySig);
 						output.writeObject(response);
+						seqnum++;
 					}
 					else
 					{
@@ -81,8 +111,10 @@ public class GroupThread extends Thread
 							//Respond to the client. On error, the client will receive a null token
 							response = new Envelope("OK");
 							response.addObject(cipherTokenWithIV);
+							response.addObject(enc_seqnum);
+							response.sign(my_gs.privateKeySig);
 							output.writeObject(response);
-
+							seqnum++;
 						}
 					}
 				}
@@ -351,6 +383,21 @@ public class GroupThread extends Thread
 					}
 
 				}
+				else if(message.getMessage().equals("EstablishSeqNum"))
+				{
+					AES aes = new AES();
+					byte[][] encrypted =
+						(byte[][])message.getObjContents().get(0);
+
+					seqnum = (Long)aes.cfbDecrypt(agreedKeyGSDH, encrypted);
+					seqnum++;
+
+					response = new Envelope("OK");
+					response.addObject(aes.cfbEncrypt(agreedKeyGSDH, seqnum));
+					output.writeObject(response);
+					seqnum++;
+				}
+				
 				else
 				{
 					response = new Envelope("FAIL"); //Server does not understand client request
@@ -421,6 +468,8 @@ public class GroupThread extends Thread
 		}
 
 		PublicKey pk = my_gs.clientCertifcates.get(username);
+		verify_key = pk;
+
 		if (pk == null) {
 			System.out.println("User " + username +
 				" tried to connect with an unknown key!");

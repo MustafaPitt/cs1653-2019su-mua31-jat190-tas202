@@ -13,7 +13,10 @@ import java.util.List;
 public class GroupClient extends Client implements GroupClientInterface {
 
 	private byte[] sharedKeyClientGS;
+	private Long seqnum;
 
+	private PrivateKey sign_key;
+	private PublicKey gs_verify_key;
 
 
 	public boolean connect(final String server, final int port, PrivateKey pkSig, PublicKey publicKeyGsRSA, String username) {
@@ -25,6 +28,13 @@ public class GroupClient extends Client implements GroupClientInterface {
 //			e.printStackTrace();
 			return false;
 		}
+		
+		if (!establishSequenceNumber()) {
+			disconnect();
+		}
+
+		sign_key = pkSig;
+		gs_verify_key = publicKeyGsRSA;
 
 		return isConnected();
 	}
@@ -41,20 +51,45 @@ public class GroupClient extends Client implements GroupClientInterface {
 			//Tell the server to return a token.
 			message = new Envelope("GET");
 			message.addObject(aes.cfbEncrypt(sharedKeyClientGS,username)); //Add user name string
+			message.addObject(aes.cfbEncrypt(sharedKeyClientGS,seqnum));
+
+			message.sign(sign_key);
+
 			output.writeObject(message);
+			seqnum++;
 
 			//Get the response from the server
 			response = (Envelope)input.readObject();
 
+			if (!response.verify(gs_verify_key)) {
+				System.out.println("The message has been modified!");
+				disconnect();
+			}
+
+			
+			ArrayList<Object> temp = null;
+			temp = response.getObjContents();
+			Long recv_seq = (Long)aes.cfbDecrypt(sharedKeyClientGS,
+				(byte[][])temp.get(temp.size() - 1));
+
+			System.out.println("r: " + recv_seq + "\ns: " +seqnum);
+			if (!(recv_seq.equals(seqnum))) {
+				System.out.println("The message has been replayed!");
+				disconnect();
+			}
+
+			System.out.println("Okay?");
+
+			seqnum++;
 
 			//Successful response
 			if(response.getMessage().equals("OK"))
 			{
 				//If there is a token in the Envelope, return it
-				ArrayList<Object> temp = null;
-				temp = response.getObjContents();
+		//		ArrayList<Object> temp = null;
+		//		temp = response.getObjContents();
 
-				if(temp.size() == 1)
+				if(temp.size() == 2)
 				{
 					//decryption
 					byte [][] cipherTokenWithIV = (byte[][]) response.getObjContents().get(0);
@@ -366,6 +401,43 @@ public class GroupClient extends Client implements GroupClientInterface {
 			e.printStackTrace();
 		}
 		sharedKeyClientGS = DH.recipientAgreementBasic(clientKP.getPrivate(),gsPkDH);
+	}
+
+	public boolean establishSequenceNumber() {
+		seqnum = new Long(new SecureRandom().nextLong());
+
+		Envelope msg = new Envelope("EstablishSeqNum");
+
+//		SecretKeySpec sk = new SecretKeySpec(sharedKeyClientGS, "AES");
+		msg.addObject(new AES().cfbEncrypt(sharedKeyClientGS, seqnum));
+
+		try {
+			output.writeObject(msg);
+			seqnum++;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+
+		try {
+			msg = (Envelope)input.readObject();
+
+			byte[][] encrypted = (byte[][])msg.getObjContents().get(0);
+
+			Long temp = (Long)new AES().cfbDecrypt(sharedKeyClientGS, encrypted);
+
+			if (!seqnum.equals(temp)) {
+				System.out.println("Invalid seqence number. Possible attack!");
+				return false;
+			}
+			seqnum++;
+
+			return true;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 	public boolean verifyPassword(String username, String password){
