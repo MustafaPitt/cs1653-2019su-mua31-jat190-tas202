@@ -3,10 +3,10 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import javax.crypto.KeyGenerator;
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
-import java.security.GeneralSecurityException;
-import java.security.Security;
+import javax.crypto.spec.SecretKeySpec;
+import java.security.*;
 
-class HMAC {
+public class HMAC {
 
 
     HMAC(){Security.addProvider(new BouncyCastleProvider());}
@@ -19,13 +19,23 @@ class HMAC {
         return keyGenerator.generateKey();
     }
 
-    static byte[] calculateHmac(SecretKey key, byte[] data)
+    public static byte[] calculateHmac(SecretKey key, byte[] data)
             throws GeneralSecurityException
     {
         Mac hmac = Mac.getInstance("HMacSHA512", "BC");
         hmac.init(key);
         return hmac.doFinal(data);
     }
+
+    public static byte[] calculateHmac(byte[] key, byte[] data)
+            throws GeneralSecurityException
+    {
+        Mac hmac = Mac.getInstance("HMacSHA512", "BC");
+        SecretKeySpec k = new SecretKeySpec(key, "HMacSHA512");
+        hmac.init(k);
+        return hmac.doFinal(data);
+    }
+
 
 
 

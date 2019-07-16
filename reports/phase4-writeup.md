@@ -24,13 +24,13 @@ each issued token to only that particular server.
 
 ### Message Reorder, Replay, and Modification (T5)
 
-The adversary can cause threats by reordering, replaying and/or, modifying messages. If the attacker reorders a message, 
+The adversary can cause threats by reordering, replaying and/or, modifying messages. If the attacker reorders a message,
 they can possibly execute a sequence of operations that should not occur. On a replay attack, an adversary can keep resending
-messages to obtain confidential information. Lastly, an attacker can modify a message and the receiver won't get the actual 
+messages to obtain confidential information. Lastly, an attacker can modify a message and the receiver won't get the actual
 messages that they were meant to receive causing incongruence.
 
 For the reorder attack, after establishing a secure connection between client and the group server and client and the file server,
-the sender will start sequence number that will be encrypted and sent with each message. In our case the client will send it 
+the sender will start sequence number that will be encrypted and sent with each message. In our case the client will send it
 to the servers. Each message will be checked before processed the requests. Any message not within the sequence will be
 dropped. For example, if the receiver expects to get message with sequence 47 and got a number < or > than expected, then we will
 have detected a reordering attack and will aborted the connection. For
@@ -38,11 +38,11 @@ the modification attack, we will send a copy of each message that
 includes an HMAC for verification.
 Then the receiver can do these same steps to make sure the message is unmodified. Last, replay attacks will not work
 against our system because we already are encrypting each message with a session diffie-hellman encryption.
- 
+
 For the replay attack we already established authentication connection between client-group server and
 between client-file server using a signed Diffie-Hellman key exchange.
 After that all messages will include an HMAC. And using
-the sequence number and HMAC messages to 
+the sequence number and HMAC messages to
 detect reorders are effective ways to address this threat.
 
 ### File Leakage (T6)
@@ -125,10 +125,7 @@ one that has a key that matches what is contained in the token.
 
 ### Client <----> File Server Overview
 * [T5] All messages include a sequence number and an HMAC of the contents of the message. The sequence number will be a randomly generated integer by the client that is incremented with each message sent between client and FS. Both of these will be encrypted with the DH shared key.
-* [T6] When upload is called, the client will first encrypt the file
-* being stored with the latest version of the groups key. The message
-* will be sent as seen below. When download is called, the download will
-* operate as normal, and the file will be decrypted when downloaded. Now the client will decrypt that file with the correct version of the group key.
+* [T6] When upload is called, the client will first encrypt the file being stored with the latest version of the groups key. The message will be sent as seen below. When download is called, the download will operate as normal, and the file will be decrypted when downloaded. Now the client will decrypt that file with the correct version of the group key.
 * [T7] Upon connecting to a FS, verify the FS public key on the token is a match to the one of the FS we connected to.
 
 ![Client - GS](report_img/p4_client_fs.jpg)

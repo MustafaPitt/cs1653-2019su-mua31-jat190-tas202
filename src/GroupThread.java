@@ -21,6 +21,8 @@ public class GroupThread extends Thread
 
 	private PublicKey verify_key;
 
+	private byte[] HMACkey;
+
 	private Long seqnum;
 
 	public GroupThread(Socket _socket, GroupServer _gs)
@@ -47,7 +49,7 @@ public class GroupThread extends Thread
 				if(message.getMessage().equals("GET"))//Client wants a token
 				{
 
-					if (!message.verify(verify_key)) {
+					if (!message.verify(HMACkey)) {
 						System.out.println("The message has been modified!");
 						socket.close();
 						proceed = false;
@@ -61,9 +63,9 @@ public class GroupThread extends Thread
 					encrypted = (byte[][])message.getObjContents().get(1);
 					Long recv_seq = (Long)aes.cfbDecrypt(agreedKeyGSDH, encrypted);
 
-					System.out.println("r: " + recv_seq + "\ns: "+seqnum) ;
+					//System.out.println("r: " + recv_seq + "\ns: "+seqnum) ;
 					if (!recv_seq.equals(seqnum)) {
-						System.out.println("The message has been replayed!");
+						System.out.println("The message has been reordered!");
 						socket.close();
 						proceed = false;
 						break;
@@ -79,7 +81,7 @@ public class GroupThread extends Thread
 						response = new Envelope("FAIL");
 						response.addObject(null);
 						response.addObject(enc_seqnum);
-						response.sign(my_gs.privateKeySig);
+						response.sign(HMACkey);
 						output.writeObject(response);
 						seqnum++;
 					}
@@ -112,7 +114,7 @@ public class GroupThread extends Thread
 							response = new Envelope("OK");
 							response.addObject(cipherTokenWithIV);
 							response.addObject(enc_seqnum);
-							response.sign(my_gs.privateKeySig);
+							response.sign(HMACkey);
 							output.writeObject(response);
 							seqnum++;
 						}
@@ -120,6 +122,14 @@ public class GroupThread extends Thread
 				}
 				else if(message.getMessage().equals("CUSER")) //Client wants to create a user
 				{
+
+					if (!message.verify(HMACkey)) {
+						System.out.println("The message has been modified!");
+						socket.close();
+						proceed = false;
+						break;
+					}
+
 					if(message.getObjContents().size() < 2)
 					{
 						response = new Envelope("FAIL");
@@ -138,6 +148,18 @@ public class GroupThread extends Thread
 								String username = (String)aes.cfbDecrypt(agreedKeyGSDH, encrypted); //Get the username
 								encrypted = (byte[][])message.getObjContents().get(1);
 								Token yourToken = (Token)aes.cfbDecrypt(agreedKeyGSDH, encrypted); //Get the username
+
+								encrypted = (byte[][])message.getObjContents().get(2);
+								Long recv_seq = (Long)aes.cfbDecrypt(agreedKeyGSDH, encrypted);
+
+								//System.out.println("r: " + recv_seq + "\ns: "+seqnum) ;
+								if (!recv_seq.equals(seqnum)) {
+									System.out.println("The message has been reordered!");
+									socket.close();
+									proceed = false;
+									break;
+								}
+								seqnum++;
 
 								if(createUser(username, yourToken))
 								{
@@ -147,11 +169,23 @@ public class GroupThread extends Thread
 							}
 						}
 					}
+					byte[][] enc_seqnum = new AES().cfbEncrypt(agreedKeyGSDH, seqnum);
+
+					response.addObject(enc_seqnum);
+					response.sign(HMACkey);
 					System.err.println(response.getMessage());
 					output.writeObject(response);
+					seqnum++;
 				}
 				else if(message.getMessage().equals("DUSER")) //Client wants to delete a user
 				{
+
+					if (!message.verify(HMACkey)) {
+						System.out.println("The message has been modified!");
+						socket.close();
+						proceed = false;
+						break;
+					}
 
 					if(message.getObjContents().size() < 2)
 					{
@@ -172,6 +206,18 @@ public class GroupThread extends Thread
 								encrypted = (byte[][])message.getObjContents().get(1);
 								Token yourToken = (Token)aes.cfbDecrypt(agreedKeyGSDH, encrypted); //Get the username
 
+								encrypted = (byte[][])message.getObjContents().get(2);
+								Long recv_seq = (Long)aes.cfbDecrypt(agreedKeyGSDH, encrypted);
+
+								//System.out.println("r: " + recv_seq + "\ns: "+seqnum) ;
+								if (!recv_seq.equals(seqnum)) {
+									System.out.println("The message has been reordered!");
+									socket.close();
+									proceed = false;
+									break;
+								}
+								seqnum++;
+
 								if(deleteUser(username, yourToken))
 								{
 									response = new Envelope("OK"); //Success
@@ -179,11 +225,22 @@ public class GroupThread extends Thread
 							}
 						}
 					}
-
+					byte[][] enc_seqnum = new AES().cfbEncrypt(agreedKeyGSDH, seqnum);
+					response.addObject(enc_seqnum);
+					response.sign(HMACkey);
 					output.writeObject(response);
+					seqnum++;
 				}
 				else if(message.getMessage().equals("CGROUP")) //Client wants to create a group
 				{
+
+					if (!message.verify(HMACkey)) {
+						System.out.println("The message has been modified!");
+						socket.close();
+						proceed = false;
+						break;
+					}
+
 					if(message.getObjContents().size() < 2)
 					{
 						response = new Envelope("FAIL");
@@ -202,6 +259,18 @@ public class GroupThread extends Thread
 								String groupName = (String)aes.cfbDecrypt(agreedKeyGSDH, encrypted); //Get the username
 								encrypted = (byte[][])message.getObjContents().get(1);
 								Token yourToken = (Token)aes.cfbDecrypt(agreedKeyGSDH, encrypted); //Get the username
+
+								encrypted = (byte[][])message.getObjContents().get(2);
+								Long recv_seq = (Long)aes.cfbDecrypt(agreedKeyGSDH, encrypted);
+
+								//System.out.println("r: " + recv_seq + "\ns: "+seqnum) ;
+								if (!recv_seq.equals(seqnum)) {
+									System.out.println("The message has been reordered!");
+									socket.close();
+									proceed = false;
+									break;
+								}
+								seqnum++;
 
 								if(createGroup(groupName, yourToken))
 								{
@@ -210,11 +279,23 @@ public class GroupThread extends Thread
 							}
 						}
 					}
+					byte[][] enc_seqnum = new AES().cfbEncrypt(agreedKeyGSDH, seqnum);
+					response.addObject(enc_seqnum);
+					response.sign(HMACkey);
 					System.err.println(response.getMessage());
 					output.writeObject(response);
+					seqnum++;
 				}
 				else if(message.getMessage().equals("DGROUP")) //Client wants to delete a group
 				{
+
+					if (!message.verify(HMACkey)) {
+						System.out.println("The message has been modified!");
+						socket.close();
+						proceed = false;
+						break;
+					}
+
 					if(message.getObjContents().size() < 2)
 					{
 						response = new Envelope("FAIL");
@@ -234,6 +315,18 @@ public class GroupThread extends Thread
 								encrypted = (byte[][])message.getObjContents().get(1);
 								Token yourToken = (Token)aes.cfbDecrypt(agreedKeyGSDH, encrypted); //Get the username
 
+								encrypted = (byte[][])message.getObjContents().get(2);
+								Long recv_seq = (Long)aes.cfbDecrypt(agreedKeyGSDH, encrypted);
+
+								//System.out.println("r: " + recv_seq + "\ns: "+seqnum) ;
+								if (!recv_seq.equals(seqnum)) {
+									System.out.println("The message has been reordered!");
+									socket.close();
+									proceed = false;
+									break;
+								}
+								seqnum++;
+
 								if(deleteGroup(groupName, yourToken))
 								{
 									response = new Envelope("OK"); //Success
@@ -241,12 +334,24 @@ public class GroupThread extends Thread
 							}
 						}
 					}
+					byte[][] enc_seqnum = new AES().cfbEncrypt(agreedKeyGSDH, seqnum);
+					response.addObject(enc_seqnum);
+					response.sign(HMACkey);
 					System.err.println(response.getMessage());
 					output.writeObject(response);
+					seqnum++;
 				}
 
 				else if(message.getMessage().equals("LMEMBERS")) //Client wants a list of members in a group
 				{
+
+					if (!message.verify(HMACkey)) {
+						System.out.println("The message has been modified!");
+						socket.close();
+						proceed = false;
+						break;
+					}
+
 					/* TODO:  Write this handler */
 					if(message.getObjContents().size() < 2)
 					{
@@ -267,6 +372,18 @@ public class GroupThread extends Thread
 								encrypted = (byte[][])message.getObjContents().get(1);
 								Token yourToken = (Token)aes.cfbDecrypt(agreedKeyGSDH, encrypted); //Get the username
 
+								encrypted = (byte[][])message.getObjContents().get(2);
+								Long recv_seq = (Long)aes.cfbDecrypt(agreedKeyGSDH, encrypted);
+
+								//System.out.println("r: " + recv_seq + "\ns: "+seqnum) ;
+								if (!recv_seq.equals(seqnum)) {
+									System.out.println("The message has been reordered!");
+									socket.close();
+									proceed = false;
+									break;
+								}
+								seqnum++;
+
 								List<String> groupMembers = listAllMembersInGroup(groupName, yourToken);
 
 								response = new Envelope("OK"); //Success
@@ -274,12 +391,23 @@ public class GroupThread extends Thread
 							}
 						}
 					}
+					byte[][] enc_seqnum = new AES().cfbEncrypt(agreedKeyGSDH, seqnum);
+					response.addObject(enc_seqnum);
+					response.sign(HMACkey);
 					System.err.println(response.getMessage());
 					output.writeObject(response);
-
+					seqnum++;
 				}
 				else if(message.getMessage().equals("AUSERTOGROUP")) //Client wants to add user to a group
 				{
+
+					if (!message.verify(HMACkey)) {
+						System.out.println("The message has been modified!");
+						socket.close();
+						proceed = false;
+						break;
+					}
+
 					/* TODO:  Write this handler */
 					if(message.getObjContents().size() < 2)
 					{
@@ -302,6 +430,17 @@ public class GroupThread extends Thread
 								encrypted = (byte[][])message.getObjContents().get(2);
 								String userToAdd = (String)aes.cfbDecrypt(agreedKeyGSDH, encrypted); //Get the username
 
+								encrypted = (byte[][])message.getObjContents().get(3);
+								Long recv_seq = (Long)aes.cfbDecrypt(agreedKeyGSDH, encrypted);
+
+								//System.out.println("r: " + recv_seq + "\ns: "+seqnum) ;
+								if (!recv_seq.equals(seqnum)) {
+									System.out.println("The message has been reordered!");
+									socket.close();
+									proceed = false;
+									break;
+								}
+								seqnum++;
 
 								if(addUserToGroup(groupName,yourToken,userToAdd))
 								{
@@ -312,12 +451,23 @@ public class GroupThread extends Thread
 							}
 						}
 					}
+					byte[][] enc_seqnum = new AES().cfbEncrypt(agreedKeyGSDH, seqnum);
+					response.addObject(enc_seqnum);
+					response.sign(HMACkey);
 					System.err.println(response.getMessage());
 					output.writeObject(response);
-
+					seqnum++;
 				}
 				else if(message.getMessage().equals("RUSERFROMGROUP")) //Client wants to remove user from a group
 				{
+
+					if (!message.verify(HMACkey)) {
+						System.out.println("The message has been modified!");
+						socket.close();
+						proceed = false;
+						break;
+					}
+
 					/* TODO:  Write this handler */
 					if(message.getObjContents().size() < 2)
 					{
@@ -340,6 +490,18 @@ public class GroupThread extends Thread
 								encrypted = (byte[][])message.getObjContents().get(2);
 								String userToRemove = (String)aes.cfbDecrypt(agreedKeyGSDH, encrypted); //Get the username
 
+								encrypted = (byte[][])message.getObjContents().get(3);
+								Long recv_seq = (Long)aes.cfbDecrypt(agreedKeyGSDH, encrypted);
+
+								//System.out.println("r: " + recv_seq + "\ns: "+seqnum) ;
+								if (!recv_seq.equals(seqnum)) {
+									System.out.println("The message has been reordered!");
+									socket.close();
+									proceed = false;
+									break;
+								}
+								seqnum++;
+
 							if(removeUserFromGroup(groupName,yourToken,userToRemove))
 								{
 									response = new Envelope("OK"); //Success
@@ -349,10 +511,12 @@ public class GroupThread extends Thread
 							}
 						}
 					}
+					byte[][] enc_seqnum = new AES().cfbEncrypt(agreedKeyGSDH, seqnum);
+					response.addObject(enc_seqnum);
+					response.sign(HMACkey);
 					System.err.println(response.getMessage());
 					output.writeObject(response);
-
-
+					seqnum++;
 				}
 				else if(message.getMessage().equals("DISCONNECT")) //Client wants to disconnect
 				{
@@ -372,19 +536,53 @@ public class GroupThread extends Thread
 					}
 				}
 				else if (message.getMessage().equals("VerifyPW")){
+
+					if (!message.verify(HMACkey)) {
+						System.out.println("The message has been modified!");
+						socket.close();
+						proceed = false;
+						break;
+					}
+
+					byte[][] encrypted = (byte[][])message.getObjContents().get(2);
+					Long recv_seq = (Long) new AES().cfbDecrypt(agreedKeyGSDH, encrypted);
+
+					//System.out.println("r: " + recv_seq + "\ns: "+seqnum) ;
+					if (!recv_seq.equals(seqnum)) {
+						System.out.println("The message has been reordered!");
+						socket.close();
+						proceed = false;
+						break;
+					}
+					seqnum++;
+					byte[][] enc_seqnum = new AES().cfbEncrypt(agreedKeyGSDH, seqnum);
+
+
 					response = 	verifyPwAndUsernameFromClientApp(message);
 					if (response.getMessage().equals("OK")) {
 						System.out.println("password correct");
+						response.addObject(enc_seqnum);
+						response.sign(HMACkey);
 						output.writeObject(response);
-
+						seqnum++;
 					} else {
 						System.out.println("password incorrect");
+						response.addObject(enc_seqnum);
+						response.sign(HMACkey);
 						output.writeObject(response);
+						seqnum++;
 					}
 
 				}
 				else if(message.getMessage().equals("EstablishSeqNum"))
 				{
+					if (!message.verify(HMACkey)) {
+						System.out.println("The message has been modified!");
+						socket.close();
+						proceed = false;
+						break;
+					}
+
 					AES aes = new AES();
 					byte[][] encrypted =
 						(byte[][])message.getObjContents().get(0);
@@ -394,10 +592,11 @@ public class GroupThread extends Thread
 
 					response = new Envelope("OK");
 					response.addObject(aes.cfbEncrypt(agreedKeyGSDH, seqnum));
+					response.sign(HMACkey);
 					output.writeObject(response);
 					seqnum++;
 				}
-				
+
 				else
 				{
 					response = new Envelope("FAIL"); //Server does not understand client request
@@ -481,6 +680,20 @@ public class GroupThread extends Thread
 				DH dh = new DH();
 				KeyPair keyPairGSDH = dh.generateKeyPair(((DHPublicKey)clientDHPK).getParams());
 				agreedKeyGSDH  =  dh.initiatorAgreementBasic(keyPairGSDH.getPrivate(),clientDHPK);
+
+
+				try{
+					//generate 2nd DH key based of first one for HMACs
+					MessageDigest d = MessageDigest.getInstance("SHA-256");
+					ByteArrayOutputStream out = new ByteArrayOutputStream();
+					ObjectOutputStream os = new ObjectOutputStream(out);
+					HMACkey = Arrays.copyOfRange(d.digest(out.toByteArray()), 0, 16);
+
+				}catch(Exception e){
+					e.printStackTrace();
+					System.exit(-1);
+				}
+
 				byte [] sig = new byte[0];
 				Envelope msg = new Envelope("OK");
 				try {

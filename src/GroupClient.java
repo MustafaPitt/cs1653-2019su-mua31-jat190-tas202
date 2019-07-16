@@ -18,6 +18,8 @@ public class GroupClient extends Client implements GroupClientInterface {
 	private PrivateKey sign_key;
 	private PublicKey gs_verify_key;
 
+	private byte[] HMACkey;
+
 
 	public boolean connect(final String server, final int port, PrivateKey pkSig, PublicKey publicKeyGsRSA, String username) {
 		super.connect(server, port);
@@ -28,7 +30,7 @@ public class GroupClient extends Client implements GroupClientInterface {
 //			e.printStackTrace();
 			return false;
 		}
-		
+
 		if (!establishSequenceNumber()) {
 			disconnect();
 		}
@@ -53,32 +55,30 @@ public class GroupClient extends Client implements GroupClientInterface {
 			message.addObject(aes.cfbEncrypt(sharedKeyClientGS,username)); //Add user name string
 			message.addObject(aes.cfbEncrypt(sharedKeyClientGS,seqnum));
 
-			message.sign(sign_key);
-
+			message.sign(HMACkey);
 			output.writeObject(message);
 			seqnum++;
 
 			//Get the response from the server
 			response = (Envelope)input.readObject();
 
-			if (!response.verify(gs_verify_key)) {
+			if (!response.verify(HMACkey)) {
 				System.out.println("The message has been modified!");
 				disconnect();
 			}
 
-			
+
 			ArrayList<Object> temp = null;
 			temp = response.getObjContents();
 			Long recv_seq = (Long)aes.cfbDecrypt(sharedKeyClientGS,
 				(byte[][])temp.get(temp.size() - 1));
 
-			System.out.println("r: " + recv_seq + "\ns: " +seqnum);
+			//System.out.println("r: " + recv_seq + "\ns: " +seqnum);
 			if (!(recv_seq.equals(seqnum))) {
-				System.out.println("The message has been replayed!");
+				System.out.println("The message has been reordered!");
 				disconnect();
 			}
 
-			System.out.println("Okay?");
 
 			seqnum++;
 
@@ -132,9 +132,29 @@ public class GroupClient extends Client implements GroupClientInterface {
 			message = new Envelope("CUSER");
 			message.addObject(aes.cfbEncrypt(sharedKeyClientGS,username)); //Add user name string
 			message.addObject(aes.cfbEncrypt(sharedKeyClientGS,token)); //Add the requester's token
+			message.addObject(aes.cfbEncrypt(sharedKeyClientGS,seqnum));
+
+			message.sign(HMACkey);
 			output.writeObject(message);
+			seqnum++;
 
 			response = (Envelope)input.readObject();
+
+			if (!response.verify(HMACkey)) {
+				System.out.println("The message has been modified!");
+				disconnect();
+			}
+			ArrayList<Object> temp = null;
+			temp = response.getObjContents();
+			Long recv_seq = (Long)aes.cfbDecrypt(sharedKeyClientGS,
+				(byte[][])temp.get(temp.size() - 1));
+
+			//System.out.println("r: " + recv_seq + "\ns: " +seqnum);
+			if (!(recv_seq.equals(seqnum))) {
+				System.out.println("The message has been reordered!");
+				disconnect();
+			}
+			seqnum++;
 
 			//If server indicates success, return true
 			if(response.getMessage().equals("OK"))
@@ -163,9 +183,30 @@ public class GroupClient extends Client implements GroupClientInterface {
 			message = new Envelope("DUSER");
 			message.addObject(aes.cfbEncrypt(sharedKeyClientGS,username)); //Add user name
 			message.addObject(aes.cfbEncrypt(sharedKeyClientGS,token));  //Add requester's token
+			message.addObject(aes.cfbEncrypt(sharedKeyClientGS,seqnum));
+
+
+			message.sign(HMACkey);
 			output.writeObject(message);
+			seqnum++;
 
 			response = (Envelope)input.readObject();
+
+			if (!response.verify(HMACkey)) {
+				System.out.println("The message has been modified!");
+				disconnect();
+			}
+			ArrayList<Object> temp = null;
+			temp = response.getObjContents();
+			Long recv_seq = (Long)aes.cfbDecrypt(sharedKeyClientGS,
+				(byte[][])temp.get(temp.size() - 1));
+
+			//System.out.println("r: " + recv_seq + "\ns: " +seqnum);
+			if (!(recv_seq.equals(seqnum))) {
+				System.out.println("The message has been reordered!");
+				disconnect();
+			}
+			seqnum++;
 
 			//If server indicates success, return true
 			if(response.getMessage().equals("OK"))
@@ -193,9 +234,30 @@ public class GroupClient extends Client implements GroupClientInterface {
 			message = new Envelope("CGROUP");
 			message.addObject(aes.cfbEncrypt(sharedKeyClientGS,groupname)); //Add the group name string
 			message.addObject(aes.cfbEncrypt(sharedKeyClientGS,token)); //Add the requester's token
+			message.addObject(aes.cfbEncrypt(sharedKeyClientGS,seqnum));
+
+
+			message.sign(HMACkey);
 			output.writeObject(message);
+			seqnum++;
 
 			response = (Envelope)input.readObject();
+
+			if (!response.verify(HMACkey)) {
+				System.out.println("The message has been modified!");
+				disconnect();
+			}
+			ArrayList<Object> temp = null;
+			temp = response.getObjContents();
+			Long recv_seq = (Long)aes.cfbDecrypt(sharedKeyClientGS,
+				(byte[][])temp.get(temp.size() - 1));
+
+			//System.out.println("r: " + recv_seq + "\ns: " +seqnum);
+			if (!(recv_seq.equals(seqnum))) {
+				System.out.println("The message has been reordered!");
+				disconnect();
+			}
+			seqnum++;
 
 			//If server indicates success, return true
 			if(response.getMessage().equals("OK"))
@@ -223,9 +285,30 @@ public class GroupClient extends Client implements GroupClientInterface {
 			message = new Envelope("DGROUP");
 			message.addObject(aes.cfbEncrypt(sharedKeyClientGS,groupname)); //Add group name string
 			message.addObject(aes.cfbEncrypt(sharedKeyClientGS,token)); //Add requester's token
+			message.addObject(aes.cfbEncrypt(sharedKeyClientGS,seqnum));
+
+			message.sign(HMACkey);
 			output.writeObject(message);
+			seqnum++;
 
 			response = (Envelope)input.readObject();
+
+			if (!response.verify(HMACkey)) {
+				System.out.println("The message has been modified!");
+				disconnect();
+			}
+			ArrayList<Object> temp = null;
+			temp = response.getObjContents();
+			Long recv_seq = (Long)aes.cfbDecrypt(sharedKeyClientGS,
+				(byte[][])temp.get(temp.size() - 1));
+
+			//System.out.println("r: " + recv_seq + "\ns: " +seqnum);
+			if (!(recv_seq.equals(seqnum))) {
+				System.out.println("The message has been reordered!");
+				disconnect();
+			}
+			seqnum++;
+
 			//If server indicates success, return true
 			if(response.getMessage().equals("OK"))
 			{
@@ -253,9 +336,31 @@ public class GroupClient extends Client implements GroupClientInterface {
 			message = new Envelope("LMEMBERS");
 			message.addObject(aes.cfbEncrypt(sharedKeyClientGS,group)); //Add group name string
 			message.addObject(aes.cfbEncrypt(sharedKeyClientGS,token)); //Add requester's token
+			message.addObject(aes.cfbEncrypt(sharedKeyClientGS,seqnum));
+
+
+			message.sign(HMACkey);
 			output.writeObject(message);
+			seqnum++;
 
 			response = (Envelope)input.readObject();
+
+			if (!response.verify(HMACkey)) {
+				System.out.println("The message has been modified!");
+				disconnect();
+			}
+			ArrayList<Object> temp = null;
+			temp = response.getObjContents();
+			Long recv_seq = (Long)aes.cfbDecrypt(sharedKeyClientGS,
+				(byte[][])temp.get(temp.size() - 1));
+
+			//System.out.println("r: " + recv_seq + "\ns: " +seqnum);
+			if (!(recv_seq.equals(seqnum))) {
+				System.out.println("The message has been reordered!");
+				disconnect();
+			}
+			seqnum++;
+
 					//If server indicates success, return the member list
 			if(response.getMessage().equals("OK"))
 			{
@@ -286,9 +391,31 @@ public class GroupClient extends Client implements GroupClientInterface {
 			message.addObject(aes.cfbEncrypt(sharedKeyClientGS,groupname)); //Add group name string
 			message.addObject(aes.cfbEncrypt(sharedKeyClientGS,token)); //Add requester's token
 			message.addObject(aes.cfbEncrypt(sharedKeyClientGS,userToAdd)); //Add user name string
+			message.addObject(aes.cfbEncrypt(sharedKeyClientGS,seqnum));
+
+
+			message.sign(HMACkey);
 			output.writeObject(message);
+			seqnum++;
 
 			response = (Envelope)input.readObject();
+
+			if (!response.verify(HMACkey)) {
+				System.out.println("The message has been modified!");
+				disconnect();
+			}
+			ArrayList<Object> temp = null;
+			temp = response.getObjContents();
+			Long recv_seq = (Long)aes.cfbDecrypt(sharedKeyClientGS,
+				(byte[][])temp.get(temp.size() - 1));
+
+			//System.out.println("r: " + recv_seq + "\ns: " +seqnum);
+			if (!(recv_seq.equals(seqnum))) {
+				System.out.println("The message has been reordered!");
+				disconnect();
+			}
+			seqnum++;
+
 			//If server indicates success, return true
 			if(response.getMessage().equals("OK"))
 			{
@@ -315,12 +442,32 @@ public class GroupClient extends Client implements GroupClientInterface {
 			message = new Envelope("RUSERFROMGROUP");
 			message.addObject(aes.cfbEncrypt(sharedKeyClientGS,groupName)); //Add group name string
 			message.addObject(aes.cfbEncrypt(sharedKeyClientGS,token)); //Add requester's token
-
 			message.addObject(aes.cfbEncrypt(sharedKeyClientGS,username)); //Add user name string
+			message.addObject(aes.cfbEncrypt(sharedKeyClientGS,seqnum));
 
+
+			message.sign(HMACkey);
 			output.writeObject(message);
+			seqnum++;
 
 			response = (Envelope)input.readObject();
+
+			if (!response.verify(HMACkey)) {
+				System.out.println("The message has been modified!");
+				disconnect();
+			}
+			ArrayList<Object> temp = null;
+			temp = response.getObjContents();
+			Long recv_seq = (Long)aes.cfbDecrypt(sharedKeyClientGS,
+				(byte[][])temp.get(temp.size() - 1));
+
+			//System.out.println("r: " + recv_seq + "\ns: " +seqnum);
+			if (!(recv_seq.equals(seqnum))) {
+				System.out.println("The message has been reordered!");
+				disconnect();
+			}
+			seqnum++;
+
 			//If server indicates success, return true
 			if(response.getMessage().equals("OK"))
 			{
@@ -401,6 +548,20 @@ public class GroupClient extends Client implements GroupClientInterface {
 			e.printStackTrace();
 		}
 		sharedKeyClientGS = DH.recipientAgreementBasic(clientKP.getPrivate(),gsPkDH);
+
+		try{
+			//generate 2nd DH key based of first one for HMACs
+			MessageDigest d = MessageDigest.getInstance("SHA-256");
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			ObjectOutputStream os = new ObjectOutputStream(out);
+
+			HMACkey = Arrays.copyOfRange(d.digest(out.toByteArray()), 0, 16);
+
+		}catch(Exception e){
+			e.printStackTrace();
+			System.exit(-1);
+		}
+
 	}
 
 	public boolean establishSequenceNumber() {
@@ -412,6 +573,7 @@ public class GroupClient extends Client implements GroupClientInterface {
 		msg.addObject(new AES().cfbEncrypt(sharedKeyClientGS, seqnum));
 
 		try {
+			msg.sign(HMACkey);
 			output.writeObject(msg);
 			seqnum++;
 		} catch (IOException e) {
@@ -421,6 +583,11 @@ public class GroupClient extends Client implements GroupClientInterface {
 
 		try {
 			msg = (Envelope)input.readObject();
+
+			if (!msg.verify(HMACkey)) {
+				System.out.println("The message has been modified!");
+				disconnect();
+			}
 
 			byte[][] encrypted = (byte[][])msg.getObjContents().get(0);
 
@@ -467,7 +634,10 @@ public class GroupClient extends Client implements GroupClientInterface {
 		msg.addObject(cipherPWWithIV);
 
 		try {
+			msg.addObject(aes.cfbEncrypt(sharedKeyClientGS,seqnum));
+			msg.sign(HMACkey);
 			output.writeObject(msg);
+			seqnum++;
 		} catch (IOException e) {
 			e.printStackTrace();
 			return false;
@@ -475,6 +645,23 @@ public class GroupClient extends Client implements GroupClientInterface {
 
 		try {
 			msg = (Envelope)input.readObject();
+
+			if (!msg.verify(HMACkey)) {
+				System.out.println("The message has been modified!");
+				disconnect();
+			}
+			ArrayList<Object> temp = null;
+			temp = msg.getObjContents();
+			Long recv_seq = (Long)aes.cfbDecrypt(sharedKeyClientGS,
+				(byte[][])temp.get(temp.size() - 1));
+
+			//System.out.println("r: " + recv_seq + "\ns: " +seqnum);
+			if (!(recv_seq.equals(seqnum))) {
+				System.out.println("The message has been reordered!");
+				disconnect();
+			}
+			seqnum++;
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
