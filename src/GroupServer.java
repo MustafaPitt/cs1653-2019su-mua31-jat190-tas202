@@ -164,12 +164,12 @@ public class GroupServer extends Server {
 			ObjectOutputStream outStreamGroup;
 			try {
 				// save the private key and give it to the client
-				outStreamGroup = new ObjectOutputStream(new FileOutputStream(username+"_clientPrivate.bin"));
+				outStreamGroup = new ObjectOutputStream(new FileOutputStream(username+"_Private.bin"));
 				outStreamGroup.writeObject(clientPrivateKey);
 				outStreamGroup.close();
 
 				// save the public key and give it to the client
-				outStreamGroup = new ObjectOutputStream(new FileOutputStream(username+"_clientPublic.bin"));
+				outStreamGroup = new ObjectOutputStream(new FileOutputStream(username+"_Public.bin"));
 				outStreamGroup.writeObject(clientPublicKey);
 				outStreamGroup.close();
 

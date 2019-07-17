@@ -12,19 +12,24 @@ import java.math.BigInteger;
 public class FileClient extends Client implements FileClientInterface {
 
 	private byte[] sharedKeyClientFS;
+	private byte[] HMACkey;
+	private Long seqnum;
 
 	// pkSig is user's private key
 	// userPubKey is user's public key
 	// publicKeyFSrsa is file server's public key.
 	public boolean connect(final String server, final int port,
-	PrivateKey pkSig, PublicKey userPubKey, PublicKey publicKeyFSrsa)
-	{
+		PrivateKey pkSig, PublicKey userPubKey, PublicKey publicKeyFSrsa){
 		super.connect(server, port);
 		//new code
 		try {
 			establishSecureSessionWithFS(port, pkSig, userPubKey, publicKeyFSrsa);
 		} catch (GeneralSecurityException e) {
 			e.printStackTrace();
+		}
+
+		if (!establishSequenceNumber()) {
+			disconnect();
 		}
 
 		//server challange
@@ -51,22 +56,44 @@ public class FileClient extends Client implements FileClientInterface {
 		Envelope env = new Envelope("DELETEF"); //Success
 	    env.addObject(aes.cfbEncrypt(sharedKeyClientFS, remotePath));
 	    env.addObject(aes.cfbEncrypt(sharedKeyClientFS, token));
-	    try {
-			output.writeObject(env);
-		    env = (Envelope)input.readObject();
+			env.addObject(aes.cfbEncrypt(sharedKeyClientFS,seqnum));
 
-			if (env.getMessage().compareTo("OK")==0) {
-				System.out.printf("File %s deleted successfully\n", filename);
+			env.sign(HMACkey);
+
+	    try {
+				output.writeObject(env);
+				seqnum++;
+
+
+		    env = (Envelope)input.readObject();
+				if (!env.verify(HMACkey)) {
+					System.out.println("The message has been modified!");
+					disconnect();
+				}
+				ArrayList<Object> temp = null;
+				temp = env.getObjContents();
+				Long recv_seq = (Long)aes.cfbDecrypt(sharedKeyClientFS,
+					(byte[][])temp.get(temp.size() - 1));
+
+				//System.out.println("r: " + recv_seq + "\ns: " +seqnum);
+				if (!(recv_seq.equals(seqnum))) {
+					System.out.println("The message has been reordered!");
+					disconnect();
+				}
+				seqnum++;
+
+				if (env.getMessage().compareTo("OK")==0) {
+					System.out.printf("File %s deleted successfully\n", filename);
+				}
+				else {
+					System.out.printf("Error deleting file %s (%s)\n", filename, env.getMessage());
+					return false;
+				}
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			} catch (ClassNotFoundException e1) {
+				e1.printStackTrace();
 			}
-			else {
-				System.out.printf("Error deleting file %s (%s)\n", filename, env.getMessage());
-				return false;
-			}
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		} catch (ClassNotFoundException e1) {
-			e1.printStackTrace();
-		}
 
 		return true;
 	}
@@ -88,38 +115,77 @@ public class FileClient extends Client implements FileClientInterface {
 					    Envelope env = new Envelope("DOWNLOADF"); //Success
 					    env.addObject(aes.cfbEncrypt(sharedKeyClientFS, sourceFile));
 					    env.addObject(aes.cfbEncrypt(sharedKeyClientFS, token));
+							env.addObject(aes.cfbEncrypt(sharedKeyClientFS,seqnum));
+
+							env.sign(HMACkey);
 					    output.writeObject(env);
+							seqnum++;
 
 					    env = (Envelope)input.readObject();
+							if (!env.verify(HMACkey)) {
+								System.out.println("The message has been modified!");
+								disconnect();
+							}
+							ArrayList<Object> temp = null;
+							temp = env.getObjContents();
+							Long recv_seq = (Long)aes.cfbDecrypt(sharedKeyClientFS,
+								(byte[][])temp.get(temp.size() - 1));
 
-						while (env.getMessage().compareTo("CHUNK")==0) {
-								fos.write((byte[])aes.cfbDecrypt(sharedKeyClientFS,
-									(byte[][])env.getObjContents().get(0)), 0,
-									(Integer)aes.cfbDecrypt(sharedKeyClientFS,
-									(byte[][])env.getObjContents().get(1)));
-								System.out.printf(".");
-								env = new Envelope("DOWNLOADF"); //Success
-								output.writeObject(env);
-								env = (Envelope)input.readObject();
-						}
-						fos.close();
+							//System.out.println("r: " + recv_seq + "\ns: " +seqnum);
+							if (!(recv_seq.equals(seqnum))) {
+								System.out.println("The message has been reordered!");
+								disconnect();
+							}
+							seqnum++;
 
-					    if(env.getMessage().compareTo("EOF")==0) {
-					    	 fos.close();
-								System.out.printf("\nTransfer successful file %s\n", sourceFile);
-								env = new Envelope("OK"); //Success
-								output.writeObject(env);
-						}
-						else {
-								System.out.printf("Error reading file %s (%s)\n", sourceFile, env.getMessage());
-								file.delete();
-								return false;
-						}
-				    }
+							while (env.getMessage().compareTo("CHUNK")==0) {
+									fos.write((byte[])aes.cfbDecrypt(sharedKeyClientFS,
+										(byte[][])env.getObjContents().get(0)), 0,
+										(Integer)aes.cfbDecrypt(sharedKeyClientFS,
+										(byte[][])env.getObjContents().get(1)));
+									System.out.printf(".");
+									env = new Envelope("DOWNLOADF"); //Success
+									env.addObject(aes.cfbEncrypt(sharedKeyClientFS,seqnum));
 
-				    else {
-						System.out.printf("Error couldn't create file %s\n", destFile);
-						return false;
+									env.sign(HMACkey);
+									output.writeObject(env);
+									seqnum++;
+
+									env = (Envelope)input.readObject();
+									if (!env.verify(HMACkey)) {
+										System.out.println("The message has been modified!");
+										disconnect();
+									}
+									temp = env.getObjContents();
+									recv_seq = (Long)aes.cfbDecrypt(sharedKeyClientFS,
+										(byte[][])temp.get(temp.size() - 1));
+
+									//System.out.println("r: " + recv_seq + "\ns: " +seqnum);
+									if (!(recv_seq.equals(seqnum))) {
+										System.out.println("The message has been reordered!");
+										disconnect();
+									}
+									seqnum++;
+							}
+							fos.close();
+
+						  if(env.getMessage().compareTo("EOF")==0) {
+						    	 fos.close();
+									System.out.printf("\nTransfer successful file %s\n", sourceFile);
+									env = new Envelope("OK"); //Success
+									env.addObject(aes.cfbEncrypt(sharedKeyClientFS,seqnum));
+									env.sign(HMACkey);
+									output.writeObject(env);
+									seqnum++;
+							}else {
+									System.out.printf("Error reading file %s (%s)\n", sourceFile, env.getMessage());
+									file.delete();
+									return false;
+							}
+
+				    }else{
+							System.out.printf("Error couldn't create file %s\n", destFile);
+							return false;
 				    }
 
 
@@ -270,7 +336,8 @@ public class FileClient extends Client implements FileClientInterface {
 	}
 
 	public void establishSecureSessionWithFS(final int port, PrivateKey
-pkSig, PublicKey userPubKey, PublicKey publicKeyFSrsa)throws GeneralSecurityException {
+		pkSig, PublicKey userPubKey, PublicKey publicKeyFSrsa)throws GeneralSecurityException {
+
 		BouncyCastleProvider bouncyCastleProvider =  new BouncyCastleProvider();
 		Security.addProvider(bouncyCastleProvider);
 
@@ -282,7 +349,7 @@ pkSig, PublicKey userPubKey, PublicKey publicKeyFSrsa)throws GeneralSecurityExce
 
 		// wrap the required keys and parameters
 		Envelope msg = new Envelope("SecureSession");
-		System.out.println(userPubKey);
+		//System.out.println(userPubKey);
 		msg.addObject(userPubKey);
 		msg.addObject(clientKP.getPublic());
 
@@ -330,6 +397,20 @@ pkSig, PublicKey userPubKey, PublicKey publicKeyFSrsa)throws GeneralSecurityExce
 			e.printStackTrace();
 		}
 		sharedKeyClientFS = DH.recipientAgreementBasic(clientKP.getPrivate(),gsPkDH);
+
+		try{
+			//generate 2nd DH key based of first one for HMACs
+			MessageDigest d = MessageDigest.getInstance("SHA-256");
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			ObjectOutputStream os = new ObjectOutputStream(out);
+
+			HMACkey = Arrays.copyOfRange(d.digest(out.toByteArray()), 0, 16);
+
+		}catch(Exception e){
+			e.printStackTrace();
+			System.exit(-1);
+		}
+
 	}
 
 	public boolean serverChallange(PublicKey publicKeyFSrsa){
@@ -342,7 +423,7 @@ pkSig, PublicKey userPubKey, PublicKey publicKeyFSrsa)throws GeneralSecurityExce
 		AES aes = new AES();
 		byte[][] cipherNWithIV = new byte[0][0];
 		SecretKeySpec secretKey = new SecretKeySpec(sharedKeyClientFS,"AES");
-	//	System.out.println("client shared: " + sharedKeyClientFS);
+	 	//System.out.println("client shared: " + sharedKeyClientFS);
 
 		try {
 			//convert n to bytes and encrypt with server public key
@@ -391,6 +472,50 @@ pkSig, PublicKey userPubKey, PublicKey publicKeyFSrsa)throws GeneralSecurityExce
 
 		//compare n to serverN
 		return serverN.equals(n);
+	}
+
+
+	public boolean establishSequenceNumber() {
+		seqnum = new Long(new SecureRandom().nextLong());
+
+		Envelope msg = new Envelope("EstablishSeqNum");
+
+		//SecretKeySpec sk = new SecretKeySpec(sharedKeyClientGS, "AES");
+		msg.addObject(new AES().cfbEncrypt(sharedKeyClientFS, seqnum));
+
+		try {
+			msg.sign(HMACkey);
+			output.writeObject(msg);
+			seqnum++;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+
+		try {
+			msg = (Envelope)input.readObject();
+
+			if (!msg.verify(HMACkey)) {
+				System.out.println("The message has been modified!");
+				disconnect();
+			}
+
+			byte[][] encrypted = (byte[][])msg.getObjContents().get(0);
+
+			Long temp = (Long)new AES().cfbDecrypt(sharedKeyClientFS, encrypted);
+
+			if (!seqnum.equals(temp)) {
+				System.out.println("Invalid seqence number. Possible attack!");
+				return false;
+			}
+			seqnum++;
+
+			return true;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 }

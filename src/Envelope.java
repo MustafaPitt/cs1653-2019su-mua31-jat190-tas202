@@ -12,7 +12,7 @@ public class Envelope implements java.io.Serializable {
 	private static final long serialVersionUID = -7726335089122193103L;
 	private String msg;
 	private ArrayList<Object> objContents = new ArrayList<Object>();
-	private byte[] HMAC;
+	private byte[] hmac;
 
 	public Envelope(String text)
 	{
@@ -30,7 +30,7 @@ public class Envelope implements java.io.Serializable {
 	}
 
 	public byte[] getSignature() {
-		return HMAC;
+		return hmac;
 	}
 
 	public void addObject(Object object)
@@ -48,7 +48,7 @@ public class Envelope implements java.io.Serializable {
 				os.writeObject(o);
 			}
 
-			HMAC = new HMAC().calculateHmac(sk, out.toByteArray());
+			hmac = new HMAC().calculateHmac(sk, out.toByteArray());
 			// System.out.print("\tHMAC(sign): ");
 			// for(byte b : HMAC)
 			// 	System.out.printf("%02x ", b);
@@ -76,7 +76,7 @@ public class Envelope implements java.io.Serializable {
 			// 	System.out.printf("%02x ", b);
 			// System.out.println("");
 
-			if(Arrays.compare(tempHMAC, HMAC) != 0){
+			if(Arrays.compare(tempHMAC, hmac) != 0){
 				return false;
 			}
 			return true;

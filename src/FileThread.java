@@ -10,6 +10,7 @@ import java.security.KeyPair;
 import java.security.PublicKey;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -22,6 +23,9 @@ public class FileThread extends Thread
 
 	private byte[] agreedKeyFSDH;
 	private PublicKey userPubKey;
+
+	private byte[] HMACkey;
+	private Long seqnum;
 
 	public FileThread(Socket _socket, FileServer my_fs)
 	{
@@ -155,29 +159,53 @@ public class FileThread extends Thread
 					output.writeObject(response);
 				}
 				else if (e.getMessage().compareTo("DOWNLOADF")==0) {
+
+					if (!e.verify(HMACkey)) {
+						System.out.println("The message has been modified!");
+						socket.close();
+						proceed = false;
+						break;
+					}
+
 					AES aes = new AES();
-
 					String remotePath = (String)aes.cfbDecrypt(agreedKeyFSDH, (byte[][])e.getObjContents().get(0));
-
 					Token t = (Token)aes.cfbDecrypt(agreedKeyFSDH, (byte[][])e.getObjContents().get(1));
+					byte[][] encrypted = (byte[][])e.getObjContents().get(2);
+					Long recv_seq = (Long)aes.cfbDecrypt(agreedKeyFSDH, encrypted);
+					if (!recv_seq.equals(seqnum)) {
+						System.out.println("The message has been reordered!");
+						socket.close();
+						proceed = false;
+						break;
+					}
+					seqnum++;
+					byte[][] enc_seqnum = aes.cfbEncrypt(agreedKeyFSDH, seqnum);
 
 					ShareFile sf = FileServer.fileList.getFile("/"+remotePath);
 
 					if (!t.verifyHash(my_fs.getGroupPublicKey())) {
 						System.out.println("Error: Invalid token signature");
 						e = new Envelope("ERROR_BADTOKEN");
+						e.addObject(enc_seqnum);
+						e.sign(HMACkey);
 						output.writeObject(e);
+						seqnum++;
 					}
 					else if (sf == null) {
 						System.out.printf("Error: File %s doesn't exist\n", remotePath);
 						e = new Envelope("ERROR_FILEMISSING");
+						e.addObject(enc_seqnum);
+						e.sign(HMACkey);
 						output.writeObject(e);
-
+						seqnum++;
 					}
 					else if (!t.getGroups().contains(sf.getGroup())){
 						System.out.printf("Error user %s doesn't have permission\n", t.getSubject());
 						e = new Envelope("ERROR_PERMISSION");
+						e.addObject(enc_seqnum);
+						e.sign(HMACkey);
 						output.writeObject(e);
+						seqnum++;
 					}
 					else {
 
@@ -187,7 +215,10 @@ public class FileThread extends Thread
 						if (!f.exists()) {
 							System.out.printf("Error file %s missing from disk\n", "_"+remotePath.replace('/', '_'));
 							e = new Envelope("ERROR_NOTONDISK");
+							e.addObject(enc_seqnum);
+							e.sign(HMACkey);
 							output.writeObject(e);
+							seqnum++;
 						}
 						else {
 							FileInputStream fis = new FileInputStream(f);
@@ -204,15 +235,34 @@ public class FileThread extends Thread
 									System.out.printf(".");
 								} else if (n < 0) {
 									System.out.println("Read error");
-
 								}
 
 								e.addObject(aes.cfbEncrypt(agreedKeyFSDH, buf));
 								e.addObject(aes.cfbEncrypt(agreedKeyFSDH, new Integer(n)));
+								e.addObject(enc_seqnum);
+								e.sign(HMACkey);
 
 								output.writeObject(e);
+								seqnum++;
 
 								e = (Envelope)input.readObject();
+								if (!e.verify(HMACkey)) {
+									System.out.println("The message has been modified!");
+									socket.close();
+									proceed = false;
+									break;
+								}
+								encrypted = (byte[][])e.getObjContents().get(0);
+								recv_seq = (Long)aes.cfbDecrypt(agreedKeyFSDH, encrypted);
+								if (!recv_seq.equals(seqnum)) {
+									System.out.println("The message has been reordered!");
+									socket.close();
+									proceed = false;
+									break;
+								}
+								seqnum++;
+								enc_seqnum = aes.cfbEncrypt(agreedKeyFSDH, seqnum);
+
 							}
 							while (fis.available()>0);
 
@@ -221,11 +271,32 @@ public class FileThread extends Thread
 							//If server indicates success, return the member list
 							if(e.getMessage().compareTo("DOWNLOADF")==0)
 							{
-
+								System.out.println("\tdone reading chunks");
 								e = new Envelope("EOF");
+								e.addObject(enc_seqnum);
+								e.sign(HMACkey);
 								output.writeObject(e);
+								seqnum++;
 
 								e = (Envelope)input.readObject();
+								if (!e.verify(HMACkey)) {
+									System.out.println("The message has been modified!");
+									socket.close();
+									proceed = false;
+									break;
+								}
+								encrypted = (byte[][])e.getObjContents().get(0);
+								recv_seq = (Long)aes.cfbDecrypt(agreedKeyFSDH, encrypted);
+								if (!recv_seq.equals(seqnum)) {
+									System.out.println("The message has been reordered!");
+									socket.close();
+									proceed = false;
+									break;
+								}
+								seqnum++;
+								enc_seqnum = aes.cfbEncrypt(agreedKeyFSDH, seqnum);
+
+
 								if(e.getMessage().compareTo("OK")==0) {
 									System.out.printf("File data upload successful\n");
 								}
@@ -252,13 +323,30 @@ public class FileThread extends Thread
 					}
 				}
 				else if (e.getMessage().compareTo("DELETEF")==0) {
-					AES aes = new AES();
 
+					if (!e.verify(HMACkey)) {
+						System.out.println("The message has been modified!");
+						socket.close();
+						proceed = false;
+						break;
+					}
+
+					AES aes = new AES();
 					String remotePath = (String)aes.cfbDecrypt(agreedKeyFSDH,
 						(byte[][])e.getObjContents().get(0));
-
 					Token t = (Token)aes.cfbDecrypt(agreedKeyFSDH,
 						(byte[][])e.getObjContents().get(1));
+					byte[][] encrypted = (byte[][])e.getObjContents().get(2);
+					Long recv_seq = (Long)aes.cfbDecrypt(agreedKeyFSDH, encrypted);
+					if (!recv_seq.equals(seqnum)) {
+						System.out.println("The message has been reordered!");
+						socket.close();
+						proceed = false;
+						break;
+					}
+					seqnum++;
+					byte[][] enc_seqnum = aes.cfbEncrypt(agreedKeyFSDH, seqnum);
+
 					ShareFile sf = FileServer.fileList.getFile("/"+remotePath);
 					if (!t.verifyHash(my_fs.getGroupPublicKey())) {
 						System.out.println("Error: Invalid token signature.");
@@ -302,7 +390,10 @@ public class FileThread extends Thread
 							e = new Envelope(e1.getMessage());
 						}
 					}
+					e.addObject(enc_seqnum);
+					e.sign(HMACkey);
 					output.writeObject(e);
+					seqnum++;
 
 				}
 				else if(e.getMessage().equals("DISCONNECT"))
@@ -361,6 +452,30 @@ public class FileThread extends Thread
 					e.addObject(encyrptedN);
 					output.writeObject(e);
 				}
+
+				else if(e.getMessage().equals("EstablishSeqNum")){
+					if (!e.verify(HMACkey)) {
+						System.out.println("The message has been modified!");
+						socket.close();
+						proceed = false;
+						break;
+					}
+
+					AES aes = new AES();
+					byte[][] encrypted =
+						(byte[][])e.getObjContents().get(0);
+
+					seqnum = (Long)aes.cfbDecrypt(agreedKeyFSDH, encrypted);
+					seqnum++;
+
+					response = new Envelope("OK");
+					response.addObject(aes.cfbEncrypt(agreedKeyFSDH, seqnum));
+					response.sign(HMACkey);
+					output.writeObject(response);
+					seqnum++;
+				}
+
+
 			} while(proceed);
 		}
 		catch(Exception e)
@@ -382,14 +497,26 @@ public class FileThread extends Thread
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
-//		PublicKey pk = my_fs.clientCertificates.get(username);
+		//PublicKey pk = my_fs.clientCertificates.get(username);
 
 		try {
 			if (rsa.verifyPkcs1Signature(userPubKey,bytesMsg,sigbytes)){
 				DH dh = new DH();
 				KeyPair keyPairFSDH = dh.generateKeyPair(((DHPublicKey)clientDHPK).getParams());
 				agreedKeyFSDH  =  dh.initiatorAgreementBasic(keyPairFSDH.getPrivate(),clientDHPK);
+
+				try{
+					//generate 2nd DH key based of first one for HMACs
+					MessageDigest d = MessageDigest.getInstance("SHA-256");
+					ByteArrayOutputStream out = new ByteArrayOutputStream();
+					ObjectOutputStream os = new ObjectOutputStream(out);
+					HMACkey = Arrays.copyOfRange(d.digest(out.toByteArray()), 0, 16);
+
+				}catch(Exception e){
+					e.printStackTrace();
+					System.exit(-1);
+				}
+
 				byte [] sig = new byte[0];
 				Envelope msg = new Envelope("OK");
 				try {

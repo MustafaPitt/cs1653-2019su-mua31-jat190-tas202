@@ -135,7 +135,7 @@ public class ClientApplication {
 			return;
 		}
 
-    if (fileClient.isConnected()) System.out.println("--Secure session with FS " + gs_port + " established--");
+    if (fileClient.isConnected()) System.out.println("--Secure session with FS " + fs_port + " established--");
         while(true){ // while you are in file server
 						System.out.println("\n********** FILE SERVER OPERATIONS **********");
             	System.out.println("1) List files\n" +
