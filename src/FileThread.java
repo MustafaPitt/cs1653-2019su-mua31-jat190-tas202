@@ -1,5 +1,7 @@
 /* File worker thread handles the business of uploading, downloading, and removing files for clients with valid tokens */
 
+import org.omg.IOP.ENCODING_CDR_ENCAPS;
+
 import javax.crypto.interfaces.DHPublicKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
@@ -47,13 +49,11 @@ public class FileThread extends Thread
 			{
 				Envelope e = (Envelope)input.readObject();
 				System.out.println("Request received: " + e.getMessage());
-
 				// Handler to list files that this user is allowed to see
 				if(e.getMessage().equals("LFILES")){
 					if (!e.verify(HMACkey)) {
 						System.out.println("The message has been modified!");
 						socket.close();
-						proceed = false;
 						break;
 					}
 
@@ -66,20 +66,40 @@ public class FileThread extends Thread
 					if (!recv_seq.equals(seqnum)) {
 						System.out.println("The message has been reordered!");
 						socket.close();
-						proceed = false;
 						break;
 					}
 					seqnum++;
 					byte[][] enc_seqnum = aes.cfbEncrypt(agreedKeyFSDH, seqnum);
 
+					// check expiration
+					if (checkTokenExpiration(t)){
+						System.out.println("token expired keep checking");
+						Envelope msgToSend = new Envelope("Expired");
+						msgToSend.addObject(enc_seqnum);
+						msgToSend.sign(HMACkey);
+						output.writeObject(msgToSend);
+						seqnum++;
+						break;
+					}
 
+					if (!checkFSPublicKey(t.getFsPublicKey())){
+
+						System.out.println("This token doesn't have permission for this file server");
+						Envelope msgToSend = new Envelope("invalid_fs_pk");
+						msgToSend.addObject(enc_seqnum);
+						msgToSend.sign(HMACkey);
+						output.writeObject(msgToSend);
+						seqnum++;
+						break;
+					}
 					// Verify token
-					if (t == null ||
-						!t.verifyHash(my_fs.getGroupPublicKey()))
+					if (t == null || !t.verifyHash(my_fs.getGroupPublicKey()))
 					{
 						response = new Envelope("FAIL-BADTOKEN");
 						System.out.println("Error: bad token. System Exit");
 					}
+
+
 					else { // Do the actual stuff
 						List<String> files = new ArrayList<String>();
 
@@ -89,8 +109,7 @@ public class FileThread extends Thread
 						}
 
 						// Send response
-						encrypted = aes.cfbEncrypt(
-							agreedKeyFSDH, files);
+						encrypted = aes.cfbEncrypt(agreedKeyFSDH, files);
 						if (encrypted != null) {
 							response = new Envelope("OK");
 							response.addObject(encrypted);
@@ -142,7 +161,6 @@ public class FileThread extends Thread
 								if (!recv_seq.equals(seqnum)) {
 									System.out.println("The message has been reordered!");
 									socket.close();
-									proceed = false;
 									break;
 								}
 								seqnum++;
@@ -179,7 +197,6 @@ public class FileThread extends Thread
 								if (!recv_seq.equals(seqnum)) {
 									System.out.println("The message has been reordered!");
 									socket.close();
-									proceed = false;
 									break;
 								}
 								seqnum++;
@@ -556,7 +573,40 @@ public class FileThread extends Thread
 		}
 	}
 
+	private boolean checkTokenExpiration(Token t) {
+		if (MyTime.isExpired(t.getExpiredTime())){
+			System.out.println("Your token is expired. Please re login again");
+			return true;
+		}
+		return false;
+	}
+
+	private boolean checkFSPublicKey(PublicKey k){
+		System.out.println("called");
+		byte[] k1 = new byte[0];
+		byte[] k2 = new byte[0];
+		try {
+			 k1  =  serialize(my_fs.publicKeyVir);
+			 k2  = serialize(k);
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		System.out.println(Arrays.toString(k1));
+		System.out.println(Arrays.toString(k2));
+		System.out.println("597 " + Arrays.equals(k1,k2));
+		return Arrays.equals(k1,k2);
+	}
+
+	public  byte[] serialize(Serializable obj) throws IOException {
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		ObjectOutputStream os = new ObjectOutputStream(out);
+		os.writeObject(obj);
+		return out.toByteArray();
+	}
+
 	private Envelope establishSecureSessionWithClient(Envelope message) {
+
 		userPubKey = (PublicKey) message.getObjContents().get(0);
 		PublicKey clientDHPK = (PublicKey) message.getObjContents().get(1);
 		byte [] sigbytes = (byte[]) message.getObjContents().get(2);

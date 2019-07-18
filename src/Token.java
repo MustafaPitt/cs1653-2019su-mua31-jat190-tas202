@@ -6,28 +6,44 @@
 
 
 import java.io.*;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.security.*;
 
 public class Token implements UserToken, Serializable {
-	 private String       username;
+	private PublicKey fsPublicKey = null;
+	private String       username;
 	 private String       issuingServer;
 	 private List<String>  groups;
 	 private List<String>  ownership;
 	 private byte[] 			signed_hash_token;
+	 private LocalTime expiredTime;
 
 	 // to be an admin, groups for a user must include "ADMIN" group
 	 // ownership is a list of groups that user owns
 	// groups is just a list of groups the user is part of
-	 Token(String _server, String _username, ArrayList<String> _groups, ArrayList<String> _ownership) {
+	 Token(String _server, String _username, ArrayList<String> _groups, ArrayList<String> _ownership , LocalTime expiredTime) {
 		this.username      = _username;
 		this.issuingServer = _server;
 		this.groups        = _groups;
 		this.ownership     = _ownership;
-		signed_hash_token = null;
+		this.signed_hash_token = null;
+		this.expiredTime = expiredTime;
 	}
+
+	Token(String _server, String _username, ArrayList<String> _groups, ArrayList<String> _ownership , LocalTime expiredTime, PublicKey pk) {
+		this.username      = _username;
+		this.issuingServer = _server;
+		this.groups        = _groups;
+		this.ownership     = _ownership;
+		this.signed_hash_token = null;
+		this.expiredTime = expiredTime;
+		this.fsPublicKey = pk;
+	}
+
+
 
 	public String getIssuer() {
 		return issuingServer;
@@ -43,13 +59,17 @@ public class Token implements UserToken, Serializable {
 		return ownership;
 	}
 
+
+	public  PublicKey getFsPublicKey (){
+	 	return  fsPublicKey;
+	}
+
 	public void updateHashToken(PrivateKey key){
 		try{
 			signed_hash_token = new RSA().generatePkcs1Signature(
 				key, getHash());
 		} catch(Exception e) {
 			e.printStackTrace();
-			return;
 		}
 	}
 
@@ -74,7 +94,8 @@ public class Token implements UserToken, Serializable {
 			os.writeObject(issuingServer);
 			os.writeObject(groups);
 			os.writeObject(ownership);
-
+			os.writeObject(expiredTime);
+			os.writeObject(fsPublicKey);
 			return d.digest(out.toByteArray());
 		} catch (Exception e) {
 			return null;
@@ -92,5 +113,9 @@ public class Token implements UserToken, Serializable {
 		for(String s : ownership){
 			System.out.println(s);
 		}
+	}
+
+	public LocalTime getExpiredTime() {
+		return expiredTime;
 	}
 }

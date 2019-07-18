@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 
-public class Envelope implements java.io.Serializable {
+public class Envelope implements Serializable {
 
 	/**
 	 *
@@ -76,10 +76,7 @@ public class Envelope implements java.io.Serializable {
 			// 	System.out.printf("%02x ", b);
 			// System.out.println("");
 
-			if(Arrays.compare(tempHMAC, hmac) != 0){
-				return false;
-			}
-			return true;
+			return Arrays.equals(tempHMAC,hmac);
 
 		} catch (Exception e) {
 			System.err.println("This message should never appear.");

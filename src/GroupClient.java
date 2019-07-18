@@ -41,7 +41,7 @@ public class GroupClient extends Client implements GroupClientInterface {
 		return isConnected();
 	}
 
-	public UserToken getToken(String username)
+	public UserToken getToken(String username, PublicKey pk )
 	{
 		try
 		{
@@ -53,6 +53,7 @@ public class GroupClient extends Client implements GroupClientInterface {
 			//Tell the server to return a token.
 			message = new Envelope("GET");
 			message.addObject(aes.cfbEncrypt(sharedKeyClientGS,username)); //Add user name string
+			message.addObject(aes.cfbEncrypt(sharedKeyClientGS,pk));
 			message.addObject(aes.cfbEncrypt(sharedKeyClientGS,seqnum));
 
 			message.sign(HMACkey);

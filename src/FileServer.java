@@ -13,7 +13,7 @@ public class FileServer extends Server {
 
 	private KeyPair keyPair;
 	PrivateKey privateKeySig;
-	private PublicKey publicKeyVir;
+	public PublicKey publicKeyVir;
 
 	FileServer() {
 		super(SERVER_PORT, "FilePile");
@@ -244,7 +244,7 @@ class AutoSaveFS extends Thread
 			}
 			catch(Exception e)
 			{
-				System.out.println("Autosave Interrupted");
+				System.out.println("AutoSave Interrupted");
 			}
 		}while(true);
 	}

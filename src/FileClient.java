@@ -32,7 +32,7 @@ public class FileClient extends Client implements FileClientInterface {
 			disconnect();
 		}
 
-		//server challange
+		//server challenge
 		if(serverChallange(publicKeyFSrsa)){
 			System.out.println("--File Server " + port + " is trusted.--");
 		}else{
@@ -213,14 +213,11 @@ public class FileClient extends Client implements FileClientInterface {
 			 // Encrypt the token
 			 AES aes = new AES();
 			 byte[][] token_encrypted = aes.cfbEncrypt(sharedKeyClientFS, token);
-
 			 message.addObject(token_encrypted); //Add requester's token
 			 message.addObject(aes.cfbEncrypt(sharedKeyClientFS,seqnum));
-
- 		   message.sign(HMACkey);
+ 		     message.sign(HMACkey);
 			 output.writeObject(message);
 			 seqnum++;
-
 			 e = (Envelope)input.readObject();
 			 if (!e.verify(HMACkey)) {
 				 System.out.println("The message has been modified!");
@@ -238,11 +235,20 @@ public class FileClient extends Client implements FileClientInterface {
 			 }
 			 seqnum++;
 
+			 if (e.getMessage().equals("Expired")){
+				 System.out.println("Token Expired. Please re-login.");
+				 return null;
+			 }
+
+			 if (e.getMessage().equals("invalid_fs_pk")){
+				 System.out.println("You r token doesn't have permission to access this fileserver");
+				 return null;
+			 }
+
 			 //If server indicates success, return the member list
 			 if(e.getMessage().equals("OK"))
 			 {
-				return (List<String>)aes.cfbDecrypt(sharedKeyClientFS,
-					(byte[][])e.getObjContents().get(0));
+			 	return (List<String>)aes.cfbDecrypt(sharedKeyClientFS, (byte[][])e.getObjContents().get(0));
 					 //This cast creates compiler warnings. Sorry.
 			 }
 

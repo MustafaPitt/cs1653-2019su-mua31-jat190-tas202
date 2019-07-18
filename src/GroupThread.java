@@ -8,6 +8,7 @@ import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
 import java.net.Socket;
 import java.security.*;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.Set;
 
 public class GroupThread extends Thread
 {
+	final int DURATION = 1; // in mint
 	private final Socket socket;
 	private GroupServer my_gs;
 	private byte[] agreedKeyGSDH;
@@ -52,7 +54,6 @@ public class GroupThread extends Thread
 					if (!message.verify(HMACkey)) {
 						System.out.println("The message has been modified!");
 						socket.close();
-						proceed = false;
 						break;
 					}
 
@@ -61,6 +62,8 @@ public class GroupThread extends Thread
 					byte[][] encrypted = (byte[][])message.getObjContents().get(0);
 					String username = (String)aes.cfbDecrypt(agreedKeyGSDH, encrypted); //Get the username
 					encrypted = (byte[][])message.getObjContents().get(1);
+					PublicKey publicKey = (PublicKey) aes.cfbDecrypt(agreedKeyGSDH, encrypted);
+					encrypted = (byte[][])message.getObjContents().get(2);
 					Long recv_seq = (Long)aes.cfbDecrypt(agreedKeyGSDH, encrypted);
 
 					//System.out.println("r: " + recv_seq + "\ns: "+seqnum) ;
@@ -70,7 +73,6 @@ public class GroupThread extends Thread
 						proceed = false;
 						break;
 					}
-
 					seqnum++;
 
 					byte[][] enc_seqnum =
@@ -85,9 +87,10 @@ public class GroupThread extends Thread
 						output.writeObject(response);
 						seqnum++;
 					}
+
 					else
 					{
-						UserToken yourToken = createToken(username); //Create a token
+						UserToken yourToken = createToken(username,publicKey); //Create a token
 						//hashes the token and signs it
 						assert yourToken != null;
 						yourToken.updateHashToken(my_gs.privateKeySig);
@@ -96,7 +99,7 @@ public class GroupThread extends Thread
 						ByteArrayOutputStream out = new ByteArrayOutputStream();
 						ObjectOutputStream os = new ObjectOutputStream(out);
 
-						byte[][] cipherTokenWithIV = new byte[0][0];
+						byte[][] cipherTokenWithIV;
 						SecretKeySpec secretKey = new SecretKeySpec(agreedKeyGSDH,"AES");
 						boolean done = false;
 
@@ -791,14 +794,14 @@ public class GroupThread extends Thread
 	}
 
 	//Method to create tokens
-	private UserToken createToken(String username)
+	private UserToken createToken(String username, PublicKey pk)
 	{
 		//Check that user exists
 		if(my_gs.userList.checkUser(username))
 		{
 			//Issue a new token with server's name, user's name, and user's groups
 			UserToken yourToken = new Token(my_gs.name, username, my_gs.userList.getUserGroups(username),
-					my_gs.userList.getUserOwnership(username));
+					my_gs.userList.getUserOwnership(username), MyTime.setDurationInMint(DURATION),pk);
 			return yourToken;
 		}
 		else
@@ -936,7 +939,7 @@ public class GroupThread extends Thread
 					{
 						//Use the delete group method. Token must be created for this action
 						deleteGroup(deleteOwnedGroup.get(index), new Token(my_gs.name, username, deleteOwnedGroup,
-								my_gs.userList.getUserOwnership(username)));
+								my_gs.userList.getUserOwnership(username),MyTime.setDurationInMint(DURATION)));
 					}
 
 					// remove all groups that user own

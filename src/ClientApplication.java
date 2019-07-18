@@ -107,6 +107,13 @@ public class ClientApplication {
 	 	scanner.nextLine();
 	 	String pw = scanner.nextLine();
 
+		System.out.print("Enter FILE server address: ");
+		String fs_server_name = scanner.nextLine();
+		System.out.print("Enter FILE server port number: ");
+		int fs_port = scanner.nextInt();
+		// add fs public key to the token
+		PublicKey fsPk = getPublicKey(fs_port + "FS_rsaPublic.bin");
+
 	 	if (!groupClient.connect(gs_server_name, gs_port,
 				clientSigPK,groupServerPublicKeyVir, username)) {
 			System.out.println("Error connecting.");
@@ -118,12 +125,8 @@ public class ClientApplication {
 		 	System.out.println("Incorrect username or password -- Cannot connect to Group Server.");
 		 	return;
 	 	}
-    token = groupClient.getToken(username); //update token
+        token = groupClient.getToken(username,fsPk); //update token
 		groupClient.disconnect();
-		System.out.print("Enter FILE server address: ");
-		String fs_server_name = scanner.nextLine();
-		System.out.print("Enter FILE server port number: ");
-		int fs_port = scanner.nextInt();
 		fileServerPublicKeyVir  = getPublicKey(fs_port + fsPubKeyFile);
 
     fileClient = new FileClient();
@@ -145,6 +148,10 @@ public class ClientApplication {
                 String input = scanner.next();
 
 				if (input.equals("1")) { // list files
+					if (fileClient.listFiles(token) == null){
+						fileClient.disconnect();
+						return;
+					}
 					System.out.println("\n" + fileClient.listFiles(token));
 				}
 
@@ -223,7 +230,7 @@ public class ClientApplication {
 			 return;
 		 }
 
-		 token = groupClient.getToken(username); //update token
+		 token = groupClient.getToken(username,null); //update token
 		 if(token != null) groupServerMenu();
 		 else System.out.println("Couldn't verify your user name");
 		 }
@@ -243,7 +250,7 @@ public class ClientApplication {
         while (true) {
 
 
-        	token = groupClient.getToken(token.getSubject()); //update token
+        	token = groupClient.getToken(token.getSubject(),null); //update token
 
 
 			System.out.println("\n********** GROUP SERVER OPERATIONS **********");
