@@ -115,7 +115,7 @@ public class FileClient extends Client implements FileClientInterface {
 					    Envelope env = new Envelope("DOWNLOADF"); //Success
 					    env.addObject(aes.cfbEncrypt(sharedKeyClientFS, sourceFile));
 					    env.addObject(aes.cfbEncrypt(sharedKeyClientFS, token));
-							env.addObject(aes.cfbEncrypt(sharedKeyClientFS,seqnum));
+							env.addObject(aes.cfbEncrypt(sharedKeyClientFS, seqnum));
 
 							env.sign(HMACkey);
 					    output.writeObject(env);
@@ -215,9 +215,28 @@ public class FileClient extends Client implements FileClientInterface {
 			 byte[][] token_encrypted = aes.cfbEncrypt(sharedKeyClientFS, token);
 
 			 message.addObject(token_encrypted); //Add requester's token
+			 message.addObject(aes.cfbEncrypt(sharedKeyClientFS,seqnum));
+
+ 		   message.sign(HMACkey);
 			 output.writeObject(message);
+			 seqnum++;
 
 			 e = (Envelope)input.readObject();
+			 if (!e.verify(HMACkey)) {
+				 System.out.println("The message has been modified!");
+				 disconnect();
+			 }
+			 ArrayList<Object> temp = null;
+			 temp = e.getObjContents();
+			 Long recv_seq = (Long)aes.cfbDecrypt(sharedKeyClientFS,
+				 (byte[][])temp.get(temp.size() - 1));
+
+			 //System.out.println("r: " + recv_seq + "\ns: " +seqnum);
+			 if (!(recv_seq.equals(seqnum))) {
+				 System.out.println("The message has been reordered!");
+				 disconnect();
+			 }
+			 seqnum++;
 
 			 //If server indicates success, return the member list
 			 if(e.getMessage().equals("OK"))
@@ -254,12 +273,30 @@ public class FileClient extends Client implements FileClientInterface {
 			 message.addObject(aes.cfbEncrypt(sharedKeyClientFS, destFile));
 			 message.addObject(aes.cfbEncrypt(sharedKeyClientFS, group));
 			 message.addObject(aes.cfbEncrypt(sharedKeyClientFS, token));
-			 output.writeObject(message);
+			 message.addObject(aes.cfbEncrypt(sharedKeyClientFS,seqnum));
 
+			 message.sign(HMACkey);
+			 output.writeObject(message);
+			 seqnum++;
 
 			 FileInputStream fis = new FileInputStream(sourceFile);
 
 			 env = (Envelope)input.readObject();
+			 if (!env.verify(HMACkey)) {
+					System.out.println("The message has been modified!");
+					disconnect();
+				}
+				ArrayList<Object> temp = null;
+				temp = env.getObjContents();
+				Long recv_seq = (Long)aes.cfbDecrypt(sharedKeyClientFS,
+					(byte[][])temp.get(temp.size() - 1));
+
+				//System.out.println("r: " + recv_seq + "\ns: " +seqnum);
+				if (!(recv_seq.equals(seqnum))) {
+					System.out.println("The message has been reordered!");
+					disconnect();
+				}
+				seqnum++;
 
 			 //If server indicates success, return the member list
 			 if(env.getMessage().equals("READY"))
@@ -288,17 +325,29 @@ public class FileClient extends Client implements FileClientInterface {
 						System.out.println("Read error");
 						return false;
 					}
-
 					message.addObject(aes.cfbEncrypt(sharedKeyClientFS, buf));
 					message.addObject(aes.cfbEncrypt(sharedKeyClientFS, new Integer(n)));
+					message.addObject(aes.cfbEncrypt(sharedKeyClientFS,seqnum));
 
-
+					message.sign(HMACkey);
 					output.writeObject(message);
-
+					seqnum++;
 
 					env = (Envelope)input.readObject();
+					if (!env.verify(HMACkey)) {
+						System.out.println("The message has been modified!");
+						disconnect();
+					}
+					temp = env.getObjContents();
+					recv_seq = (Long)aes.cfbDecrypt(sharedKeyClientFS,
+						(byte[][])temp.get(temp.size() - 1));
 
-
+					//System.out.println("r: " + recv_seq + "\ns: " +seqnum);
+					if (!(recv_seq.equals(seqnum))) {
+						System.out.println("The message has been reordered!");
+						disconnect();
+					}
+					seqnum++;
 			 }
 			 while (fis.available()>0);
 
@@ -307,9 +356,27 @@ public class FileClient extends Client implements FileClientInterface {
 			 {
 
 				message = new Envelope("EOF");
+				message.addObject(aes.cfbEncrypt(sharedKeyClientFS,seqnum));
+				message.sign(HMACkey);
 				output.writeObject(message);
+				seqnum++;
 
 				env = (Envelope)input.readObject();
+				if (!env.verify(HMACkey)) {
+					System.out.println("The message has been modified!");
+					disconnect();
+				}
+				temp = env.getObjContents();
+				recv_seq = (Long)aes.cfbDecrypt(sharedKeyClientFS,
+					(byte[][])temp.get(temp.size() - 1));
+
+				//System.out.println("r: " + recv_seq + "\ns: " +seqnum);
+				if (!(recv_seq.equals(seqnum))) {
+					System.out.println("The message has been reordered!");
+					disconnect();
+				}
+				seqnum++;
+
 				if(env.getMessage().compareTo("OK")==0) {
 					System.out.printf("\nFile data upload successful\n");
 				}
@@ -334,6 +401,8 @@ public class FileClient extends Client implements FileClientInterface {
 				}
 		 return true;
 	}
+
+
 
 	public void establishSecureSessionWithFS(final int port, PrivateKey
 		pkSig, PublicKey userPubKey, PublicKey publicKeyFSrsa)throws GeneralSecurityException {

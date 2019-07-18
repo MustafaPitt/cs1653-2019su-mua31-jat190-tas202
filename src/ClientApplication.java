@@ -33,20 +33,15 @@ public class ClientApplication {
 
 	public static void main (String []args){
 
-		try {
-			if(args.length != 2) {
-				System.out.println("Usage: java -cp '.;bcprov' <user_private_key> <user_public_key>");
-				System.exit(0);
-			}
-			clientSigPK = getClientPrivateKey(args[0]);
-			clientPubKey = getPublicKey(args[1]);
+
+			// if(args.length != 2) {
+			// 	System.out.println("Usage: java -cp '.;bcprov' <user_private_key> <user_public_key>");
+			// 	System.exit(0);
+			// }
+			// clientSigPK = getClientPrivateKey(args[0]);
+			// clientPubKey = getPublicKey(args[1]);
 			groupServerPublicKeyVir = getPublicKey(gsPubKeyFile);
 
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
 
 
 		groupClient = new GroupClient();
@@ -59,6 +54,10 @@ public class ClientApplication {
 				System.out.print("Username: ");
 				username = scanner.nextLine();
 				signedIn = true;
+				try{
+					clientSigPK = getClientPrivateKey(username + "_Private.bin");
+					clientPubKey = getPublicKey(username + "_Public.bin");
+				}catch(Exception e){ e.printStackTrace(); }
 			}
 
 			System.out.println("\n1)Login to group server 2) Connect to File Server 3) Exit");

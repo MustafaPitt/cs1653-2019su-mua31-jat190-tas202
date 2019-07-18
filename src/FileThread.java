@@ -49,12 +49,29 @@ public class FileThread extends Thread
 				System.out.println("Request received: " + e.getMessage());
 
 				// Handler to list files that this user is allowed to see
-				if(e.getMessage().equals("LFILES"))
-				{
+				if(e.getMessage().equals("LFILES")){
+					if (!e.verify(HMACkey)) {
+						System.out.println("The message has been modified!");
+						socket.close();
+						proceed = false;
+						break;
+					}
+
 					// Decrypt message
 					AES aes = new AES();
 					byte[][] encrypted = (byte[][])e.getObjContents().get(0);
 					Token t = (Token)aes.cfbDecrypt(agreedKeyFSDH, encrypted);
+					encrypted = (byte[][])e.getObjContents().get(1);
+					Long recv_seq = (Long)aes.cfbDecrypt(agreedKeyFSDH, encrypted);
+					if (!recv_seq.equals(seqnum)) {
+						System.out.println("The message has been reordered!");
+						socket.close();
+						proceed = false;
+						break;
+					}
+					seqnum++;
+					byte[][] enc_seqnum = aes.cfbEncrypt(agreedKeyFSDH, seqnum);
+
 
 					// Verify token
 					if (t == null ||
@@ -82,13 +99,22 @@ public class FileThread extends Thread
 							response = new Envelope("FAIL");
 						}
 					}
-
+					response.addObject(enc_seqnum);
+					response.sign(HMACkey);
 					output.writeObject(response);
+					seqnum++;
 				}
-				if(e.getMessage().equals("UPLOADF"))
-				{
 
-					if(e.getObjContents().size() < 3)
+				if(e.getMessage().equals("UPLOADF")){
+
+					if (!e.verify(HMACkey)) {
+						System.out.println("The message has been modified!");
+						socket.close();
+						proceed = false;
+						break;
+					}
+
+					if(e.getObjContents().size() < 4)
 					{
 						response = new Envelope("FAIL-BADCONTENTS");
 					}
@@ -111,6 +137,17 @@ public class FileThread extends Thread
 								(byte[][])e.getObjContents().get(1));
 							UserToken yourToken = (UserToken)aes.cfbDecrypt(agreedKeyFSDH,
 								(byte[][])e.getObjContents().get(2));
+							byte[][] encrypted = (byte[][])e.getObjContents().get(3);
+							Long recv_seq = (Long)aes.cfbDecrypt(agreedKeyFSDH, encrypted);
+								if (!recv_seq.equals(seqnum)) {
+									System.out.println("The message has been reordered!");
+									socket.close();
+									proceed = false;
+									break;
+								}
+								seqnum++;
+								byte[][] enc_seqnum = aes.cfbEncrypt(agreedKeyFSDH, seqnum);
+
 
 							if (!yourToken.verifyHash(my_fs.getGroupPublicKey())) {
 								System.out.println("Error: Invalid token signature");
@@ -131,17 +168,47 @@ public class FileThread extends Thread
 								System.out.printf("Successfully created file %s\n", remotePath.replace('/', '_'));
 
 								response = new Envelope("READY"); //Success
+								response.addObject(enc_seqnum);
+								response.sign(HMACkey);
 								output.writeObject(response);
+								seqnum++;
 
 								e = (Envelope)input.readObject();
+								encrypted = (byte[][])e.getObjContents().get(2);
+								recv_seq = (Long)aes.cfbDecrypt(agreedKeyFSDH, encrypted);
+								if (!recv_seq.equals(seqnum)) {
+									System.out.println("The message has been reordered!");
+									socket.close();
+									proceed = false;
+									break;
+								}
+								seqnum++;
+								enc_seqnum = aes.cfbEncrypt(agreedKeyFSDH, seqnum);
+
 								while (e.getMessage().compareTo("CHUNK")==0) {
 									fos.write((byte[])aes.cfbDecrypt(agreedKeyFSDH, (byte[][]) e.getObjContents().get(0)), 0,
 										(Integer)aes.cfbDecrypt(agreedKeyFSDH, (byte[][])e.getObjContents().get(1)));
 									response = new Envelope("READY"); //Success
+									response.addObject(enc_seqnum);
+									response.sign(HMACkey);
 									output.writeObject(response);
+									seqnum++;
+
 									e = (Envelope)input.readObject();
+									//System.out.println(e.getMessage() + " size: " + e.getObjContents().size());
+									encrypted = (byte[][])e.getObjContents().get(e.getObjContents().size()-1);
+									recv_seq = (Long)aes.cfbDecrypt(agreedKeyFSDH, encrypted);
+									if (!recv_seq.equals(seqnum)) {
+										System.out.println("The message has been reordered!");
+										socket.close();
+										proceed = false;
+										break;
+									}
+									seqnum++;
+									enc_seqnum = aes.cfbEncrypt(agreedKeyFSDH, seqnum);
 								}
 
+								System.out.println("\tdone reading chunks");
 								if(e.getMessage().compareTo("EOF")==0) {
 									System.out.printf("Transfer successful file %s\n", remotePath);
 									FileServer.fileList.addFile(yourToken.getSubject(), group, remotePath);
@@ -155,8 +222,12 @@ public class FileThread extends Thread
 							}
 						}
 					}
-
+					byte[][] enc_seqnum = new AES().cfbEncrypt(agreedKeyFSDH, seqnum);
+					response.addObject(enc_seqnum);
+					response.sign(HMACkey);
 					output.writeObject(response);
+					seqnum++;
+
 				}
 				else if (e.getMessage().compareTo("DOWNLOADF")==0) {
 
