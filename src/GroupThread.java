@@ -16,7 +16,7 @@ import java.util.Set;
 
 public class GroupThread extends Thread
 {
-	final int DURATION = 1; // in mint
+	final int DURATION = 30; // in mint
 	private final Socket socket;
 	private GroupServer my_gs;
 	private byte[] agreedKeyGSDH;

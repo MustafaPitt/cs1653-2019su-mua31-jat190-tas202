@@ -107,6 +107,8 @@ public class ClientApplication {
 	 	scanner.nextLine();
 	 	String pw = scanner.nextLine();
 
+		System.out.println("");
+
 		System.out.print("Enter FILE server address: ");
 		String fs_server_name = scanner.nextLine();
 		System.out.print("Enter FILE server port number: ");
@@ -137,8 +139,6 @@ public class ClientApplication {
 			return;
 		}
 
-		Token t = (Token)token;
-		System.out.println(t.getFsPublicKey());
 
     if (fileClient.isConnected()) System.out.println("--Secure session with FS " + fs_port + " established--");
         while(true){ // while you are in file server
@@ -171,7 +171,11 @@ public class ClientApplication {
 					System.out.print("Group?: ");
 					group = scanner.nextLine();
 
-					fileClient.upload(source, dest, group, token);
+					if(fileClient.upload(source, dest, group, token) == false){
+						fileClient.disconnect();
+						return;
+					}
+
 				}
 
 				if (input.equals("3")) { // Download a file
@@ -184,7 +188,11 @@ public class ClientApplication {
 					System.out.print("Dest?: ");
 					dest = scanner.nextLine();
 
-					fileClient.download(source, dest, token);
+					if(fileClient.download(source, dest, token) == false){
+						fileClient.disconnect();
+						return;
+					}
+
 				}
 
 				if (input.equals("4")) { // Delete a file
@@ -194,7 +202,11 @@ public class ClientApplication {
 					scanner.nextLine();
 					filename = scanner.nextLine();
 
-					fileClient.delete(filename, token);
+					if(fileClient.delete(filename, token) == false){
+						fileClient.disconnect();
+						return;
+					}
+
 				}
 
         if(input.equals("5")) {

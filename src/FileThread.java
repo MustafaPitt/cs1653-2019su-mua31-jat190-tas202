@@ -62,9 +62,6 @@ public class FileThread extends Thread
 					Token t = (Token)aes.cfbDecrypt(agreedKeyFSDH, encrypted);
 					encrypted = (byte[][])e.getObjContents().get(1);
 
-					System.out.println(my_fs.publicKeyVir);
-					System.out.println(t.getFsPublicKey());
-
 					Long recv_seq = (Long)aes.cfbDecrypt(agreedKeyFSDH, encrypted);
 					if (!recv_seq.equals(seqnum)) {
 						System.out.println("The message has been reordered!");
@@ -157,8 +154,9 @@ public class FileThread extends Thread
 								(byte[][])e.getObjContents().get(0));
 							String group = (String)aes.cfbDecrypt(agreedKeyFSDH,
 								(byte[][])e.getObjContents().get(1));
-							UserToken yourToken = (UserToken)aes.cfbDecrypt(agreedKeyFSDH,
+							Token yourToken = (Token)aes.cfbDecrypt(agreedKeyFSDH,
 								(byte[][])e.getObjContents().get(2));
+
 							byte[][] encrypted = (byte[][])e.getObjContents().get(3);
 							Long recv_seq = (Long)aes.cfbDecrypt(agreedKeyFSDH, encrypted);
 								if (!recv_seq.equals(seqnum)) {
@@ -169,6 +167,27 @@ public class FileThread extends Thread
 								seqnum++;
 								byte[][] enc_seqnum = aes.cfbEncrypt(agreedKeyFSDH, seqnum);
 
+								// check expiration
+								if (checkTokenExpiration(yourToken)){
+									System.out.println("token expired keep checking");
+									Envelope msgToSend = new Envelope("Expired");
+									msgToSend.addObject(enc_seqnum);
+									msgToSend.sign(HMACkey);
+									output.writeObject(msgToSend);
+									seqnum++;
+									break;
+								}
+
+								if (!checkFSPublicKey(yourToken.getFsPublicKey())){
+
+									System.out.println("This token doesn't have permission for this file server");
+									Envelope msgToSend = new Envelope("invalid_fs_pk");
+									msgToSend.addObject(enc_seqnum);
+									msgToSend.sign(HMACkey);
+									output.writeObject(msgToSend);
+									seqnum++;
+									break;
+								}
 
 							if (!yourToken.verifyHash(my_fs.getGroupPublicKey())) {
 								System.out.println("Error: Invalid token signature");
@@ -271,6 +290,28 @@ public class FileThread extends Thread
 					}
 					seqnum++;
 					byte[][] enc_seqnum = aes.cfbEncrypt(agreedKeyFSDH, seqnum);
+
+					// check expiration
+					if (checkTokenExpiration(t)){
+						System.out.println("token expired keep checking");
+						Envelope msgToSend = new Envelope("Expired");
+						msgToSend.addObject(enc_seqnum);
+						msgToSend.sign(HMACkey);
+						output.writeObject(msgToSend);
+						seqnum++;
+						break;
+					}
+
+					if (!checkFSPublicKey(t.getFsPublicKey())){
+
+						System.out.println("This token doesn't have permission for this file server");
+						Envelope msgToSend = new Envelope("invalid_fs_pk");
+						msgToSend.addObject(enc_seqnum);
+						msgToSend.sign(HMACkey);
+						output.writeObject(msgToSend);
+						seqnum++;
+						break;
+					}
 
 					ShareFile sf = FileServer.fileList.getFile("/"+remotePath);
 
@@ -437,6 +478,28 @@ public class FileThread extends Thread
 					}
 					seqnum++;
 					byte[][] enc_seqnum = aes.cfbEncrypt(agreedKeyFSDH, seqnum);
+
+					// check expiration
+					if (checkTokenExpiration(t)){
+						System.out.println("token expired keep checking");
+						Envelope msgToSend = new Envelope("Expired");
+						msgToSend.addObject(enc_seqnum);
+						msgToSend.sign(HMACkey);
+						output.writeObject(msgToSend);
+						seqnum++;
+						break;
+					}
+
+					if (!checkFSPublicKey(t.getFsPublicKey())){
+
+						System.out.println("This token doesn't have permission for this file server");
+						Envelope msgToSend = new Envelope("invalid_fs_pk");
+						msgToSend.addObject(enc_seqnum);
+						msgToSend.sign(HMACkey);
+						output.writeObject(msgToSend);
+						seqnum++;
+						break;
+					}
 
 					ShareFile sf = FileServer.fileList.getFile("/"+remotePath);
 					if (!t.verifyHash(my_fs.getGroupPublicKey())) {

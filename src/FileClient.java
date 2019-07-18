@@ -82,6 +82,16 @@ public class FileClient extends Client implements FileClientInterface {
 				}
 				seqnum++;
 
+				if (env.getMessage().equals("Expired")){
+					System.out.println("Token Expired. Please re-login.");
+					return false;
+				}
+
+				if (env.getMessage().equals("invalid_fs_pk")){
+					System.out.println("Your token doesn't have permission to access this fileserver");
+					return false;
+				}
+
 				if (env.getMessage().compareTo("OK")==0) {
 					System.out.printf("File %s deleted successfully\n", filename);
 				}
@@ -137,6 +147,16 @@ public class FileClient extends Client implements FileClientInterface {
 								disconnect();
 							}
 							seqnum++;
+
+							if (env.getMessage().equals("Expired")){
+								System.out.println("Token Expired. Please re-login.");
+								return false;
+							}
+
+							if (env.getMessage().equals("invalid_fs_pk")){
+								System.out.println("Your token doesn't have permission to access this fileserver");
+								return false;
+							}
 
 							while (env.getMessage().compareTo("CHUNK")==0) {
 									fos.write((byte[])aes.cfbDecrypt(sharedKeyClientFS,
@@ -209,9 +229,6 @@ public class FileClient extends Client implements FileClientInterface {
 			 Envelope message = null, e = null;
 			 //Tell the server to return the member list
 			 message = new Envelope("LFILES");
-
-			 Token t = (Token)token;
-	 		 System.out.println(t.getFsPublicKey());
 
 			 // Encrypt the token
 			 AES aes = new AES();
@@ -306,6 +323,16 @@ public class FileClient extends Client implements FileClientInterface {
 					disconnect();
 				}
 				seqnum++;
+
+				if (env.getMessage().equals("Expired")){
+					System.out.println("Token Expired. Please re-login.");
+					return false;
+				}
+
+				if (env.getMessage().equals("invalid_fs_pk")){
+					System.out.println("Your token doesn't have permission to access this fileserver");
+					return false;
+				}
 
 			 //If server indicates success, return the member list
 			 if(env.getMessage().equals("READY"))

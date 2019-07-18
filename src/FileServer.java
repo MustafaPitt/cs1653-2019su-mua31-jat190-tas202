@@ -63,7 +63,7 @@ public class FileServer extends Server {
 			FileInputStream fis = new FileInputStream(super.port + "FS_rsaPublic.bin");
 			fileStream = new ObjectInputStream(fis);
 			publicKeyVir = (PublicKey)fileStream.readObject();
-			System.out.println(publicKeyVir);
+
 
 			fis = new FileInputStream(super.port + "FS_rsaPrivate.bin");
 			fileStream = new ObjectInputStream(fis);
