@@ -15,6 +15,8 @@ public class FileServer extends Server {
 	PrivateKey privateKeySig;
 	public PublicKey publicKeyVir;
 
+ 	private PublicKey GSpubKey;
+
 	FileServer() {
 		super(SERVER_PORT, "FilePile");
 	}
@@ -23,8 +25,8 @@ public class FileServer extends Server {
 		super(_port, "FilePile");
 	}
 
-	public PublicKey getGroupPublicKey() {
-		return publicKeyVir;
+	public PublicKey getGroupPublicKey(){
+		return GSpubKey;
 	}
 
 	public void start() {
@@ -61,6 +63,7 @@ public class FileServer extends Server {
 			FileInputStream fis = new FileInputStream(super.port + "FS_rsaPublic.bin");
 			fileStream = new ObjectInputStream(fis);
 			publicKeyVir = (PublicKey)fileStream.readObject();
+			System.out.println(publicKeyVir);
 
 			fis = new FileInputStream(super.port + "FS_rsaPrivate.bin");
 			fileStream = new ObjectInputStream(fis);
@@ -97,62 +100,62 @@ public class FileServer extends Server {
 		try{
 			FileInputStream fis = new FileInputStream("rsaPublicKeyVir.bin");
 			fileStream = new ObjectInputStream(fis);
-			publicKeyVir = (PublicKey)fileStream.readObject();
+			GSpubKey = (PublicKey)fileStream.readObject();
 		}catch(Exception e){
 			e.printStackTrace();
 			System.out.println("Group Server public key not found can't continue");
 		}
-		//try to open rsa files
-		try{
-			FileInputStream fis = new FileInputStream(super.port + "FS_rsaPublic.bin");
-			fileStream = new ObjectInputStream(fis);
-			publicKeyVir = (PublicKey)fileStream.readObject();
-
-			fis = new FileInputStream(super.port + "FS_rsaPrivate.bin");
-			fileStream = new ObjectInputStream(fis);
-			privateKeySig = (PrivateKey)fileStream.readObject();
-
-
-		}catch(FileNotFoundException e){
-			System.out.println("rsa keys do not exist. Creating keys...");
-			try{
-				RSA rsa = new RSA();
-				keyPair = rsa.generateKeyPair();
-				privateKeySig = keyPair.getPrivate();
-				publicKeyVir = keyPair.getPublic();
-			} catch (GeneralSecurityException e1) {
-				e1.printStackTrace();
-			}
-
-
-
-
-			ObjectOutputStream outStreamGroup;
-			try {
-				// save keys
-				outStreamGroup = new ObjectOutputStream(new FileOutputStream(super.port + "FS_rsaPublic.bin"));
-				outStreamGroup.writeObject(publicKeyVir);
-				outStreamGroup.close();
-
-				outStreamGroup = new ObjectOutputStream(new FileOutputStream(super.port + "FS_rsaPrivate.bin"));
-				outStreamGroup.writeObject(privateKeySig);
-				outStreamGroup.close();
+		// //try to open rsa files
+		// try{
+		// 	FileInputStream fis = new FileInputStream(super.port + "FS_rsaPublic.bin");
+		// 	fileStream = new ObjectInputStream(fis);
+		// 	publicKeyVir = (PublicKey)fileStream.readObject();
+		//
+		// 	fis = new FileInputStream(super.port + "FS_rsaPrivate.bin");
+		// 	fileStream = new ObjectInputStream(fis);
+		// 	privateKeySig = (PrivateKey)fileStream.readObject();
+		//
+		//
+		// }catch(FileNotFoundException e){
+		// 	System.out.println("rsa keys do not exist. Creating keys...");
+		// 	try{
+		// 		RSA rsa = new RSA();
+		// 		keyPair = rsa.generateKeyPair();
+		// 		privateKeySig = keyPair.getPrivate();
+		// 		publicKeyVir = keyPair.getPublic();
+		// 	} catch (GeneralSecurityException e1) {
+		// 		e1.printStackTrace();
+		// 	}
+		//
 
 
-			}catch(Exception ex){ ex.printStackTrace();}
 
-			fileList = new FileList();
-
-		}catch(Exception ex){ ex.printStackTrace();}
-
-		try{
-			FileInputStream fis = new FileInputStream("rsaPublicKeyVir.bin");
-			fileStream = new ObjectInputStream(fis);
-			publicKeyVir = (PublicKey)fileStream.readObject();
-		}catch(Exception e){
-			e.printStackTrace();
-			System.out.println("Group Server public key not found can't continue");
-		}
+		// 	ObjectOutputStream outStreamGroup;
+		// 	try {
+		// 		// save keys
+		// 		outStreamGroup = new ObjectOutputStream(new FileOutputStream(super.port + "FS_rsaPublic.bin"));
+		// 		outStreamGroup.writeObject(publicKeyVir);
+		// 		outStreamGroup.close();
+		//
+		// 		outStreamGroup = new ObjectOutputStream(new FileOutputStream(super.port + "FS_rsaPrivate.bin"));
+		// 		outStreamGroup.writeObject(privateKeySig);
+		// 		outStreamGroup.close();
+		//
+		//
+		// 	}catch(Exception ex){ ex.printStackTrace();}
+		//
+		// 	fileList = new FileList();
+		//
+		// }catch(Exception ex){ ex.printStackTrace();}
+		//
+		// try{
+		// 	FileInputStream fis = new FileInputStream("rsaPublicKeyVir.bin");
+		// 	fileStream = new ObjectInputStream(fis);
+		// 	publicKeyVir = (PublicKey)fileStream.readObject();
+		// }catch(Exception e){
+		// 	e.printStackTrace();
+		// 	System.out.println("Group Server public key not found can't continue");
+		// }
 
 		File file = new File("shared_files");
 		 if (file.mkdir()) {

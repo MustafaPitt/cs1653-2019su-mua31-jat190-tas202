@@ -1,5 +1,3 @@
-package guitemp;
-
 import javax.swing.*;
 import java.awt.event.WindowEvent;
 

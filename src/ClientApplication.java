@@ -125,7 +125,7 @@ public class ClientApplication {
 		 	System.out.println("Incorrect username or password -- Cannot connect to Group Server.");
 		 	return;
 	 	}
-        token = groupClient.getToken(username,fsPk); //update token
+    token = groupClient.getToken(username,fsPk); //update token
 		groupClient.disconnect();
 		fileServerPublicKeyVir  = getPublicKey(fs_port + fsPubKeyFile);
 
@@ -136,6 +136,9 @@ public class ClientApplication {
 			fileClient.disconnect();
 			return;
 		}
+
+		Token t = (Token)token;
+		System.out.println(t.getFsPublicKey());
 
     if (fileClient.isConnected()) System.out.println("--Secure session with FS " + fs_port + " established--");
         while(true){ // while you are in file server

@@ -210,6 +210,9 @@ public class FileClient extends Client implements FileClientInterface {
 			 //Tell the server to return the member list
 			 message = new Envelope("LFILES");
 
+			 Token t = (Token)token;
+	 		 System.out.println(t.getFsPublicKey());
+
 			 // Encrypt the token
 			 AES aes = new AES();
 			 byte[][] token_encrypted = aes.cfbEncrypt(sharedKeyClientFS, token);
@@ -241,7 +244,7 @@ public class FileClient extends Client implements FileClientInterface {
 			 }
 
 			 if (e.getMessage().equals("invalid_fs_pk")){
-				 System.out.println("You r token doesn't have permission to access this fileserver");
+				 System.out.println("Your token doesn't have permission to access this fileserver");
 				 return null;
 			 }
 

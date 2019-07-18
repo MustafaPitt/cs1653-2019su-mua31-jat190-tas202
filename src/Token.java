@@ -60,7 +60,7 @@ public class Token implements UserToken, Serializable {
 	}
 
 
-	public  PublicKey getFsPublicKey (){
+	public PublicKey getFsPublicKey (){
 	 	return  fsPublicKey;
 	}
 

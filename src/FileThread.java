@@ -1,7 +1,5 @@
 /* File worker thread handles the business of uploading, downloading, and removing files for clients with valid tokens */
 
-import org.omg.IOP.ENCODING_CDR_ENCAPS;
-
 import javax.crypto.interfaces.DHPublicKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
@@ -51,6 +49,7 @@ public class FileThread extends Thread
 				System.out.println("Request received: " + e.getMessage());
 				// Handler to list files that this user is allowed to see
 				if(e.getMessage().equals("LFILES")){
+
 					if (!e.verify(HMACkey)) {
 						System.out.println("The message has been modified!");
 						socket.close();
@@ -62,6 +61,10 @@ public class FileThread extends Thread
 					byte[][] encrypted = (byte[][])e.getObjContents().get(0);
 					Token t = (Token)aes.cfbDecrypt(agreedKeyFSDH, encrypted);
 					encrypted = (byte[][])e.getObjContents().get(1);
+
+					System.out.println(my_fs.publicKeyVir);
+					System.out.println(t.getFsPublicKey());
+
 					Long recv_seq = (Long)aes.cfbDecrypt(agreedKeyFSDH, encrypted);
 					if (!recv_seq.equals(seqnum)) {
 						System.out.println("The message has been reordered!");
@@ -575,26 +578,25 @@ public class FileThread extends Thread
 
 	private boolean checkTokenExpiration(Token t) {
 		if (MyTime.isExpired(t.getExpiredTime())){
-			System.out.println("Your token is expired. Please re login again");
+			System.out.println("Your token is expired. Please re-login");
 			return true;
 		}
 		return false;
 	}
 
 	private boolean checkFSPublicKey(PublicKey k){
-		System.out.println("called");
 		byte[] k1 = new byte[0];
 		byte[] k2 = new byte[0];
 		try {
 			 k1  =  serialize(my_fs.publicKeyVir);
-			 k2  = serialize(k);
+			 k2  =  serialize(k);
 
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		System.out.println(Arrays.toString(k1));
-		System.out.println(Arrays.toString(k2));
-		System.out.println("597 " + Arrays.equals(k1,k2));
+		//System.out.println(Arrays.toString(k1));
+		//System.out.println(Arrays.toString(k2));
+		System.out.println(Arrays.equals(k1,k2));
 		return Arrays.equals(k1,k2);
 	}
 

@@ -101,7 +101,7 @@ public class GroupThread extends Thread
 
 						byte[][] cipherTokenWithIV;
 						SecretKeySpec secretKey = new SecretKeySpec(agreedKeyGSDH,"AES");
-						boolean done = false;
+
 
 						try {
 							os.writeObject(yourToken);
@@ -112,15 +112,15 @@ public class GroupThread extends Thread
 							return;
 						}
 
-						if(!done){
-							//Respond to the client. On error, the client will receive a null token
-							response = new Envelope("OK");
-							response.addObject(cipherTokenWithIV);
-							response.addObject(enc_seqnum);
-							response.sign(HMACkey);
-							output.writeObject(response);
-							seqnum++;
-						}
+
+						//Respond to the client. On error, the client will receive a null token
+						response = new Envelope("OK");
+						response.addObject(cipherTokenWithIV);
+						response.addObject(enc_seqnum);
+						response.sign(HMACkey);
+						output.writeObject(response);
+						seqnum++;
+
 					}
 				}
 				else if(message.getMessage().equals("CUSER")) //Client wants to create a user
