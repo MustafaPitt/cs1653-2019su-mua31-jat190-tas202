@@ -2,6 +2,7 @@
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
+import javax.crypto.SecretKey;
 import javax.crypto.spec.DHParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
@@ -330,7 +331,7 @@ public class FileClient extends Client implements FileClientInterface {
 				}
 
 				if (env.getMessage().equals("invalid_fs_pk")){
-					System.out.println("Your token doesn't have permission to access this fileserver");
+					System.out.println("Your token doesn't have permission to access this file server");
 					return false;
 				}
 
@@ -356,7 +357,7 @@ public class FileClient extends Client implements FileClientInterface {
 				 	message = new Envelope("CHUNK");
 					int n = fis.read(buf); //can throw an IOException
 					if (n > 0) {
-						System.out.printf(".");
+						System.out.print(".");
 					} else if (n < 0) {
 						System.out.println("Read error");
 						return false;
@@ -579,7 +580,6 @@ public class FileClient extends Client implements FileClientInterface {
 		return serverN.equals(n);
 	}
 
-
 	public boolean establishSequenceNumber() {
 		seqnum = new Long(new SecureRandom().nextLong());
 
@@ -610,7 +610,7 @@ public class FileClient extends Client implements FileClientInterface {
 			Long temp = (Long)new AES().cfbDecrypt(sharedKeyClientFS, encrypted);
 
 			if (!seqnum.equals(temp)) {
-				System.out.println("Invalid seqence number. Possible attack!");
+				System.out.println("Invalid sequence number. Possible attack!");
 				return false;
 			}
 			seqnum++;
@@ -623,4 +623,11 @@ public class FileClient extends Client implements FileClientInterface {
 		}
 	}
 
+
+	@Override
+	public HashMap<String, List<SecretKey>> getUserGroupsKeys(UserToken token) {
+		System.out.println("This method called");
+		System.exit(-1);
+		return null;
+	}
 }

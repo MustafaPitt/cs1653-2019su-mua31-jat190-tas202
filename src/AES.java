@@ -5,13 +5,9 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+import java.io.*;
 import java.security.GeneralSecurityException;
 import java.security.Security;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 
 public class AES {
     AES(){
@@ -81,21 +77,11 @@ public class AES {
         }
         return sb.toString();
     }
-
-    public static void main (String [] args) throws GeneralSecurityException {
-//        AES aes = new AES();
-//        SecretKey secretKey =  aes.generateKey();
-//        String plainText = "ABC mustafa al azzawi";
-//        System.out.println("Secret key : " + Arrays.toString(secretKey.getEncoded()));
-//        byte [][] cipherTextWithIV = cfbEncrypt(secretKey,plainText.getBytes());
-//        System.out.println ("iv:  " +bytesToString(cipherTextWithIV[0]));
-//        System.out.println("cipher: " + bytesToString(cipherTextWithIV[1]));
 //
-//        byte [] decPlainText =  cfbDecrypt(secretKey,cipherTextWithIV[0],cipherTextWithIV[1]);
-//        System.out.println("Message after decrypt: " + bytesToString(decPlainText));
-
-
-    }
+//    public static void main (String [] args) throws GeneralSecurityException {
+//
+//
+//    }
 
 
 }

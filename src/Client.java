@@ -1,7 +1,10 @@
+import javax.crypto.SecretKey;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.HashMap;
+import java.util.List;
 
 public abstract class Client {
 
@@ -26,7 +29,7 @@ public abstract class Client {
 		return isConnected();
 	}
 
-	public boolean isConnected() {
+	boolean isConnected() {
 		return sock != null && sock.isConnected();
 	}
 
@@ -46,13 +49,5 @@ public abstract class Client {
 	}
 
 
-
-//	static class SecureSessionParameters implements Serializable {
-//		public DHParameterSpec dhParameterSpec;
-//		public PublicKey publicKey;
-//		public SecureSessionParameters(DHParameterSpec dhParameterSpec, PublicKey publicKey) {
-//			this.dhParameterSpec = dhParameterSpec;
-//			this.publicKey = publicKey;
-//		}
-//	}
+	public abstract HashMap<String, List<SecretKey>> getUserGroupsKeys(UserToken token);
 }

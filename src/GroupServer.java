@@ -41,9 +41,15 @@ public class GroupServer extends Server {
 
 	public SecretKey hashPWSecretKey;
 
+
+
 	// to manage group members => each group map to a list contains members belong to key group
 	public HashMap<String,List<String>> groupMembers ;
 	private DHParameterSpec dhParameterSpec;
+
+	// ================= T6 ============================
+	public HashMap<String, List <SecretKey>> groupKeys;
+	//======================================================
 
 	public GroupServer() {
 		super(SERVER_PORT, "ALPHA");
@@ -78,6 +84,13 @@ public class GroupServer extends Server {
 			fis = new FileInputStream("GroupMembers.bin");
 			groupStream = new ObjectInputStream(fis);
 			groupMembers = (HashMap) groupStream.readObject();
+
+			//======================== T6 ======================
+			// open group keys
+			fis = new FileInputStream("GroupKeys.bin");
+			groupStream = new ObjectInputStream(fis);
+			groupKeys = (HashMap) groupStream.readObject();
+			//========================================================
 
 			// open private key file
 			fis = new FileInputStream("rsaPrivateKeySig.bin");
@@ -135,6 +148,12 @@ public class GroupServer extends Server {
 			groupMembers = new HashMap<>();  // init a group members
 			clientCertifcates = new HashMap<>(); // init client certificates
 			String pw = PW.generate(8); // generate pw of length n
+			//================ T6 ===============
+			groupKeys = new HashMap<String, List<SecretKey>>();// init group keys
+			//=========================================
+
+
+
 			byte [] pwHash = new byte[256];
 			try {
 				pwHash = HMAC.calculateHmac(hashPWSecretKey,pw.getBytes());
@@ -154,6 +173,18 @@ public class GroupServer extends Server {
 			// add username to group member
 			members.add(username);
 			groupMembers.put("ADMIN",members);
+			//================== T6 =======================
+			List <SecretKey> keys = new ArrayList<>();
+			try {
+				SecretKey secretKey =  new AES().generateKey();
+				keys.add(secretKey);
+				groupKeys.put("ADMIN", keys);
+			} catch (GeneralSecurityException e1) {
+				e1.printStackTrace();
+			}
+			//===============================================
+
+
 			// create a new user "admin " public and private key. Save the public in the client certificates hashmap
 			//and give the private to the client
 			PublicKey clientPublicKey = keyPair.getPublic();
@@ -164,12 +195,12 @@ public class GroupServer extends Server {
 			ObjectOutputStream outStreamGroup;
 			try {
 				// save the private key and give it to the client
-				outStreamGroup = new ObjectOutputStream(new FileOutputStream(username+"_Private.bin"));
+				outStreamGroup = new ObjectOutputStream(new FileOutputStream(username+"_clientPrivate.bin"));
 				outStreamGroup.writeObject(clientPrivateKey);
 				outStreamGroup.close();
 
 				// save the public key and give it to the client
-				outStreamGroup = new ObjectOutputStream(new FileOutputStream(username+"_Public.bin"));
+				outStreamGroup = new ObjectOutputStream(new FileOutputStream(username+"_clientPublic.bin"));
 				outStreamGroup.writeObject(clientPublicKey);
 				outStreamGroup.close();
 
@@ -276,6 +307,12 @@ class ShutDownListener extends Thread
 			outStreamGroup = new ObjectOutputStream(new FileOutputStream("GroupMembers.bin"));
 			outStreamGroup.writeObject(my_gs.groupMembers);
 			outStreamGroup.close();
+			//======================== T6 =================
+			// save GroupKeys
+			outStreamGroup = new ObjectOutputStream(new FileOutputStream("GroupKeys.bin"));
+			outStreamGroup.writeObject(my_gs.groupKeys);
+			outStreamGroup.close();
+			//===========================================
 
 
 		}
@@ -311,6 +348,12 @@ class AutoSave extends Thread
 					outStream.close();
 					outStream = new ObjectOutputStream(new FileOutputStream("GroupMembers.bin"));
 					outStream.writeObject(my_gs.groupMembers);
+					outStream.close();
+					//================== T6 ================
+					outStream = new ObjectOutputStream(new FileOutputStream("GroupKeys.bin"));
+					outStream.writeObject(my_gs.groupKeys);
+					outStream.close();
+					//======================================
 				}
 				catch(Exception e)
 				{

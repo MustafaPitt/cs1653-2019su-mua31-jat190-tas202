@@ -2,12 +2,14 @@
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
+import javax.crypto.SecretKey;
 import javax.crypto.spec.DHParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
 import java.security.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class GroupClient extends Client implements GroupClientInterface {
@@ -373,6 +375,7 @@ public class GroupClient extends Client implements GroupClientInterface {
 			return null;
 
 		}
+
 		catch(Exception e)
 		{
 			System.err.println("Error: " + e.getMessage());
@@ -381,6 +384,59 @@ public class GroupClient extends Client implements GroupClientInterface {
 		}
 	}
 
+	// ================================= T6 =====================================
+	public HashMap<String, List<SecretKey>> getUserGroupsKeys(UserToken token) {
+		try
+		{
+			AES aes = new AES();
+			Envelope message=null, response= null;
+			//Tell the server to return the member list
+			message = new Envelope("GroupKeys");
+			message.addObject(aes.cfbEncrypt(sharedKeyClientGS,token)); //Add requester's token
+			message.addObject(aes.cfbEncrypt(sharedKeyClientGS,seqnum));
+
+			message.sign(HMACkey);
+			output.writeObject(message);
+			seqnum++;
+
+			response = (Envelope)input.readObject();
+
+			if (!response.verify(HMACkey)) {
+				System.out.println("The message has been modified!");
+				disconnect();
+			}
+			ArrayList<Object> temp;
+			temp = response.getObjContents();
+			Long recv_seq = (Long)aes.cfbDecrypt(sharedKeyClientGS,
+					(byte[][])temp.get(temp.size() - 1));
+
+			//System.out.println("r: " + recv_seq + "\ns: " +seqnum);
+			if (!(recv_seq.equals(seqnum))) {
+				System.out.println("The message has been reordered!");
+				disconnect();
+			}
+			seqnum++;
+
+			//If server indicates success, return the member list
+			if(response.getMessage().equals("OK"))
+			{
+				byte[][] encrypted = (byte[][])response.getObjContents().get(0);
+				HashMap <String, List<SecretKey>> userGroupsKeys = (HashMap)aes.cfbDecrypt(sharedKeyClientGS, encrypted);
+				return userGroupsKeys; //This cast creates compiler warnings. Sorry.
+			}
+
+			return null;
+
+		}
+
+		catch(Exception e)
+		{
+			System.err.println("Error: " + e.getMessage());
+			e.printStackTrace(System.err);
+			return null;
+		}
+	}
+	//============================================================================
 	public boolean addUserToGroup(String userToAdd, String groupname, UserToken token)
 	{
 		try
@@ -668,9 +724,7 @@ public class GroupClient extends Client implements GroupClientInterface {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-
 		return (msg.getMessage().equals("OK")) ;
-
-
 	}
+
 }

@@ -3,20 +3,18 @@
  */
 
 
+import javax.crypto.SecretKey;
 import javax.crypto.interfaces.DHPublicKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
 import java.net.Socket;
 import java.security.*;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class GroupThread extends Thread
 {
-	final int DURATION = 30; // in mint
+	private final int DURATION = 30; // in mint
 	private final Socket socket;
 	private GroupServer my_gs;
 	private byte[] agreedKeyGSDH;
@@ -70,7 +68,6 @@ public class GroupThread extends Thread
 					if (!recv_seq.equals(seqnum)) {
 						System.out.println("The message has been reordered!");
 						socket.close();
-						proceed = false;
 						break;
 					}
 					seqnum++;
@@ -351,10 +348,8 @@ public class GroupThread extends Thread
 					if (!message.verify(HMACkey)) {
 						System.out.println("The message has been modified!");
 						socket.close();
-						proceed = false;
 						break;
 					}
-
 					/* TODO:  Write this handler */
 					if(message.getObjContents().size() < 2)
 					{
@@ -382,7 +377,6 @@ public class GroupThread extends Thread
 								if (!recv_seq.equals(seqnum)) {
 									System.out.println("The message has been reordered!");
 									socket.close();
-									proceed = false;
 									break;
 								}
 								seqnum++;
@@ -401,6 +395,53 @@ public class GroupThread extends Thread
 					output.writeObject(response);
 					seqnum++;
 				}
+				//=================== T6 ========================
+				// request group keys
+				else if (message.getMessage().equals("GroupKeys")){
+
+					System.out.println("DBG reached here message size " + message.getObjContents().size());
+					/* TODO:  Write this handler */
+					if(message.getObjContents().size() < 2)
+					{
+						response = new Envelope("FAIL");
+					}
+					else
+					{
+						response = new Envelope("FAIL");
+
+						if(message.getObjContents().get(0) != null)
+						{
+							if(message.getObjContents().get(1) != null)
+							{
+								// Decrypt message
+								AES aes = new AES();
+								byte[][] encrypted = (byte[][])message.getObjContents().get(0);
+								Token  token = (Token) aes.cfbDecrypt(agreedKeyGSDH, encrypted); //Get the token
+
+								encrypted = (byte[][])message.getObjContents().get(1);
+								Long recv_seq = (Long)aes.cfbDecrypt(agreedKeyGSDH, encrypted); // get seq
+
+								if (!recv_seq.equals(seqnum)) {
+									System.out.println("The message has been reordered!");
+									socket.close();
+									break;
+								}
+								seqnum++;
+								HashMap<String, List<SecretKey>> userGroupKeys = getUserGroupsKeys(token);
+
+								response = new Envelope("OK"); //Success
+								response.addObject(aes.cfbEncrypt(agreedKeyGSDH, userGroupKeys));
+							}
+						}
+					}
+					byte[][] enc_seqNum = new AES().cfbEncrypt(agreedKeyGSDH, seqnum);
+					response.addObject(enc_seqNum);
+					response.sign(HMACkey);
+					System.err.println(response.getMessage());
+					output.writeObject(response);
+					seqnum++;
+				}
+				//=========================================================================================
 				else if(message.getMessage().equals("AUSERTOGROUP")) //Client wants to add user to a group
 				{
 
@@ -500,7 +541,6 @@ public class GroupThread extends Thread
 								if (!recv_seq.equals(seqnum)) {
 									System.out.println("The message has been reordered!");
 									socket.close();
-									proceed = false;
 									break;
 								}
 								seqnum++;
@@ -543,7 +583,6 @@ public class GroupThread extends Thread
 					if (!message.verify(HMACkey)) {
 						System.out.println("The message has been modified!");
 						socket.close();
-						proceed = false;
 						break;
 					}
 
@@ -554,7 +593,6 @@ public class GroupThread extends Thread
 					if (!recv_seq.equals(seqnum)) {
 						System.out.println("The message has been reordered!");
 						socket.close();
-						proceed = false;
 						break;
 					}
 					seqnum++;
@@ -582,13 +620,11 @@ public class GroupThread extends Thread
 					if (!message.verify(HMACkey)) {
 						System.out.println("The message has been modified!");
 						socket.close();
-						proceed = false;
 						break;
 					}
 
 					AES aes = new AES();
-					byte[][] encrypted =
-						(byte[][])message.getObjContents().get(0);
+					byte[][] encrypted = (byte[][])message.getObjContents().get(0);
 
 					seqnum = (Long)aes.cfbDecrypt(agreedKeyGSDH, encrypted);
 					seqnum++;
@@ -599,7 +635,6 @@ public class GroupThread extends Thread
 					output.writeObject(response);
 					seqnum++;
 				}
-
 				else
 				{
 					response = new Envelope("FAIL"); //Server does not understand client request
@@ -620,8 +655,8 @@ public class GroupThread extends Thread
 		byte [][] cipherPasswordWithIV = (byte[][]) message.getObjContents().get(1);
 
 		AES aes = new AES();
-		byte username[] = new byte[0];
-		byte pw[] = new byte[0];
+		byte[] username = new byte[0];
+		byte[] pw = new byte[0];
 		byte [] hashedPW = new byte[0];
 		SecretKeySpec secretKey = new SecretKeySpec(agreedKeyGSDH,"AES");
 
@@ -640,7 +675,7 @@ public class GroupThread extends Thread
 
 		HMAC hmac = new HMAC();
 		try {
-			hashedPW = 	hmac.calculateHmac(my_gs.hashPWSecretKey,pw);
+			hashedPW = 	HMAC.calculateHmac(my_gs.hashPWSecretKey,pw);
 		} catch (GeneralSecurityException e) {
 			e.printStackTrace();
 		}
@@ -681,8 +716,8 @@ public class GroupThread extends Thread
 		try {
 			if (rsa.verifyPkcs1Signature(pk,bytesMsg,sigbytes)){
 				DH dh = new DH();
-				KeyPair keyPairGSDH = dh.generateKeyPair(((DHPublicKey)clientDHPK).getParams());
-				agreedKeyGSDH  =  dh.initiatorAgreementBasic(keyPairGSDH.getPrivate(),clientDHPK);
+				KeyPair keyPairGSDH = DH.generateKeyPair(((DHPublicKey)clientDHPK).getParams());
+				agreedKeyGSDH  =  DH.initiatorAgreementBasic(keyPairGSDH.getPrivate(),clientDHPK);
 
 
 				try{
@@ -726,6 +761,16 @@ public class GroupThread extends Thread
 				if (my_gs.groupMembers.get(groupName).contains(userToDel)){
 					my_gs.groupMembers.get(groupName).remove(userToDel); // remove it from user group
 					my_gs.userList.getUserGroups(userToDel).remove(groupName); // remove it from member list
+
+					// ============== T6 ================
+					// we add a new key each time we remove or add a user and make the recent created key as a default group key
+					try {
+						SecretKey secretKey =  new AES().generateKey();
+						my_gs.groupKeys.get(groupName).add(secretKey);
+					} catch (GeneralSecurityException e1) {
+						e1.printStackTrace();
+					}
+					//===================================
 					return true;
 				}
 			}
@@ -742,6 +787,17 @@ public class GroupThread extends Thread
 		}
 		return null;
 	}
+	// ======================== T6 ==============================================
+	private HashMap<String, List<SecretKey>> getUserGroupsKeys(UserToken token){
+		HashMap <String , List<SecretKey>> userGroupKeys = new HashMap<>();
+		// find all groups that user owner belong and get group keys
+		for (String group : token.getGroups()){
+			if(my_gs.groupKeys.containsKey(group))
+				userGroupKeys.put(group,my_gs.groupKeys.get(group));
+		}
+		return userGroupKeys;
+	}
+	//===========================================================================
 
 	private boolean addUserToGroup(String groupName, UserToken yourToken, String userNameToAdd){
 		String requester = yourToken.getSubject();
@@ -755,6 +811,16 @@ public class GroupThread extends Thread
 				if (!my_gs.groupMembers.get(groupName).contains(userNameToAdd)){
 					my_gs.groupMembers.get(groupName).add(userNameToAdd);
 					my_gs.userList.getUserGroups(userNameToAdd).add(groupName);
+					// ============== T6 ================
+					// we add a new key each time we remove or add a user and make the recent created key as a default group key
+					try {
+						SecretKey secretKey =  new AES().generateKey();
+						my_gs.groupKeys.get(groupName).add(secretKey);
+					} catch (GeneralSecurityException e1) {
+						e1.printStackTrace();
+					}
+					//===================================
+
 					return true;
 				}
 			}
@@ -783,6 +849,18 @@ public class GroupThread extends Thread
 				List<String> membersList = new ArrayList<>();
 				membersList.add(requester);
 				my_gs.groupMembers.put(groupName,membersList);
+
+				//=============== T6 ====================================
+				// create keys list for the group
+				List <SecretKey> keys = new ArrayList<>(); //  create keys list for the group member
+				try {
+					keys.add(new AES().generateKey()); // create a  key for the group owner
+					my_gs.groupKeys.put(groupName,keys);
+				} catch (GeneralSecurityException e) {
+					e.printStackTrace();
+				}
+
+				//=======================================================
 				return true;
 
 			}
@@ -850,7 +928,7 @@ public class GroupThread extends Thread
 
 						ObjectOutputStream outStreamGroup = null;
 
-						KeyPair keyPair = rsa.generateKeyPair();
+						KeyPair keyPair = RSA.generateKeyPair();
 						PublicKey clientPublicKey = keyPair.getPublic();
 						PrivateKey clientPrivateKey = keyPair.getPrivate();
 
@@ -944,12 +1022,23 @@ public class GroupThread extends Thread
 
 					// remove all groups that user own
 					for (String groupOwn : my_gs.userList.getUserOwnership(username)){
-						if(my_gs.groupMembers.containsKey(groupOwn))
-							my_gs.groupMembers.remove(groupOwn);
+						my_gs.groupMembers.remove(groupOwn);
+						    //=============== T6 ==================
+								// remove group keys
+								my_gs.groupKeys.remove(groupOwn);
+							//=====================================
 					}
 					for (String group : my_gs.userList.getUserGroups(username)){
 						if(my_gs.groupMembers.containsKey(group))
 							my_gs.groupMembers.get(group).remove(username);
+						//=============== T6 ==================
+						// update group key by add a new one
+						try {
+							my_gs.groupKeys.get(group).add(new AES().generateKey());
+						} catch (GeneralSecurityException e) {
+							e.printStackTrace();
+						}
+						//=====================================
 					}
 
 					//Delete the user from the user list
@@ -1010,11 +1099,16 @@ public class GroupThread extends Thread
 			my_gs.userList.removeGroup(requester,groupName); // remove the group
 			my_gs.userList.removeOwnership(requester,groupName); // remove the ownership
 			my_gs.groupMembers.remove(groupName); // remove all members from the group
+			// =================== T6 ==================================================
+			 my_gs.groupKeys.remove(groupName); // remove group keys
+			//==========================================================================
 			System.err.println("group delete successfully ");
 			return true;
 		}
 		System.err.println("Error Del group: check user or ownership");
 		return false;
 	}
+
+
 
 }

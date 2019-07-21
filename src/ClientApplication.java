@@ -1,11 +1,11 @@
 
+import javax.crypto.SecretKey;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.security.PrivateKey;
 import java.security.PublicKey;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.regex.Pattern;
 
 
@@ -31,6 +31,9 @@ public class ClientApplication {
 	private static String gsPubKeyFile = "rsaPublicKeyVir.bin";
 	private static String fsPubKeyFile = "FS_rsaPublic.bin";
 
+	//====================== T6 ======================================
+	private static HashMap<String, List<SecretKey>> userGroupsKeys;
+	//================================================================
 	public static void main (String []args){
 
 
@@ -55,8 +58,8 @@ public class ClientApplication {
 				username = scanner.nextLine();
 				signedIn = true;
 				try{
-					clientSigPK = getClientPrivateKey(username + "_Private.bin");
-					clientPubKey = getPublicKey(username + "_Public.bin");
+					clientSigPK = getClientPrivateKey(username + "_clientPrivate.bin");
+					clientPubKey = getPublicKey(username + "_clientPublic.bin");
 				}catch(Exception e){ e.printStackTrace(); }
 			}
 
@@ -127,8 +130,30 @@ public class ClientApplication {
 		 	System.out.println("Incorrect username or password -- Cannot connect to Group Server.");
 		 	return;
 	 	}
-    token = groupClient.getToken(username,fsPk); //update token
+    	token = groupClient.getToken(username,fsPk); //update token
+
+		//======================= t6 ===================
+		userGroupsKeys = groupClient.getUserGroupsKeys(token);
+		if (userGroupsKeys != null) {
+			System.err.println("DBG checking group keys");
+			for (String gName : userGroupsKeys.keySet()) {
+				System.err.println("Group name  " + gName);
+				for (SecretKey secretKey : userGroupsKeys.get(gName)){
+					System.out.println(Base64.getEncoder().encodeToString(secretKey.getEncoded()));
+				}
+			}
+		}
+
+		System.out.println("DBG ClientAplication line 147: remove it later. I create userGroupsKeys " +
+				"list <String group name , list<SecretKeys>> which contains all" +
+				"group keys. we will always use the last key to encrypt. for decryption we have to get the key index first." +
+				"I'm not sure how userGroupsKeys is accurate, but all the codes I wrote surrounded by T6 tag like this " +
+				"========== T6 ================= we can review it");
+		//===============================================
+
 		groupClient.disconnect();
+
+
 		fileServerPublicKeyVir  = getPublicKey(fs_port + fsPubKeyFile);
 
     fileClient = new FileClient();
@@ -137,11 +162,12 @@ public class ClientApplication {
 			//if this returns false the fs can't be trusted
 			fileClient.disconnect();
 			return;
-		}
-
+  	}
 
     if (fileClient.isConnected()) System.out.println("--Secure session with FS " + fs_port + " established--");
-        while(true){ // while you are in file server
+
+
+		while(true){ // while you are in file server
 						System.out.println("\n********** FILE SERVER OPERATIONS **********");
             	System.out.println("1) List files\n" +
 						"2) Upload\n" +
@@ -219,7 +245,6 @@ public class ClientApplication {
 
     }
 }
-
 
 	// handle all group server operations
      private static void connectToGroupServer(String username) {

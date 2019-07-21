@@ -129,8 +129,7 @@ public class FileThread extends Thread
 					if (!e.verify(HMACkey)) {
 						System.out.println("The message has been modified!");
 						socket.close();
-						proceed = false;
-						break;
+ 						break;
 					}
 
 					if(e.getObjContents().size() < 4)
@@ -139,19 +138,13 @@ public class FileThread extends Thread
 					}
 					else
 					{
-						if(e.getObjContents().get(0) == null) {
+						if(e.getObjContents().contains(null)) {
 							response = new Envelope("FAIL-BADPATH");
-						}
-						if(e.getObjContents().get(1) == null) {
-							response = new Envelope("FAIL-BADGROUP");
-						}
-						if(e.getObjContents().get(2) == null) {
-							response = new Envelope("FAIL-BADTOKEN");
 						}
 						else {
 							AES aes = new AES();
 							String remotePath = (String)aes.cfbDecrypt(agreedKeyFSDH,
-								(byte[][])e.getObjContents().get(0));
+									(byte[][])e.getObjContents().get(0));
 							String group = (String)aes.cfbDecrypt(agreedKeyFSDH,
 								(byte[][])e.getObjContents().get(1));
 							Token yourToken = (Token)aes.cfbDecrypt(agreedKeyFSDH,
