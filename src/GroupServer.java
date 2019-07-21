@@ -21,6 +21,8 @@ import java.security.GeneralSecurityException;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.SecureRandom;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -48,7 +50,8 @@ public class GroupServer extends Server {
 	private DHParameterSpec dhParameterSpec;
 
 	// ================= T6 ============================
-	public HashMap<String, List <SecretKey>> groupKeys;
+	public HashMap<String, byte[]>         lts_map;
+	public HashMap<String, List<GroupKey>> group_keys;
 	//======================================================
 
 	public GroupServer() {
@@ -89,7 +92,11 @@ public class GroupServer extends Server {
 			// open group keys
 			fis = new FileInputStream("GroupKeys.bin");
 			groupStream = new ObjectInputStream(fis);
-			groupKeys = (HashMap) groupStream.readObject();
+			group_keys = (HashMap) groupStream.readObject();
+
+			fis = new FileInputStream("LTS.bin");
+			groupStream = new ObjectInputStream(fis);
+			lts_map = (HashMap) groupStream.readObject();
 			//========================================================
 
 			// open private key file
@@ -149,7 +156,9 @@ public class GroupServer extends Server {
 			clientCertifcates = new HashMap<>(); // init client certificates
 			String pw = PW.generate(8); // generate pw of length n
 			//================ T6 ===============
-			groupKeys = new HashMap<String, List<SecretKey>>();// init group keys
+			System.err.println("Created group keys map.");
+			group_keys = new HashMap<String, List<GroupKey>>();// init group keys
+			lts_map = new HashMap<String, byte[]>();
 			//=========================================
 
 
@@ -174,13 +183,10 @@ public class GroupServer extends Server {
 			members.add(username);
 			groupMembers.put("ADMIN",members);
 			//================== T6 =======================
-			List <SecretKey> keys = new ArrayList<>();
 			try {
-				SecretKey secretKey =  new AES().generateKey();
-				keys.add(secretKey);
-				groupKeys.put("ADMIN", keys);
-			} catch (GeneralSecurityException e1) {
-				e1.printStackTrace();
+				createGroupKey("ADMIN");
+			} catch (NoSuchAlgorithmException f) {
+				System.err.println("Oops.");
 			}
 			//===============================================
 
@@ -195,12 +201,12 @@ public class GroupServer extends Server {
 			ObjectOutputStream outStreamGroup;
 			try {
 				// save the private key and give it to the client
-				outStreamGroup = new ObjectOutputStream(new FileOutputStream(username+"_clientPrivate.bin"));
+				outStreamGroup = new ObjectOutputStream(new FileOutputStream(username+"_Private.bin"));
 				outStreamGroup.writeObject(clientPrivateKey);
 				outStreamGroup.close();
 
 				// save the public key and give it to the client
-				outStreamGroup = new ObjectOutputStream(new FileOutputStream(username+"_clientPublic.bin"));
+				outStreamGroup = new ObjectOutputStream(new FileOutputStream(username+"_Public.bin"));
 				outStreamGroup.writeObject(clientPublicKey);
 				outStreamGroup.close();
 
@@ -279,6 +285,32 @@ public class GroupServer extends Server {
 
 	}
 
+	public void createGroupKey(String group) 
+		throws NoSuchAlgorithmException
+	{
+		GroupKey k;
+		List<GroupKey> keys = group_keys.get(group);
+
+		if (keys == null) { // This is a new group and has no LTS.
+			createLongTermSecret(group);
+			k = new GroupKey(lts_map.get(group), 0);
+
+			keys = new ArrayList<GroupKey>();
+			keys.add(k);
+			group_keys.put(group, keys);
+		}
+		else {
+			k = new GroupKey(lts_map.get(group), keys.size());
+			keys.add(k);
+		}
+	}
+
+	public void createLongTermSecret(String group) {
+		byte[] lts = new byte[32];
+		new SecureRandom().nextBytes(lts);
+		lts_map.put(group, lts);
+	}
+
 }
 
 //This thread saves the user list
@@ -310,7 +342,11 @@ class ShutDownListener extends Thread
 			//======================== T6 =================
 			// save GroupKeys
 			outStreamGroup = new ObjectOutputStream(new FileOutputStream("GroupKeys.bin"));
-			outStreamGroup.writeObject(my_gs.groupKeys);
+			outStreamGroup.writeObject(my_gs.group_keys);
+			outStreamGroup.close();
+
+			outStreamGroup = new ObjectOutputStream(new FileOutputStream("LTS.bin"));
+			outStreamGroup.writeObject(my_gs.lts_map);
 			outStreamGroup.close();
 			//===========================================
 
@@ -351,7 +387,7 @@ class AutoSave extends Thread
 					outStream.close();
 					//================== T6 ================
 					outStream = new ObjectOutputStream(new FileOutputStream("GroupKeys.bin"));
-					outStream.writeObject(my_gs.groupKeys);
+					outStream.writeObject(my_gs.group_keys);
 					outStream.close();
 					//======================================
 				}

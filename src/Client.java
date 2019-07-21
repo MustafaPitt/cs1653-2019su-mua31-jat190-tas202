@@ -15,6 +15,8 @@ public abstract class Client {
 	protected ObjectOutputStream output = null;
 	protected ObjectInputStream input = null;
 
+	protected HashMap<String, List<GroupKey>> keychain;
+
 	public boolean connect(final String server, final int port) {
 		try {
 			sock = new Socket(server,port);
@@ -49,5 +51,6 @@ public abstract class Client {
 	}
 
 
-	public abstract HashMap<String, List<SecretKey>> getUserGroupsKeys(UserToken token);
+//	public abstract HashMap<String, List<SecretKey>> getUserGroupsKeys(UserToken token);
+//	public abstract boolean getUserGroupsKeys(UserToken token);
 }

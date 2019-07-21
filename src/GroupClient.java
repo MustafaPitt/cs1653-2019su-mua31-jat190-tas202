@@ -110,6 +110,11 @@ public class GroupClient extends Client implements GroupClientInterface {
 					ByteArrayInputStream in = new ByteArrayInputStream(bytetoken);
 	        		ObjectInputStream is = new ObjectInputStream(in);
 					token = (UserToken)is.readObject();
+
+					getUserGroupsKeys(token);
+
+					System.out.println(keychain);
+
 					return token;
 				}
 			}
@@ -265,6 +270,8 @@ public class GroupClient extends Client implements GroupClientInterface {
 			//If server indicates success, return true
 			if(response.getMessage().equals("OK"))
 			{
+				byte[][] encrypted = (byte[][])response.getObjContents().get(0);
+				keychain = (HashMap)aes.cfbDecrypt(sharedKeyClientGS, encrypted);
 				return true;
 			}
 
@@ -385,7 +392,7 @@ public class GroupClient extends Client implements GroupClientInterface {
 	}
 
 	// ================================= T6 =====================================
-	public HashMap<String, List<SecretKey>> getUserGroupsKeys(UserToken token) {
+	public boolean getUserGroupsKeys(UserToken token) {
 		try
 		{
 			AES aes = new AES();
@@ -421,11 +428,11 @@ public class GroupClient extends Client implements GroupClientInterface {
 			if(response.getMessage().equals("OK"))
 			{
 				byte[][] encrypted = (byte[][])response.getObjContents().get(0);
-				HashMap <String, List<SecretKey>> userGroupsKeys = (HashMap)aes.cfbDecrypt(sharedKeyClientGS, encrypted);
-				return userGroupsKeys; //This cast creates compiler warnings. Sorry.
+				keychain = (HashMap)aes.cfbDecrypt(sharedKeyClientGS, encrypted);
+				return true; //This cast creates compiler warnings. Sorry.
 			}
 
-			return null;
+			return false;
 
 		}
 
@@ -433,7 +440,7 @@ public class GroupClient extends Client implements GroupClientInterface {
 		{
 			System.err.println("Error: " + e.getMessage());
 			e.printStackTrace(System.err);
-			return null;
+			return false;
 		}
 	}
 	//============================================================================
@@ -528,6 +535,8 @@ public class GroupClient extends Client implements GroupClientInterface {
 			//If server indicates success, return true
 			if(response.getMessage().equals("OK"))
 			{
+				byte[][] encrypted = (byte[][])response.getObjContents().get(0);
+				keychain = (HashMap)aes.cfbDecrypt(sharedKeyClientGS, encrypted);
 				return true;
 			}
 

@@ -16,6 +16,12 @@ public class FileClient extends Client implements FileClientInterface {
 	private byte[] HMACkey;
 	private Long seqnum;
 
+	public FileClient() {}
+
+	public FileClient(HashMap<String, List<GroupKey>> k) {
+		keychain = k;
+	}
+
 	// pkSig is user's private key
 	// userPubKey is user's public key
 	// publicKeyFSrsa is file server's public key.
@@ -621,13 +627,5 @@ public class FileClient extends Client implements FileClientInterface {
 			e.printStackTrace();
 			return false;
 		}
-	}
-
-
-	@Override
-	public HashMap<String, List<SecretKey>> getUserGroupsKeys(UserToken token) {
-		System.out.println("This method called");
-		System.exit(-1);
-		return null;
 	}
 }

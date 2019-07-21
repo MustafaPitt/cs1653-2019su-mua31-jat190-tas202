@@ -138,4 +138,6 @@ public interface GroupClientInterface
      */
     public List<String> listMembers(final String group, final UserToken token);
 
+	public boolean getUserGroupsKeys(UserToken t);
+
 }   //-- end interface GroupClientInterface

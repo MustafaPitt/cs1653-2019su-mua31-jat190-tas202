@@ -31,9 +31,6 @@ public class ClientApplication {
 	private static String gsPubKeyFile = "rsaPublicKeyVir.bin";
 	private static String fsPubKeyFile = "FS_rsaPublic.bin";
 
-	//====================== T6 ======================================
-	private static HashMap<String, List<SecretKey>> userGroupsKeys;
-	//================================================================
 	public static void main (String []args){
 
 
@@ -58,8 +55,8 @@ public class ClientApplication {
 				username = scanner.nextLine();
 				signedIn = true;
 				try{
-					clientSigPK = getClientPrivateKey(username + "_clientPrivate.bin");
-					clientPubKey = getPublicKey(username + "_clientPublic.bin");
+					clientSigPK = getClientPrivateKey(username + "_Private.bin");
+					clientPubKey = getPublicKey(username + "_Public.bin");
 				}catch(Exception e){ e.printStackTrace(); }
 			}
 
@@ -133,22 +130,22 @@ public class ClientApplication {
     	token = groupClient.getToken(username,fsPk); //update token
 
 		//======================= t6 ===================
-		userGroupsKeys = groupClient.getUserGroupsKeys(token);
-		if (userGroupsKeys != null) {
-			System.err.println("DBG checking group keys");
-			for (String gName : userGroupsKeys.keySet()) {
-				System.err.println("Group name  " + gName);
-				for (SecretKey secretKey : userGroupsKeys.get(gName)){
-					System.out.println(Base64.getEncoder().encodeToString(secretKey.getEncoded()));
-				}
-			}
-		}
-
-		System.out.println("DBG ClientAplication line 147: remove it later. I create userGroupsKeys " +
-				"list <String group name , list<SecretKeys>> which contains all" +
-				"group keys. we will always use the last key to encrypt. for decryption we have to get the key index first." +
-				"I'm not sure how userGroupsKeys is accurate, but all the codes I wrote surrounded by T6 tag like this " +
-				"========== T6 ================= we can review it");
+//		userGroupsKeys = groupClient.getUserGroupsKeys(token);
+//		if (userGroupsKeys != null) {
+//			System.err.println("DBG checking group keys");
+//			for (String gName : userGroupsKeys.keySet()) {
+//				System.err.println("Group name  " + gName);
+//				for (SecretKey secretKey : userGroupsKeys.get(gName)){
+//					System.out.println(Base64.getEncoder().encodeToString(secretKey.getEncoded()));
+//				}
+//			}
+//		}
+//
+//		System.out.println("DBG ClientAplication line 147: remove it later. I create userGroupsKeys " +
+//				"list <String group name , list<SecretKeys>> which contains all" +
+//				"group keys. we will always use the last key to encrypt. for decryption we have to get the key index first." +
+//				"I'm not sure how userGroupsKeys is accurate, but all the codes I wrote surrounded by T6 tag like this " +
+//				"========== T6 ================= we can review it");
 		//===============================================
 
 		groupClient.disconnect();
@@ -156,7 +153,7 @@ public class ClientApplication {
 
 		fileServerPublicKeyVir  = getPublicKey(fs_port + fsPubKeyFile);
 
-    fileClient = new FileClient();
+    fileClient = new FileClient(groupClient.keychain);
   	if(!fileClient.connect(fs_server_name, fs_port, clientSigPK,
 		clientPubKey, fileServerPublicKeyVir)){
 			//if this returns false the fs can't be trusted
