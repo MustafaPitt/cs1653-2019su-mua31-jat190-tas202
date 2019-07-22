@@ -2,10 +2,14 @@
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
+import javax.crypto.Cipher;
+import javax.crypto.CipherOutputStream;
+import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.DHParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
+import java.nio.ByteBuffer;
 import java.security.*;
 import java.util.*;
 import java.math.BigInteger;
@@ -312,8 +316,6 @@ public class FileClient extends Client implements FileClientInterface {
 			 output.writeObject(message);
 			 seqnum++;
 
-			 FileInputStream fis = new FileInputStream(sourceFile);
-
 			 env = (Envelope)input.readObject();
 			 if (!env.verify(HMACkey)) {
 					System.out.println("The message has been modified!");
@@ -353,6 +355,15 @@ public class FileClient extends Client implements FileClientInterface {
 				 return false;
 			 }
 
+			List<GroupKey> l = keychain.get(group);
+			Integer key_version = l.size() - 1;
+
+			// Encrypt file to temp, then upload that.
+			String temp_file = encryptFile(sourceFile, group,
+				l.get(key_version).encrypt_key,
+				l.get(key_version).verify_key, key_version);
+
+			 FileInputStream fis = new FileInputStream(temp_file);
 
 			 do {
 				 byte[] buf = new byte[4096];
@@ -442,6 +453,9 @@ public class FileClient extends Client implements FileClientInterface {
 				e1.printStackTrace(System.err);
 				return false;
 				}
+
+		// TODO: Remove temp file
+		
 		 return true;
 	}
 
@@ -627,5 +641,67 @@ public class FileClient extends Client implements FileClientInterface {
 			e.printStackTrace();
 			return false;
 		}
+	}
+
+	public String encryptFile(String filename, String groupname,
+		SecretKey encrypt, SecretKey verify, int kv) 
+		throws Exception
+	{
+		byte[] block = new byte[4096];
+
+		String tmpfn = "." + filename + ".tmp";
+
+		FileInputStream fis = new FileInputStream(new File(filename));
+		FileOutputStream fos = new FileOutputStream(
+			new File("."+filename+".tmp"));
+
+		Cipher c = Cipher.getInstance("AES/CBC/PKCS5Padding");
+		c.init(Cipher.ENCRYPT_MODE, encrypt);
+		CipherOutputStream cos = new CipherOutputStream(fos, c);
+
+		// Do encryption
+		while (fis.read(block) != -1) {
+			cos.write(block);
+		}
+		cos.close();
+
+		fos = new FileOutputStream(new File("."+filename+".tmp"), true);
+
+		// Write key version, group name
+		fos.write(ByteBuffer.allocate(4).putInt(kv).array());
+		fos.write(groupname.getBytes());
+		fos.close();
+
+		// Write HMAC
+		byte[] hmac = getFileHMAC(tmpfn, groupname, verify, kv);
+		fos = new FileOutputStream(new File("."+filename+".tmp"), true);
+		fos.write(hmac);
+		fos.close();
+
+		System.out.println(Arrays.toString(hmac));
+
+		return tmpfn;
+	}
+
+	/* Calculate HMAC of a file using SHA-512.
+	 * Key version, group name, file contents
+	 */
+	public byte[] getFileHMAC(String filename, String groupname,
+		SecretKey verify, int kv)
+		throws Exception
+	{
+        Mac mac = Mac.getInstance("HMacSHA512", "BC");
+        SecretKeySpec k = new SecretKeySpec(verify.getEncoded(),
+			"HmacSHA512");
+        mac.init(k);
+
+		FileInputStream fis = new FileInputStream(new File(filename));
+
+		byte[] block = new byte[4096];
+		while (fis.read(block) != -1) {
+			mac.update(block);
+		}
+		fis.close();
+		return mac.doFinal();
 	}
 }
