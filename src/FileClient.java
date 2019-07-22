@@ -4,6 +4,8 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import javax.crypto.Cipher;
 import javax.crypto.CipherOutputStream;
+import javax.crypto.CipherInputStream;
+import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.DHParameterSpec;
@@ -208,6 +210,17 @@ public class FileClient extends Client implements FileClientInterface {
 									env.sign(HMACkey);
 									output.writeObject(env);
 									seqnum++;
+
+									//T6 decrypt
+									//first get version and group name
+									try{
+										if(decryptFile(file) == false){
+											file.delete();
+											return false;
+										}
+									}catch(Exception ex) {ex.printStackTrace();}
+
+
 							}else {
 									System.out.printf("Error reading file %s (%s)\n", sourceFile, env.getMessage());
 									file.delete();
@@ -310,7 +323,7 @@ public class FileClient extends Client implements FileClientInterface {
 			 message.addObject(aes.cfbEncrypt(sharedKeyClientFS, destFile));
 			 message.addObject(aes.cfbEncrypt(sharedKeyClientFS, group));
 			 message.addObject(aes.cfbEncrypt(sharedKeyClientFS, token));
-			 message.addObject(aes.cfbEncrypt(sharedKeyClientFS,seqnum));
+			 message.addObject(aes.cfbEncrypt(sharedKeyClientFS, seqnum));
 
 			 message.sign(HMACkey);
 			 output.writeObject(message);
@@ -363,6 +376,7 @@ public class FileClient extends Client implements FileClientInterface {
 				l.get(key_version).encrypt_key,
 				l.get(key_version).verify_key, key_version);
 
+
 			 FileInputStream fis = new FileInputStream(temp_file);
 
 			 do {
@@ -404,6 +418,7 @@ public class FileClient extends Client implements FileClientInterface {
 					seqnum++;
 			 }
 			 while (fis.available()>0);
+			 fis.close();
 
 			 //If server indicates success, return the member list
 			 if(env.getMessage().compareTo("READY")==0)
@@ -440,22 +455,23 @@ public class FileClient extends Client implements FileClientInterface {
 					 return false;
 				 }
 
-			}
-			 else {
+			}else {
 
 				 System.out.printf("Upload failed: %s\n", env.getMessage());
 				 return false;
-			 }
+			}
+
+			String n = "." + sourceFile + ".tmp";
+			File deltmp = new File(n);
+			if(!deltmp.delete()) System.out.println("Error deleting " + n);
 
 		 }catch(Exception e1)
 			{
 				System.err.println("Error: " + e1.getMessage());
 				e1.printStackTrace(System.err);
 				return false;
-				}
+			}
 
-		// TODO: Remove temp file
-		
 		 return true;
 	}
 
@@ -644,7 +660,7 @@ public class FileClient extends Client implements FileClientInterface {
 	}
 
 	public String encryptFile(String filename, String groupname,
-		SecretKey encrypt, SecretKey verify, int kv) 
+		SecretKey encrypt, SecretKey verify, int kv)
 		throws Exception
 	{
 		byte[] block = new byte[4096];
@@ -655,8 +671,9 @@ public class FileClient extends Client implements FileClientInterface {
 		FileOutputStream fos = new FileOutputStream(
 			new File("."+filename+".tmp"));
 
-		Cipher c = Cipher.getInstance("AES/CBC/PKCS5Padding");
-		c.init(Cipher.ENCRYPT_MODE, encrypt);
+		IvParameterSpec iv = new IvParameterSpec(new byte[16]);
+		Cipher c = Cipher.getInstance("AES/CBC/NoPadding");
+		c.init(Cipher.ENCRYPT_MODE, encrypt, iv);
 		CipherOutputStream cos = new CipherOutputStream(fos, c);
 
 		// Do encryption
@@ -668,12 +685,15 @@ public class FileClient extends Client implements FileClientInterface {
 		fos = new FileOutputStream(new File("."+filename+".tmp"), true);
 
 		// Write key version, group name
+		fos.write(iv.getIV());
 		fos.write(ByteBuffer.allocate(4).putInt(kv).array());
-		fos.write(groupname.getBytes());
+		byte[] gn = new byte[20];
+		System.arraycopy(groupname.getBytes(), 0, gn, 0, Math.min(groupname.getBytes().length, 20));
+		fos.write(gn);
 		fos.close();
 
 		// Write HMAC
-		byte[] hmac = getFileHMAC(tmpfn, groupname, verify, kv);
+		byte[] hmac = getFileHMAC(tmpfn, verify);
 		fos = new FileOutputStream(new File("."+filename+".tmp"), true);
 		fos.write(hmac);
 		fos.close();
@@ -683,11 +703,83 @@ public class FileClient extends Client implements FileClientInterface {
 		return tmpfn;
 	}
 
+	public boolean decryptFile(File file) throws Exception{
+		//check HMAC
+		RandomAccessFile raf = new RandomAccessFile(file, "rw");
+
+		//seek to start of HMAC
+		raf.seek(file.length() - 64);
+
+		byte[] hmac = new byte[64];
+		raf.read(hmac);
+		//System.out.println("\tHMAC = " + Arrays.toString(hmac));
+
+		//seek to start of groupname
+		raf.seek(file.length() - 84);
+
+		byte[] groupname = new byte[20];
+		raf.read(groupname);
+		System.out.println(Arrays.toString(groupname));
+		String gn = new String(groupname);
+		gn = gn.trim();
+	  //System.out.println("\tgroupname = " + gn + " size: " + gn.length());
+
+		//seek to start of version num
+		raf.seek(file.length() - 88);
+
+		byte[] version_num = new byte[4];
+		raf.read(version_num);
+		int vn = ByteBuffer.wrap(version_num).getInt();
+
+		//seek to start of iv
+		raf.seek(file.length() - 104);
+
+		byte[] iv_byte = new byte[16];
+		raf.read(iv_byte);
+		IvParameterSpec iv = new IvParameterSpec(iv_byte);
+
+		//compute HMAC
+		raf.setLength(raf.length()-64);
+		raf.close();
+
+		byte[] encFileHMAC = getFileHMAC(file.getName(), keychain.get(gn).get(vn).verify_key);
+
+		if(Arrays.equals(hmac, encFileHMAC) == false){
+			System.out.println("This file has been modified.");
+			return false;
+		}
+
+		//hmac is correct, decrypt file
+		raf = new RandomAccessFile(file, "rw");
+		raf.setLength(raf.length() - 40);
+		raf.close();
+
+		FileInputStream fis = new FileInputStream(file);
+		File dec_data = new File("decryptedData");
+		FileOutputStream fos = new FileOutputStream(dec_data);
+
+		Cipher c = Cipher.getInstance("AES/CBC/NoPadding");
+		c.init(Cipher.DECRYPT_MODE, keychain.get(gn).get(vn).encrypt_key, iv);
+		CipherInputStream cis = new CipherInputStream(fis, c);
+
+		byte[] block = new byte[4096];
+		// Do encryption
+		while (cis.read(block) != -1) {
+			fos.write(block);
+		}
+		fos.close();
+
+		file.delete();
+		dec_data.renameTo(file);
+
+		return true;
+
+	}
+
 	/* Calculate HMAC of a file using SHA-512.
 	 * Key version, group name, file contents
 	 */
-	public byte[] getFileHMAC(String filename, String groupname,
-		SecretKey verify, int kv)
+	public byte[] getFileHMAC(String filename, SecretKey verify)
 		throws Exception
 	{
         Mac mac = Mac.getInstance("HMacSHA512", "BC");
