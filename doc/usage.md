@@ -6,7 +6,7 @@
   `java .:/path/to/bc.jar
   GroupServer <port number>`.
 * The client application can be run with the command
-  `java .:/path/to/bc.jar ClientApplication <private_key> <public_key>`
+  `java .:/path/to/bc.jar ClientApplication`
 
 # Getting set up
 If the programs are running in separate directories or on separate
