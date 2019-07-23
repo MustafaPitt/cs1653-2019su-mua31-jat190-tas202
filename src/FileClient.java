@@ -672,13 +672,15 @@ public class FileClient extends Client implements FileClientInterface {
 			new File("."+filename+".tmp"));
 
 		IvParameterSpec iv = new IvParameterSpec(new byte[16]);
-		Cipher c = Cipher.getInstance("AES/CBC/NoPadding");
+		Cipher c = Cipher.getInstance("AES/CBC/PKCS5Padding");
 		c.init(Cipher.ENCRYPT_MODE, encrypt, iv);
 		CipherOutputStream cos = new CipherOutputStream(fos, c);
 
 		// Do encryption
-		while (fis.read(block) != -1) {
-			cos.write(block);
+		int i;
+		while ((i = fis.read(block)) != -1) {
+			cos.write(block, 0, i);
+			System.out.println("ENCRYPT: " + i);
 		}
 		cos.close();
 
@@ -758,15 +760,19 @@ public class FileClient extends Client implements FileClientInterface {
 		File dec_data = new File("decryptedData");
 		FileOutputStream fos = new FileOutputStream(dec_data);
 
-		Cipher c = Cipher.getInstance("AES/CBC/NoPadding");
+		Cipher c = Cipher.getInstance("AES/CBC/PKCS5Padding");
 		c.init(Cipher.DECRYPT_MODE, keychain.get(gn).get(vn).encrypt_key, iv);
 		CipherInputStream cis = new CipherInputStream(fis, c);
 
 		byte[] block = new byte[4096];
+
 		// Do encryption
-		while (cis.read(block) != -1) {
-			fos.write(block);
+		int i;
+		while ((i = cis.read(block)) != -1) {
+			fos.write(block, 0, i);
+			System.out.println("DECRYPT: " + i);
 		}
+		fos.flush();
 		fos.close();
 
 		file.delete();
