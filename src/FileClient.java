@@ -680,7 +680,6 @@ public class FileClient extends Client implements FileClientInterface {
 		int i;
 		while ((i = fis.read(block)) != -1) {
 			cos.write(block, 0, i);
-			System.out.println("ENCRYPT: " + i);
 		}
 		cos.close();
 
@@ -770,13 +769,15 @@ public class FileClient extends Client implements FileClientInterface {
 		int i;
 		while ((i = cis.read(block)) != -1) {
 			fos.write(block, 0, i);
-			System.out.println("DECRYPT: " + i);
 		}
-		fos.flush();
 		fos.close();
+		fis.close();
 
-		file.delete();
-		dec_data.renameTo(file);
+		String temp = file.getName();
+		if (!file.delete()) System.out.println(
+			"Error deleting " + temp);
+
+		dec_data.renameTo(new File(temp));
 
 		return true;
 
