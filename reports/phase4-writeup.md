@@ -125,9 +125,12 @@ one that has a key that matches what is contained in the token.
 
 ### Client <----> File Server Overview
 * [T5] All messages include a sequence number and an HMAC of the contents of the message. The sequence number will be a randomly generated integer by the client that is incremented with each message sent between client and FS. Both of these will be encrypted with the DH shared key.
-* [T6] When upload is called, the client will first encrypt the file being stored with the latest version of the groups key. The message will be sent as seen below. When download is called, the download will operate as normal, and the file will be decrypted when downloaded. Now the client will decrypt that file with the correct version of the group key.
+* [T6] When upload is called, the client will first encrypt the file being stored with the latest version of the group's key. The message will be sent as seen below(plus the groupname and iv used will be part of the header). When download is called, the download will operate as normal, and the file will be decrypted when downloaded. Now the client will decrypt that file with the correct version of the group key.
 * [T7] Upon connecting to a FS, verify the FS public key on the token is a match to the one of the FS we connected to.
 
 ![Client - GS](report_img/p4_client_fs.jpg)
 
 ### Conclusion
+Our group started by looking at each threat and trying to address them individually. For T5, adding sequence numbers and HMACs did the job. For T6, creating group keys and encrypting the files before they were uploaded to files servers stops file leakage from being a problem. Also, for T7, giving tokens a single valid file server and a time duration will limit token use when they are stolen. These defenses had some overlaps in the sense that T5 is used on all messages and the other two are sent via messages. We had a couple ideas that we started with prior to reaching these that mainly just needed some revision after our group's meeting.
+
+As far as our protocols still addressing T1-T4, we did not change anything that would effect these. For T1, the password system is still in place. For T2, tokens are still hashed and verified each use. For T3, upon fileserver entry there is still a challenge / response issue.  And lastly, for T4, all communications are still encrypted with a DH shared key.
