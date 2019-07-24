@@ -66,7 +66,7 @@ public class FileClient extends Client implements FileClientInterface {
 		else {
 			remotePath = filename;
 		}
-		Envelope env = new Envelope("DELETEF"); //Success
+		Envelope env = new Envelope("DELETEF", sharedKeyClientFS); //Success
 	    env.addObject(aes.cfbEncrypt(sharedKeyClientFS, remotePath));
 	    env.addObject(aes.cfbEncrypt(sharedKeyClientFS, token));
 			env.addObject(aes.cfbEncrypt(sharedKeyClientFS,seqnum));
@@ -135,7 +135,7 @@ public class FileClient extends Client implements FileClientInterface {
 				    	file.createNewFile();
 					    FileOutputStream fos = new FileOutputStream(file);
 
-					    Envelope env = new Envelope("DOWNLOADF"); //Success
+					    Envelope env = new Envelope("DOWNLOADF", sharedKeyClientFS); //Success
 					    env.addObject(aes.cfbEncrypt(sharedKeyClientFS, sourceFile));
 					    env.addObject(aes.cfbEncrypt(sharedKeyClientFS, token));
 							env.addObject(aes.cfbEncrypt(sharedKeyClientFS, seqnum));
@@ -177,7 +177,7 @@ public class FileClient extends Client implements FileClientInterface {
 										(Integer)aes.cfbDecrypt(sharedKeyClientFS,
 										(byte[][])env.getObjContents().get(1)));
 									System.out.printf(".");
-									env = new Envelope("DOWNLOADF"); //Success
+									env = new Envelope("DOWNLOADF", sharedKeyClientFS); //Success
 									env.addObject(aes.cfbEncrypt(sharedKeyClientFS,seqnum));
 
 									env.sign(HMACkey);
@@ -205,7 +205,7 @@ public class FileClient extends Client implements FileClientInterface {
 						  if(env.getMessage().compareTo("EOF")==0) {
 						    	 fos.close();
 									System.out.printf("\nTransfer successful file %s\n", sourceFile);
-									env = new Envelope("OK"); //Success
+									env = new Envelope("OK", sharedKeyClientFS); //Success
 									env.addObject(aes.cfbEncrypt(sharedKeyClientFS,seqnum));
 									env.sign(HMACkey);
 									output.writeObject(env);
@@ -252,7 +252,7 @@ public class FileClient extends Client implements FileClientInterface {
 		 {
 			 Envelope message = null, e = null;
 			 //Tell the server to return the member list
-			 message = new Envelope("LFILES");
+			 message = new Envelope("LFILES", sharedKeyClientFS);
 
 			 // Encrypt the token
 			 AES aes = new AES();
@@ -319,7 +319,7 @@ public class FileClient extends Client implements FileClientInterface {
 			 AES aes = new AES();
 			 Envelope message = null, env = null;
 			 //Tell the server to return the member list
-			 message = new Envelope("UPLOADF");
+			 message = new Envelope("UPLOADF", sharedKeyClientFS);
 			 message.addObject(aes.cfbEncrypt(sharedKeyClientFS, destFile));
 			 message.addObject(aes.cfbEncrypt(sharedKeyClientFS, group));
 			 message.addObject(aes.cfbEncrypt(sharedKeyClientFS, token));
@@ -385,7 +385,7 @@ public class FileClient extends Client implements FileClientInterface {
 				 		System.out.printf("Server error: %s\n", env.getMessage());
 				 		return false;
 				 	}
-				 	message = new Envelope("CHUNK");
+				 	message = new Envelope("CHUNK", sharedKeyClientFS);
 					int n = fis.read(buf); //can throw an IOException
 					if (n > 0) {
 						System.out.print(".");
@@ -424,7 +424,7 @@ public class FileClient extends Client implements FileClientInterface {
 			 if(env.getMessage().compareTo("READY")==0)
 			 {
 
-				message = new Envelope("EOF");
+				message = new Envelope("EOF", sharedKeyClientFS);
 				message.addObject(aes.cfbEncrypt(sharedKeyClientFS,seqnum));
 				message.sign(HMACkey);
 				output.writeObject(message);
@@ -579,7 +579,7 @@ public class FileClient extends Client implements FileClientInterface {
 		}
 
 		//create and send the Envelope to the FS
-		Envelope msg = new Envelope("Challange");
+		Envelope msg = new Envelope("Challange", sharedKeyClientFS);
 		msg.addObject(cipherNWithIV);
 
 		try {
@@ -619,7 +619,7 @@ public class FileClient extends Client implements FileClientInterface {
 	public boolean establishSequenceNumber() {
 		seqnum = new Long(new SecureRandom().nextLong());
 
-		Envelope msg = new Envelope("EstablishSeqNum");
+		Envelope msg = new Envelope("EstablishSeqNum", sharedKeyClientFS);
 
 		//SecretKeySpec sk = new SecretKeySpec(sharedKeyClientGS, "AES");
 		msg.addObject(new AES().cfbEncrypt(sharedKeyClientFS, seqnum));
@@ -699,7 +699,7 @@ public class FileClient extends Client implements FileClientInterface {
 		fos.write(hmac);
 		fos.close();
 
-		System.out.println(Arrays.toString(hmac));
+		//System.out.println(Arrays.toString(hmac));
 
 		return tmpfn;
 	}

@@ -77,7 +77,7 @@ public class GroupThread extends Thread
 
 					if(username == null)
 					{
-						response = new Envelope("FAIL");
+						response = new Envelope("FAIL", agreedKeyGSDH);
 						response.addObject(null);
 						response.addObject(enc_seqnum);
 						response.sign(HMACkey);
@@ -105,13 +105,13 @@ public class GroupThread extends Thread
 							cipherTokenWithIV = aes.cfbEncrypt(secretKey, out.toByteArray());
 						} catch (GeneralSecurityException e) {
 							e.printStackTrace();
-							output.writeObject(new Envelope("FAIL"));
+							output.writeObject(new Envelope("FAIL", agreedKeyGSDH));
 							return;
 						}
 
 
 						//Respond to the client. On error, the client will receive a null token
-						response = new Envelope("OK");
+						response = new Envelope("OK", agreedKeyGSDH);
 						response.addObject(cipherTokenWithIV);
 						response.addObject(enc_seqnum);
 						response.sign(HMACkey);
@@ -132,11 +132,11 @@ public class GroupThread extends Thread
 
 					if(message.getObjContents().size() < 2)
 					{
-						response = new Envelope("FAIL");
+						response = new Envelope("FAIL", agreedKeyGSDH);
 					}
 					else
 					{
-						response = new Envelope("FAIL");
+						response = new Envelope("FAIL", agreedKeyGSDH);
 
 						if(message.getObjContents().get(0) != null)
 						{
@@ -164,7 +164,7 @@ public class GroupThread extends Thread
 								if(createUser(username, yourToken))
 								{
 									System.err.println("got here 4");
-									response = new Envelope("OK"); //Success
+									response = new Envelope("OK", agreedKeyGSDH); //Success
 								}
 							}
 						}
@@ -189,11 +189,11 @@ public class GroupThread extends Thread
 
 					if(message.getObjContents().size() < 2)
 					{
-						response = new Envelope("FAIL");
+						response = new Envelope("FAIL", agreedKeyGSDH);
 					}
 					else
 					{
-						response = new Envelope("FAIL");
+						response = new Envelope("FAIL", agreedKeyGSDH);
 
 						if(message.getObjContents().get(0) != null)
 						{
@@ -220,7 +220,7 @@ public class GroupThread extends Thread
 
 								if(deleteUser(username, yourToken))
 								{
-									response = new Envelope("OK"); //Success
+									response = new Envelope("OK", agreedKeyGSDH); //Success
 								}
 							}
 						}
@@ -243,11 +243,11 @@ public class GroupThread extends Thread
 
 					if(message.getObjContents().size() < 2)
 					{
-						response = new Envelope("FAIL");
+						response = new Envelope("FAIL", agreedKeyGSDH);
 					}
 					else
 					{
-						response = new Envelope("FAIL");
+						response = new Envelope("FAIL", agreedKeyGSDH);
 
 						if(message.getObjContents().get(0) != null)
 						{
@@ -274,7 +274,7 @@ public class GroupThread extends Thread
 
 								if(createGroup(groupName, yourToken))
 								{
-									response = new Envelope("OK"); //Success
+									response = new Envelope("OK", agreedKeyGSDH); //Success
 									response.addObject(new AES().cfbEncrypt(agreedKeyGSDH, getUserGroupsKeys(yourToken)));
 								}
 							}
@@ -299,11 +299,11 @@ public class GroupThread extends Thread
 
 					if(message.getObjContents().size() < 2)
 					{
-						response = new Envelope("FAIL");
+						response = new Envelope("FAIL", agreedKeyGSDH);
 					}
 					else
 					{
-						response = new Envelope("FAIL");
+						response = new Envelope("FAIL", agreedKeyGSDH);
 
 						if(message.getObjContents().get(0) != null)
 						{
@@ -330,7 +330,7 @@ public class GroupThread extends Thread
 
 								if(deleteGroup(groupName, yourToken))
 								{
-									response = new Envelope("OK"); //Success
+									response = new Envelope("OK", agreedKeyGSDH); //Success
 								}
 							}
 						}
@@ -354,11 +354,11 @@ public class GroupThread extends Thread
 					/* TODO:  Write this handler */
 					if(message.getObjContents().size() < 2)
 					{
-						response = new Envelope("FAIL");
+						response = new Envelope("FAIL", agreedKeyGSDH);
 					}
 					else
 					{
-						response = new Envelope("FAIL");
+						response = new Envelope("FAIL", agreedKeyGSDH);
 
 						if(message.getObjContents().get(0) != null)
 						{
@@ -384,7 +384,7 @@ public class GroupThread extends Thread
 
 								List<String> groupMembers = listAllMembersInGroup(groupName, yourToken);
 
-								response = new Envelope("OK"); //Success
+								response = new Envelope("OK", agreedKeyGSDH); //Success
 								response.addObject(aes.cfbEncrypt(agreedKeyGSDH, groupMembers));
 							}
 						}
@@ -406,11 +406,11 @@ public class GroupThread extends Thread
 					/* TODO:  Write this handler */
 					if(message.getObjContents().size() < 2)
 					{
-						response = new Envelope("FAIL");
+						response = new Envelope("FAIL", agreedKeyGSDH);
 					}
 					else
 					{
-						response = new Envelope("FAIL");
+						response = new Envelope("FAIL", agreedKeyGSDH);
 
 						if(message.getObjContents().get(0) != null)
 						{
@@ -432,7 +432,7 @@ public class GroupThread extends Thread
 								seqnum++;
 								userGroupKeys = getUserGroupsKeys(token);
 
-								response = new Envelope("OK"); //Success
+								response = new Envelope("OK", agreedKeyGSDH); //Success
 								response.addObject(aes.cfbEncrypt(agreedKeyGSDH, userGroupKeys));
 							}
 						}
@@ -460,11 +460,11 @@ public class GroupThread extends Thread
 					/* TODO:  Write this handler */
 					if(message.getObjContents().size() < 2)
 					{
-						response = new Envelope("FAIL");
+						response = new Envelope("FAIL", agreedKeyGSDH);
 					}
 					else
 					{
-						response = new Envelope("FAIL");
+						response = new Envelope("FAIL", agreedKeyGSDH);
 
 						if(message.getObjContents().get(0) != null)
 						{
@@ -493,10 +493,10 @@ public class GroupThread extends Thread
 
 								if(addUserToGroup(groupName,yourToken,userToAdd))
 								{
-									response = new Envelope("OK"); //Success
+									response = new Envelope("OK", agreedKeyGSDH); //Success
 								}
 								else
-									response = new Envelope("FAIL");
+									response = new Envelope("FAIL", agreedKeyGSDH);
 							}
 						}
 					}
@@ -520,11 +520,11 @@ public class GroupThread extends Thread
 					/* TODO:  Write this handler */
 					if(message.getObjContents().size() < 2)
 					{
-						response = new Envelope("FAIL");
+						response = new Envelope("FAIL", agreedKeyGSDH);
 					}
 					else
 					{
-						response = new Envelope("FAIL");
+						response = new Envelope("FAIL", agreedKeyGSDH);
 
 						if(message.getObjContents().get(0) != null)
 						{
@@ -552,11 +552,11 @@ public class GroupThread extends Thread
 
 							if(removeUserFromGroup(groupName,yourToken,userToRemove))
 								{
-									response = new Envelope("OK"); //Success
+									response = new Envelope("OK", agreedKeyGSDH); //Success
 									response.addObject(new AES().cfbEncrypt(agreedKeyGSDH, getUserGroupsKeys(yourToken)));
 								}
 								else
-									response = new Envelope("FAIL");
+									response = new Envelope("FAIL", agreedKeyGSDH);
 							}
 						}
 					}
@@ -635,7 +635,7 @@ public class GroupThread extends Thread
 					seqnum = (Long)aes.cfbDecrypt(agreedKeyGSDH, encrypted);
 					seqnum++;
 
-					response = new Envelope("OK");
+					response = new Envelope("OK", agreedKeyGSDH);
 					response.addObject(aes.cfbEncrypt(agreedKeyGSDH, seqnum));
 					response.sign(HMACkey);
 					output.writeObject(response);
@@ -643,7 +643,7 @@ public class GroupThread extends Thread
 				}
 				else
 				{
-					response = new Envelope("FAIL"); //Server does not understand client request
+					response = new Envelope("FAIL", agreedKeyGSDH); //Server does not understand client request
 					output.writeObject(response);
 				}
 			}while(proceed);
@@ -677,7 +677,7 @@ public class GroupThread extends Thread
 			e.printStackTrace();
 		}
 		if (!my_gs.userList.checkUser(new String(username)))
-			return  new Envelope("Fail");
+			return  new Envelope("Fail", agreedKeyGSDH);
 
 		HMAC hmac = new HMAC();
 		try {
@@ -690,9 +690,9 @@ public class GroupThread extends Thread
 		String pwStr = new String(hashedPW);
 
 		if(my_gs.userList.getUser(userStr).getPwHash().equals(pwStr)){
-			return new Envelope("OK");
+			return new Envelope("OK", agreedKeyGSDH);
 		}
-		return new Envelope("FAIL");
+		return new Envelope("FAIL", agreedKeyGSDH);
 
 
 	}

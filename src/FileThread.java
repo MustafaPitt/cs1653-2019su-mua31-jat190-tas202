@@ -74,7 +74,7 @@ public class FileThread extends Thread
 					// check expiration
 					if (checkTokenExpiration(t)){
 						System.out.println("token expired keep checking");
-						Envelope msgToSend = new Envelope("Expired");
+						Envelope msgToSend = new Envelope("Expired", agreedKeyFSDH);
 						msgToSend.addObject(enc_seqnum);
 						msgToSend.sign(HMACkey);
 						output.writeObject(msgToSend);
@@ -85,7 +85,7 @@ public class FileThread extends Thread
 					if (!checkFSPublicKey(t.getFsPublicKey())){
 
 						System.out.println("This token doesn't have permission for this file server");
-						Envelope msgToSend = new Envelope("invalid_fs_pk");
+						Envelope msgToSend = new Envelope("invalid_fs_pk", agreedKeyFSDH);
 						msgToSend.addObject(enc_seqnum);
 						msgToSend.sign(HMACkey);
 						output.writeObject(msgToSend);
@@ -95,7 +95,7 @@ public class FileThread extends Thread
 					// Verify token
 					if (t == null || !t.verifyHash(my_fs.getGroupPublicKey()))
 					{
-						response = new Envelope("FAIL-BADTOKEN");
+						response = new Envelope("FAIL-BADTOKEN", agreedKeyFSDH);
 						System.out.println("Error: bad token. System Exit");
 					}
 
@@ -111,11 +111,11 @@ public class FileThread extends Thread
 						// Send response
 						encrypted = aes.cfbEncrypt(agreedKeyFSDH, files);
 						if (encrypted != null) {
-							response = new Envelope("OK");
+							response = new Envelope("OK", agreedKeyFSDH);
 							response.addObject(encrypted);
 						} else {
 							System.out.println("Failed to encrypt response!");
-							response = new Envelope("FAIL");
+							response = new Envelope("FAIL", agreedKeyFSDH);
 						}
 					}
 					response.addObject(enc_seqnum);
@@ -134,12 +134,12 @@ public class FileThread extends Thread
 
 					if(e.getObjContents().size() < 4)
 					{
-						response = new Envelope("FAIL-BADCONTENTS");
+						response = new Envelope("FAIL-BADCONTENTS", agreedKeyFSDH);
 					}
 					else
 					{
 						if(e.getObjContents().contains(null)) {
-							response = new Envelope("FAIL-BADPATH");
+							response = new Envelope("FAIL-BADPATH", agreedKeyFSDH);
 						}
 						else {
 							AES aes = new AES();
@@ -163,7 +163,7 @@ public class FileThread extends Thread
 								// check expiration
 								if (checkTokenExpiration(yourToken)){
 									System.out.println("token expired keep checking");
-									Envelope msgToSend = new Envelope("Expired");
+									Envelope msgToSend = new Envelope("Expired", agreedKeyFSDH);
 									msgToSend.addObject(enc_seqnum);
 									msgToSend.sign(HMACkey);
 									output.writeObject(msgToSend);
@@ -174,7 +174,7 @@ public class FileThread extends Thread
 								if (!checkFSPublicKey(yourToken.getFsPublicKey())){
 
 									System.out.println("This token doesn't have permission for this file server");
-									Envelope msgToSend = new Envelope("invalid_fs_pk");
+									Envelope msgToSend = new Envelope("invalid_fs_pk", agreedKeyFSDH);
 									msgToSend.addObject(enc_seqnum);
 									msgToSend.sign(HMACkey);
 									output.writeObject(msgToSend);
@@ -184,15 +184,15 @@ public class FileThread extends Thread
 
 							if (!yourToken.verifyHash(my_fs.getGroupPublicKey())) {
 								System.out.println("Error: Invalid token signature");
-								response = new Envelope("FAIL-BADTOKEN");
+								response = new Envelope("FAIL-BADTOKEN", agreedKeyFSDH);
 							}
 							else if (FileServer.fileList.checkFile(remotePath)) {
 								System.out.printf("Error: file already exists at %s\n", remotePath);
-								response = new Envelope("FAIL-FILEEXISTS"); //Success
+								response = new Envelope("FAIL-FILEEXISTS", agreedKeyFSDH); //Success
 							}
 							else if (!yourToken.getGroups().contains(group)) {
 								System.out.printf("Error: user missing valid token for group %s\n", group);
-								response = new Envelope("FAIL-UNAUTHORIZED"); //Success
+								response = new Envelope("FAIL-UNAUTHORIZED", agreedKeyFSDH); //Success
 							}
 							else  {
 								File file = new File("shared_files/"+remotePath.replace('/', '_'));
@@ -200,7 +200,7 @@ public class FileThread extends Thread
 								FileOutputStream fos = new FileOutputStream(file);
 								System.out.printf("Successfully created file %s\n", remotePath.replace('/', '_'));
 
-								response = new Envelope("READY"); //Success
+								response = new Envelope("READY", agreedKeyFSDH); //Success
 								response.addObject(enc_seqnum);
 								response.sign(HMACkey);
 								output.writeObject(response);
@@ -220,7 +220,7 @@ public class FileThread extends Thread
 								while (e.getMessage().compareTo("CHUNK")==0) {
 									fos.write((byte[])aes.cfbDecrypt(agreedKeyFSDH, (byte[][]) e.getObjContents().get(0)), 0,
 										(Integer)aes.cfbDecrypt(agreedKeyFSDH, (byte[][])e.getObjContents().get(1)));
-									response = new Envelope("READY"); //Success
+									response = new Envelope("READY", agreedKeyFSDH); //Success
 									response.addObject(enc_seqnum);
 									response.sign(HMACkey);
 									output.writeObject(response);
@@ -244,11 +244,11 @@ public class FileThread extends Thread
 								if(e.getMessage().compareTo("EOF")==0) {
 									System.out.printf("Transfer successful file %s\n", remotePath);
 									FileServer.fileList.addFile(yourToken.getSubject(), group, remotePath);
-									response = new Envelope("OK"); //Success
+									response = new Envelope("OK", agreedKeyFSDH); //Success
 								}
 								else {
 									System.out.printf("Error reading file %s from client\n", remotePath);
-									response = new Envelope("ERROR-TRANSFER"); //Success
+									response = new Envelope("ERROR-TRANSFER", agreedKeyFSDH); //Success
 								}
 								fos.close();
 							}
@@ -287,7 +287,7 @@ public class FileThread extends Thread
 					// check expiration
 					if (checkTokenExpiration(t)){
 						System.out.println("token expired keep checking");
-						Envelope msgToSend = new Envelope("Expired");
+						Envelope msgToSend = new Envelope("Expired", agreedKeyFSDH);
 						msgToSend.addObject(enc_seqnum);
 						msgToSend.sign(HMACkey);
 						output.writeObject(msgToSend);
@@ -298,7 +298,7 @@ public class FileThread extends Thread
 					if (!checkFSPublicKey(t.getFsPublicKey())){
 
 						System.out.println("This token doesn't have permission for this file server");
-						Envelope msgToSend = new Envelope("invalid_fs_pk");
+						Envelope msgToSend = new Envelope("invalid_fs_pk", agreedKeyFSDH);
 						msgToSend.addObject(enc_seqnum);
 						msgToSend.sign(HMACkey);
 						output.writeObject(msgToSend);
@@ -310,7 +310,7 @@ public class FileThread extends Thread
 
 					if (!t.verifyHash(my_fs.getGroupPublicKey())) {
 						System.out.println("Error: Invalid token signature");
-						e = new Envelope("ERROR_BADTOKEN");
+						e = new Envelope("ERROR_BADTOKEN", agreedKeyFSDH);
 						e.addObject(enc_seqnum);
 						e.sign(HMACkey);
 						output.writeObject(e);
@@ -318,7 +318,7 @@ public class FileThread extends Thread
 					}
 					else if (sf == null) {
 						System.out.printf("Error: File %s doesn't exist\n", remotePath);
-						e = new Envelope("ERROR_FILEMISSING");
+						e = new Envelope("ERROR_FILEMISSING", agreedKeyFSDH);
 						e.addObject(enc_seqnum);
 						e.sign(HMACkey);
 						output.writeObject(e);
@@ -326,7 +326,7 @@ public class FileThread extends Thread
 					}
 					else if (!t.getGroups().contains(sf.getGroup())){
 						System.out.printf("Error user %s doesn't have permission\n", t.getSubject());
-						e = new Envelope("ERROR_PERMISSION");
+						e = new Envelope("ERROR_PERMISSION", agreedKeyFSDH);
 						e.addObject(enc_seqnum);
 						e.sign(HMACkey);
 						output.writeObject(e);
@@ -339,7 +339,7 @@ public class FileThread extends Thread
 							File f = new File("shared_files/_"+remotePath.replace('/', '_'));
 						if (!f.exists()) {
 							System.out.printf("Error file %s missing from disk\n", "_"+remotePath.replace('/', '_'));
-							e = new Envelope("ERROR_NOTONDISK");
+							e = new Envelope("ERROR_NOTONDISK", agreedKeyFSDH);
 							e.addObject(enc_seqnum);
 							e.sign(HMACkey);
 							output.writeObject(e);
@@ -354,7 +354,7 @@ public class FileThread extends Thread
 									System.out.printf("Server error: %s\n", e.getMessage());
 									break;
 								}
-								e = new Envelope("CHUNK");
+								e = new Envelope("CHUNK", agreedKeyFSDH);
 								int n = fis.read(buf); //can throw an IOException
 								if (n > 0) {
 									System.out.printf(".");
@@ -397,7 +397,7 @@ public class FileThread extends Thread
 							if(e.getMessage().compareTo("DOWNLOADF")==0)
 							{
 								System.out.println("\tdone reading chunks");
-								e = new Envelope("EOF");
+								e = new Envelope("EOF", agreedKeyFSDH);
 								e.addObject(enc_seqnum);
 								e.sign(HMACkey);
 								output.writeObject(e);
@@ -475,7 +475,7 @@ public class FileThread extends Thread
 					// check expiration
 					if (checkTokenExpiration(t)){
 						System.out.println("token expired keep checking");
-						Envelope msgToSend = new Envelope("Expired");
+						Envelope msgToSend = new Envelope("Expired", agreedKeyFSDH);
 						msgToSend.addObject(enc_seqnum);
 						msgToSend.sign(HMACkey);
 						output.writeObject(msgToSend);
@@ -486,7 +486,7 @@ public class FileThread extends Thread
 					if (!checkFSPublicKey(t.getFsPublicKey())){
 
 						System.out.println("This token doesn't have permission for this file server");
-						Envelope msgToSend = new Envelope("invalid_fs_pk");
+						Envelope msgToSend = new Envelope("invalid_fs_pk", agreedKeyFSDH);
 						msgToSend.addObject(enc_seqnum);
 						msgToSend.sign(HMACkey);
 						output.writeObject(msgToSend);
@@ -497,15 +497,15 @@ public class FileThread extends Thread
 					ShareFile sf = FileServer.fileList.getFile("/"+remotePath);
 					if (!t.verifyHash(my_fs.getGroupPublicKey())) {
 						System.out.println("Error: Invalid token signature.");
-						e = new Envelope("ERROR_BADTOKEN");
+						e = new Envelope("ERROR_BADTOKEN", agreedKeyFSDH);
 					}
 					else if (sf == null) {
 						System.out.printf("Error: File %s doesn't exist\n", remotePath);
-						e = new Envelope("ERROR_DOESNTEXIST");
+						e = new Envelope("ERROR_DOESNTEXIST", agreedKeyFSDH);
 					}
 					else if (!t.getGroups().contains(sf.getGroup())){
 						System.out.printf("Error user %s doesn't have permission\n", t.getSubject());
-						e = new Envelope("ERROR_PERMISSION");
+						e = new Envelope("ERROR_PERMISSION", agreedKeyFSDH);
 					}
 					else {
 
@@ -516,16 +516,16 @@ public class FileThread extends Thread
 
 							if (!f.exists()) {
 								System.out.printf("Error file %s missing from disk\n", "_"+remotePath.replace('/', '_'));
-								e = new Envelope("ERROR_FILEMISSING");
+								e = new Envelope("ERROR_FILEMISSING", agreedKeyFSDH);
 							}
 							else if (f.delete()) {
 								System.out.printf("File %s deleted from disk\n", "_"+remotePath.replace('/', '_'));
 								FileServer.fileList.removeFile("/"+remotePath);
-								e = new Envelope("OK");
+								e = new Envelope("OK", agreedKeyFSDH);
 							}
 							else {
 								System.out.printf("Error deleting file %s from disk\n", "_"+remotePath.replace('/', '_'));
-								e = new Envelope("ERROR_DELETE");
+								e = new Envelope("ERROR_DELETE", agreedKeyFSDH);
 							}
 
 
@@ -579,7 +579,7 @@ public class FileThread extends Thread
 						msgByte = rsa.cfbDecrypt(my_fs.privateKeySig, publicKeyEncryptedN);
 					} catch (Exception ex) {
 						ex.printStackTrace();
-						e = new Envelope("FAIL");
+						e = new Envelope("FAIL", agreedKeyFSDH);
 						fail = true;
 					}
 
@@ -589,10 +589,10 @@ public class FileThread extends Thread
 					if(fail == false){
 						try {
 							encyrptedN = aes.cfbEncrypt(secretKey, msgByte);
-							e = new Envelope("OK");
+							e = new Envelope("OK", agreedKeyFSDH);
 						} catch (Exception ex) {
 							ex.printStackTrace();
-							e = new Envelope("FAIL");
+							e = new Envelope("FAIL", agreedKeyFSDH);
 						}
 					}
 
@@ -615,7 +615,7 @@ public class FileThread extends Thread
 					seqnum = (Long)aes.cfbDecrypt(agreedKeyFSDH, encrypted);
 					seqnum++;
 
-					response = new Envelope("OK");
+					response = new Envelope("OK", agreedKeyFSDH);
 					response.addObject(aes.cfbEncrypt(agreedKeyFSDH, seqnum));
 					response.sign(HMACkey);
 					output.writeObject(response);
@@ -697,7 +697,7 @@ public class FileThread extends Thread
 				}
 
 				byte [] sig = new byte[0];
-				Envelope msg = new Envelope("OK");
+				Envelope msg = new Envelope("OK", agreedKeyFSDH);
 				try {
 					sig =rsa.generatePkcs1Signature(my_fs.privateKeySig, rsa.serialize(keyPairFSDH.getPublic()));
 				} catch (IOException e) {
@@ -710,6 +710,6 @@ public class FileThread extends Thread
 		} catch(GeneralSecurityException e){
 			e.printStackTrace();
 		}
-		return new Envelope("FAIL");
+		return new Envelope("FAIL", agreedKeyFSDH);
 	}
 }

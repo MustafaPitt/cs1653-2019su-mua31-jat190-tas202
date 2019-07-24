@@ -2,6 +2,7 @@ import java.io.*;
 import java.security.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import javax.crypto.SecretKey;
 
 
 public class Envelope implements Serializable {
@@ -11,17 +12,34 @@ public class Envelope implements Serializable {
 	 */
 	private static final long serialVersionUID = -7726335089122193103L;
 	private String msg;
+	private byte[][] ciphermsg;
 	private ArrayList<Object> objContents = new ArrayList<Object>();
 	private byte[] hmac;
+	private byte[] sharedkey;
 
 	public Envelope(String text)
 	{
 		msg = text;
 	}
 
+	public Envelope(String text, byte[] sk)
+	{
+		ciphermsg = new AES().cfbEncrypt(sk, text.getBytes());
+		sharedkey = sk;
+	}
+
 	public String getMessage()
 	{
-		return msg;
+
+		if(sharedkey == null) {
+			//System.out.println("msg= " + msg);
+			return msg;
+		}
+		//System.out.println("ciphermsg= " + ciphermsg);
+		String ret = new String((byte[])(new AES().cfbDecrypt(sharedkey, ciphermsg)));
+		//System.out.println("ret= " + ret);
+
+		return ret;
 	}
 
 	public ArrayList<Object> getObjContents()
