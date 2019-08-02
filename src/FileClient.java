@@ -47,9 +47,9 @@ public class FileClient extends Client implements FileClientInterface {
 
 		//server challenge
 		if(serverChallange(publicKeyFSrsa)){
-			System.out.println("--File Server " + port + " is trusted.--");
+			System.out.println("--File Server " + port + " is Trusted--");
 		}else{
-			System.out.println("--File Server " + port + " is NOT trusted.--");
+			System.out.println("--File Server " + port + " is NOT Trusted--");
 			return false;
 		}
 
@@ -204,7 +204,7 @@ public class FileClient extends Client implements FileClientInterface {
 
 						  if(env.getMessage().compareTo("EOF")==0) {
 						    	 fos.close();
-									System.out.printf("\nTransfer successful file %s\n", sourceFile);
+									System.out.printf("\nFile transfer successful\n");
 									env = new Envelope("OK", sharedKeyClientFS); //Success
 									env.addObject(aes.cfbEncrypt(sharedKeyClientFS,seqnum));
 									env.sign(HMACkey);
@@ -533,7 +533,7 @@ public class FileClient extends Client implements FileClientInterface {
 		PublicKey gsPkDH = (PublicKey) message.getObjContents().get(1);
 		try {
 			if(rsa.verifyPkcs1Signature(publicKeyFSrsa,rsa.serialize(gsPkDH),sigFS)){
-				System.out.println("--Now we established secure session successfully with file server " + port + "--");
+				System.out.println("--Connection Established--");
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -720,7 +720,7 @@ public class FileClient extends Client implements FileClientInterface {
 
 		byte[] groupname = new byte[20];
 		raf.read(groupname);
-		System.out.println(Arrays.toString(groupname));
+		//System.out.println(Arrays.toString(groupname));
 		String gn = new String(groupname);
 		gn = gn.trim();
 	  //System.out.println("\tgroupname = " + gn + " size: " + gn.length());
