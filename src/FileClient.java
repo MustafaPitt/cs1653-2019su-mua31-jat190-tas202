@@ -34,6 +34,20 @@ public class FileClient extends Client implements FileClientInterface {
 	public boolean connect(final String server, final int port,
 		PrivateKey pkSig, PublicKey userPubKey, PublicKey publicKeyFSrsa){
 		super.connect(server, port);
+
+		/* Hash inversion challenge */
+		try {
+			Envelope env = (Envelope) input.readObject();
+			byte[] b = (byte[]) env.getObjContents().get(0);
+			long answer =
+				Puzzle.partialHashReverse(b, Puzzle.LEADING_ZEROS);
+			env = new Envelope("HASH_INVERT_RESPONSE");
+			env.addObject(answer);
+			output.writeObject(env);
+		} catch (Exception e) {
+			return false;
+		}
+
 		//new code
 		try {
 			establishSecureSessionWithFS(port, pkSig, userPubKey, publicKeyFSrsa);

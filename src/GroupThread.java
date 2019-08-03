@@ -1142,7 +1142,7 @@ public class GroupThread extends Thread
 
 		Long response;
 
-		new Random().nextBytes(b);
+		new SecureRandom().nextBytes(b);
 		e.addObject(b);
 		os.writeObject(e);
 
