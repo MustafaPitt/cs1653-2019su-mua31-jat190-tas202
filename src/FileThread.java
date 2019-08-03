@@ -8,11 +8,9 @@ import java.net.Socket;
 import java.security.GeneralSecurityException;
 import java.security.KeyPair;
 import java.security.PublicKey;
+import java.security.SecureRandom;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import java.security.MessageDigest;
 
@@ -42,6 +40,22 @@ public class FileThread extends Thread
 			final ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
 			final ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
 			Envelope response = null;
+
+			/* Do hash inversion challenge */
+			try {
+				if (!puzzleChallenge(input, output)) {
+					System.out.println("Client failed challenge!" +
+						" DISCONNECT");
+					socket.close();
+					return;
+				}
+			} catch (Exception e) {
+				System.out.println("An unknown error occurred.");
+				e.printStackTrace();
+				return;
+			}
+			System.out.println("Passed puzzle test!");
+
 
 			do
 			{
@@ -711,5 +725,28 @@ public class FileThread extends Thread
 			e.printStackTrace();
 		}
 		return new Envelope("FAIL", agreedKeyFSDH);
+	}
+
+	private boolean puzzleChallenge(ObjectInputStream is,
+		ObjectOutputStream os) throws Exception
+	{
+		byte[] b = new byte[64];
+		Envelope e = new Envelope("HASHCHALLENGE");
+
+		MessageDigest md = MessageDigest.getInstance("SHA-256");
+		byte[] hash;
+
+		Long response;
+
+		new SecureRandom().nextBytes(b);
+		e.addObject(b);
+		os.writeObject(e);
+
+		/* Get response and verify */
+		response = (Long)((Envelope) is.readObject()).getObjContents().get(0);
+		md.update(b);
+		hash = md.digest(Puzzle.Converter.longToBytes(response));
+
+		return Puzzle.valid(hash, Puzzle.LEADING_ZEROS);
 	}
 }

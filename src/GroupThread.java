@@ -40,6 +40,23 @@ public class GroupThread extends Thread
 			System.out.println("*** New connection from " + socket.getInetAddress() + ":" + socket.getPort() + "***");
 			final ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
 			final ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
+
+			/* Do hash inversion challenge */
+			try {
+				if (!puzzleChallenge(input, output)) {
+					System.out.println("Client failed challenge!" +
+						" DISCONNECT");
+					socket.close();
+					return;
+				}
+			} catch (Exception e) {
+				System.out.println("An unknown error occurred.");
+				e.printStackTrace();
+				return;
+			}
+			System.out.println("Passed puzzle test!");
+
+			/* Main loop */
 			do
 			{
 				Envelope message = (Envelope)input.readObject();
@@ -1114,5 +1131,26 @@ public class GroupThread extends Thread
 		return false;
 	}
 
+	private boolean puzzleChallenge(ObjectInputStream is,
+		ObjectOutputStream os) throws Exception
+	{
+		byte[] b = new byte[64];
+		Envelope e = new Envelope("HASHCHALLENGE");
 
+		MessageDigest md = MessageDigest.getInstance("SHA-256");
+		byte[] hash;
+
+		Long response;
+
+		new SecureRandom().nextBytes(b);
+		e.addObject(b);
+		os.writeObject(e);
+
+		/* Get response and verify */
+		response = (Long)((Envelope) is.readObject()).getObjContents().get(0);
+		md.update(b);
+		hash = md.digest(Puzzle.Converter.longToBytes(response));
+
+		return Puzzle.valid(hash, Puzzle.LEADING_ZEROS);
+	}
 }
