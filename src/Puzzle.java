@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 
 public class Puzzle {
-	public static final int LEADING_ZEROS = 22;
+	public static final int LEADING_ZEROS = 23;
 
 	static class Converter {
 		private static ByteBuffer bb = ByteBuffer.allocate(Long.BYTES);
@@ -32,7 +32,7 @@ public class Puzzle {
 
 	public static boolean valid(byte[] b, int s) {
 		final byte mask[] = {
-			(byte) 0x00, (byte) 0x80, (byte) 0xc0, (byte) 0xe0, 
+			(byte) 0x00, (byte) 0x80, (byte) 0xc0, (byte) 0xe0,
 			(byte) 0xf0, (byte) 0xf8, (byte) 0xfc, (byte) 0xfe,
 			(byte) 0xff
 		};

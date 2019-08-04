@@ -10,6 +10,7 @@
 * The script to simulate a Dos attack can be run with
   `./threat.sh <thread count> <username> <address> <port number>
 <password>`
+    - Your may need to change the execution command in the .sh file. 
 
 # Getting set up
 If the programs are running in separate directories or on separate
@@ -17,7 +18,7 @@ computers, some preliminary setup is required. These are the out-of-band
 communications that are needed to first exchange all of the required
 keys.
 1. From the group server's directory, run the group server to generate a
-   keypair and create the admin user. 
+   keypair and create the admin user.
 4. Copy the group server's public key to the file server's directory and
 the client application's directory.
 5. Copy the created user's keypair to the client application directory.
