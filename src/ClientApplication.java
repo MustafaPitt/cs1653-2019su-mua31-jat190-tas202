@@ -31,6 +31,8 @@ public class ClientApplication {
 	private static String gsPubKeyFile = "rsaPublicKeyVir.bin";
 	private static String fsPubKeyFile = "FS_rsaPublic.bin";
 
+	private static Scanner scanner = new Scanner(System.in);
+
 	public static void main (String []args){
 
 
@@ -48,7 +50,7 @@ public class ClientApplication {
 		fileClient = new FileClient();
 		boolean signedIn = false;
     while (true){
-      Scanner scanner = new Scanner(System.in);
+//      Scanner scanner = new Scanner(System.in);
 
 			if(!signedIn){
 				System.out.print("Username: ");
@@ -62,7 +64,7 @@ public class ClientApplication {
 
 			System.out.println("\n********** MAIN MENU **********");
 			System.out.println("1) Connect to Group Server \n2) Connect to File Server \n3) Exit Program");
-            String input = scanner.next();
+            String input = scanner.nextLine();
           	if (!input.matches("[0-9]")){
               System.out.println("Invalid input");
 						}
@@ -99,7 +101,7 @@ public class ClientApplication {
 	}
 
 	private static void connectToFileServer(String username) {
-		Scanner scanner = new Scanner(System.in);
+//		Scanner scanner = new Scanner(System.in);
 	 	System.out.print("Enter GROUP server address: ");
 	 	gs_server_name = scanner.nextLine();
 	 	System.out.print("Enter GROUP server port number: ");
@@ -249,13 +251,13 @@ public class ClientApplication {
 	// handle all group server operations
      private static void connectToGroupServer(String username) {
 
-		 Scanner scanner = new Scanner(System.in);
+//		 Scanner scanner = new Scanner(System.in);
 		 System.out.print("Enter GROUP server address: ");
 		 gs_server_name = scanner.nextLine();
 		 System.out.print("Enter GROUP server port number: ");
-		 gs_port = scanner.nextInt();
+		 gs_port = Integer.parseInt(scanner.nextLine());
 		 System.out.print("Enter password: ");
-		 scanner.nextLine();
+//		 scanner.nextLine();
 		 String pw = scanner.nextLine();
 
 		 if (!groupClient.connect(gs_server_name, gs_port,
@@ -286,7 +288,7 @@ public class ClientApplication {
     }
 
     private static void groupServerMenu() {
-        Scanner scanner = new Scanner(System.in);
+//        Scanner scanner = new Scanner(System.in);
         while (true) {
 
 
@@ -317,7 +319,7 @@ public class ClientApplication {
 			try {
 					System.out.println(".......... List Group Members ..........");
 					System.out.print("Enter a group name: ");
-					Scanner scanner = new Scanner(System.in);
+//					Scanner scanner = new Scanner(System.in);
 					String groupName = scanner.next();
 					List<String> members = groupClient.listMembers(groupName, token);
 					if (members != null) {
@@ -334,7 +336,7 @@ public class ClientApplication {
     }
 
     private static void delGroupInGS() {
-        Scanner scanner = new Scanner(System.in);
+//        Scanner scanner = new Scanner(System.in);
         System.out.println(".......... Delete Group ..........");
         System.out.print("Enter a group name to delete: ");
         String groupName = scanner.next();
@@ -350,7 +352,7 @@ public class ClientApplication {
     }
 
     private static void createGroupInGS() {
-        Scanner scanner = new Scanner(System.in);
+//        Scanner scanner = new Scanner(System.in);
         System.out.println(".......... Create Group ..........");
         System.out.print("Enter a group name to create: ");
 
@@ -366,7 +368,7 @@ public class ClientApplication {
 		}
 
     private static void delUserFromGS() {
-        Scanner scanner = new Scanner(System.in);
+//        Scanner scanner = new Scanner(System.in);
         System.out.println(".......... Delete User ..........");
         System.out.print("Enter a username to delete: ");
         String username = scanner.next();
@@ -381,7 +383,7 @@ public class ClientApplication {
     }
 
     private static void createUserInGS() {
-         Scanner scanner = new Scanner(System.in);
+//         Scanner scanner = new Scanner(System.in);
          System.out.println(".......... Create New User ..........");
          System.out.print("Enter a new username: ");
          String username = scanner.next();
@@ -398,7 +400,7 @@ public class ClientApplication {
 			 try {
 				 System.out.println(".......... Add User to Group ..........");
 				 System.out.print("Enter a group name: ");
-				 Scanner scanner = new Scanner(System.in);
+//				 Scanner scanner = new Scanner(System.in);
 				 String groupName = scanner.next();
 				 System.out.print("Enter a user to be added to a group " + groupName + ": ");
 				 String userToBeAdd = scanner.next();
@@ -420,7 +422,7 @@ public class ClientApplication {
 	        try {
 	            System.out.println(".......... Delete User From Group ..........");
 	            System.out.print("Enter a group name: ");
-	            Scanner scanner = new Scanner(System.in);
+//	            Scanner scanner = new Scanner(System.in);
 	            String groupName = scanner.next();
 	            System.out.print("Enter a user to be deleted from group " + groupName + ": ");
 	            String userToBeDel = scanner.next();
