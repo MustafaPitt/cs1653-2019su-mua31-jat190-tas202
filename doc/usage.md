@@ -7,6 +7,9 @@
   GroupServer <port number>`.
 * The client application can be run with the command
   `java .:/path/to/bc.jar ClientApplication`
+* The script to simulate a Dos attack can be run with
+  `./threat.sh <thread count> <username> <address> <port number>
+<password>`
 
 # Getting set up
 If the programs are running in separate directories or on separate
